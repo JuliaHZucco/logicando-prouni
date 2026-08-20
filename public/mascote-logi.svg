@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="512" height="512" role="img" aria-label="Logi - Mascote do Logicando PROUNI">
+  <title>Logi - Mascote Logicando PROUNI</title>
+  <!-- Halo verde-lima -->
+  <circle cx="100" cy="100" r="96" fill="#a3d900" fill-opacity="0.18"/>
+  <!-- Corpo -->
+  <ellipse cx="100" cy="118" rx="60" ry="58" fill="#1a5632"/>
+  <!-- Barriga -->
+  <ellipse cx="100" cy="128" rx="34" ry="36" fill="#fef9e7"/>
+  <!-- Tufos/orelhas -->
+  <path d="M52 74 L64 60 L74 78 Z" fill="#1a5632"/>
+  <path d="M148 74 L136 60 L126 78 Z" fill="#1a5632"/>
+  <!-- Olhos -->
+  <circle cx="80" cy="100" r="18" fill="#ffffff"/>
+  <circle cx="120" cy="100" r="18" fill="#ffffff"/>
+  <circle cx="82" cy="102" r="9" fill="#0f172a"/>
+  <circle cx="122" cy="102" r="9" fill="#0f172a"/>
+  <circle cx="85" cy="99" r="3" fill="#ffffff"/>
+  <circle cx="125" cy="99" r="3" fill="#ffffff"/>
+  <!-- Bico -->
+  <path d="M100 116 L92 128 L108 128 Z" fill="#f7a600" stroke="#c47f00" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Bochechas -->
+  <circle cx="66" cy="128" r="6" fill="#f7a600" fill-opacity="0.35"/>
+  <circle cx="134" cy="128" r="6" fill="#f7a600" fill-opacity="0.35"/>
+  <!-- Capelo -->
+  <rect x="56" y="46" width="88" height="12" rx="2" fill="#0f172a" transform="rotate(-4 100 52)"/>
+  <path d="M60 52 L100 34 L140 52 L100 68 Z" fill="#0f172a"/>
+  <!-- Borla -->
+  <circle cx="138" cy="54" r="4" fill="#f7a600"/>
+  <path d="M138 54 L146 74" stroke="#f7a600" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="146" cy="76" r="4" fill="#f7a600"/>
+  <!-- Asas -->
+  <path d="M42 118 Q30 130 46 156 Q54 148 58 140" fill="#1a5632"/>
+  <path d="M158 118 Q170 130 154 156 Q146 148 142 140" fill="#1a5632"/>
+  <!-- Pés -->
+  <path d="M84 172 Q84 178 78 180 M84 172 Q90 176 90 180 M84 172 L84 168" stroke="#f7a600" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M116 172 Q116 178 110 180 M116 172 Q122 176 122 180 M116 172 L116 168" stroke="#f7a600" stroke-width="3" stroke-linecap="round" fill="none"/>
+</svg>
