@@ -3,8 +3,8 @@
   --feevale-verde: #1e6b45;
   --feevale-verde-coruja: #1a5632;
   --feevale-verde-limao: #8dc63f;
-  --feevale-laranja: #f5a623;
-  --feevale-laranja-escuro: #e08e0b;
+  --feevale-laranja: #f8d000;
+  --feevale-laranja-escuro: #f8d000;
   --feevale-cinza: #6b7280;
   --feevale-cinza-claro: #eef1ee;
   --feevale-fundo: #f6f8f5;
@@ -144,53 +144,47 @@ a {
 .chamada-quiz {
   position: relative;
   overflow: hidden;
-  width: fit-content;
+  width: min(100%, 760px);
   max-width: 100%;
   margin: 0 auto;
-  background: linear-gradient(135deg, var(--feevale-laranja) 0%, var(--feevale-laranja-escuro) 100%);
+  justify-content: space-between;
+  background: #3ca040;
   border-radius: 999px;
-  padding: 0.85rem 1.4rem 0.85rem 0.75rem;
+  padding: 1rem 1.6rem 1rem 0.9rem;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(224, 142, 11, 0.28);
+  box-shadow: 0 6px 16px rgba(60, 160, 64, 0.28);
+  animation: destaque-quiz 3.8s ease-in-out infinite;
 }
 
-.chamada-quiz::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -60%;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  animation: brilho-quiz 4.5s ease-in-out infinite;
-}
-
-@keyframes brilho-quiz {
-  0% {
-    left: -60%;
-  }
-  55% {
-    left: 130%;
-  }
+@keyframes destaque-quiz {
+  0%,
+  55%,
   100% {
-    left: 130%;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 6px 16px rgba(60, 160, 64, 0.28);
+  }
+  62%,
+  72% {
+    transform: translateY(-3px) scale(1.025);
+    box-shadow: 0 12px 26px rgba(60, 160, 64, 0.42);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chamada-quiz {
+    animation: none;
   }
 }
 
 .chamada-quiz-icone {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.24);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 
@@ -199,15 +193,16 @@ a {
 }
 
 .chamada-quiz-eyebrow {
-  font-size: 0.62rem;
+  font-size: 0.88rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   opacity: 0.85;
+  text-align: center;
 }
 
 .chamada-quiz-titulo {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1.08rem;
 }
 
 .chamada-quiz-selo {
@@ -255,7 +250,7 @@ a {
   font-size: 1.25rem;
   color: #fff;
   flex-shrink: 0;
-  background: var(--feevale-verde-coruja);
+  background: #00783c;
 }
 
 .nome-categoria {
@@ -381,12 +376,6 @@ a {
   font-size: 0.85rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .chamada-quiz::after {
-    animation: none;
-  }
-}
-
 @media (max-width: 576px) {
   .card-boas-vindas {
     padding: 1.25rem;
@@ -416,10 +405,32 @@ a {
 @media (max-width: 480px) {
   .chamada-quiz {
     width: 100%;
-    justify-content: center;
+    gap: 0.75rem !important;
+    padding: 0.85rem 1rem;
+  }
+
+  .chamada-quiz-icone {
+    width: 42px;
+    height: 42px;
+    font-size: 1.05rem;
   }
 
   .chamada-quiz-texto {
+    flex: 1;
+    min-width: 0;
     white-space: normal;
+  }
+
+  .chamada-quiz-eyebrow {
+    font-size: 0.75rem;
+  }
+
+  .chamada-quiz-titulo {
+    font-size: 0.98rem;
+  }
+
+  .chamada-quiz-selo {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.7rem;
   }
 }

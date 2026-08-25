@@ -14,19 +14,19 @@ export default function Inicio() {
         <div className="row align-items-center g-4">
           <div className="col-auto">
             <div className="mascote-boas-vindas-wrap">
-              <img src="/mascote-logi.svg" alt="Mascote Logi" className="mascote-boas-vindas" />
+              <img src="/mascote-fe.svg" alt="Mascote Fê" className="mascote-boas-vindas" />
             </div>
           </div>
           <div className="col">
             <div className="eyebrow eyebrow-laranja mb-2">
               <i className="bi bi-stars me-1" aria-hidden="true" />
-              BEM-VINDO(A) AO LOGI PROUNI
+              BEM-VINDO(A) AO FEEVALE PROUNI
             </div>
             <h1 className="titulo-boas-vindas mb-3">
               Suas dúvidas do <span className="texto-destaque">PROUNI</span>, resolvidas.
             </h1>
             <p className="texto-boas-vindas mb-0">
-              Sou a Logi! Escolha uma categoria abaixo ou busque uma
+              Sou a Fê! Escolha uma categoria abaixo ou busque uma
               palavra-chave para descobrir tudo sobre bolsas de estudo,
               inscrição, prazos e mais.
             </p>

@@ -17,10 +17,10 @@ export default function Cabecalho() {
     <header className="app-cabecalho">
       <div className="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
         <a href="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
-          <img src="/mascote-logi.svg" alt="Mascote Logi" className="marca-mascote" />
+          <img src="/mascote-fe.svg" alt="Mascote Fê" className="marca-mascote" />
           <span className="d-flex flex-column">
             <span className="marca-titulo">
-              Logi <span className="marca-destaque">PROUNI</span>
+              Feevale <span className="marca-destaque">Prouni</span>
             </span>
             <span className="marca-subtitulo">UNIVERSIDADE FEEVALE</span>
           </span>

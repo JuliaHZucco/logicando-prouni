@@ -1,4 +1,4 @@
-# Logi PROUNI
+# Feevale Prouni
 
 App web (React + TypeScript + Bootstrap) para tirar dúvidas sobre o PROUNI — Universidade Feevale.
 
