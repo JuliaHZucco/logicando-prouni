@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import { categorias } from "../funcionalidades/duvidas/dados/conteudo";
 import { useVisualizacoes } from "../funcionalidades/duvidas/hooks/useVisualizacoes";
 import ChamadaQuiz from "../funcionalidades/duvidas/ChamadaQuiz";
-import BarraProgresso from "../componentes/BarraProgresso";
+import CardCategoria from "../componentes/CardCategoria";
+import CardInformativo from "../componentes/CardInformativo";
 
 export default function Inicio() {
   const { totalDuvidasVistas, totalGeralDuvidas, contarDuvidasVistasNaCategoria } =
@@ -52,27 +52,10 @@ export default function Inicio() {
             const categoriaDuvidasVistas = contarDuvidasVistasNaCategoria(categoriaDuvidaIds);
             return (
               <div className="col-12 col-md-6" key={categoria.categoriaId}>
-                <Link to={`/categoria/${categoria.categoriaId}`} className="card-categoria">
-                  <div className="icone-categoria">
-                    <i className={`bi ${categoria.categoriaIcone}`} aria-hidden="true" />
-                  </div>
-                  <div className="flex-grow-1">
-                    <div className="d-flex align-items-center justify-content-between">
-                      <span className="nome-categoria">{categoria.categoriaNome}</span>
-                      <i className="bi bi-arrow-right seta-categoria" aria-hidden="true" />
-                    </div>
-                    <p className="descricao-categoria">{categoria.categoriaDescricao}</p>
-                    <div className="d-flex align-items-center gap-2">
-                      <BarraProgresso
-                        progressoValorAtual={categoriaDuvidasVistas}
-                        progressoValorTotal={categoriaDuvidaIds.length}
-                      />
-                      <span className="contagem-categoria">
-                        {categoriaDuvidasVistas}/{categoriaDuvidaIds.length}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
+                <CardCategoria
+                  categoria={categoria}
+                  categoriaDuvidasVistas={categoriaDuvidasVistas}
+                />
               </div>
             );
           })}
@@ -81,6 +64,14 @@ export default function Inicio() {
 
       <div className="mt-4">
         <ChamadaQuiz />
+      </div>
+
+      <div className="mt-4">
+        <CardInformativo
+          cardTitulo="Logicando"
+          cardIcone="bi-lightbulb"
+          cardTexto="O projeto social Logicando: Aprendizagem Criativa e Tecnologias Digitais no Desenvolvimento do Pensamento Computacional tem o objetivo de qualificar estudantes e professores de Ensino Fundamental e Médio a fim de promover o desenvolvimento tecnológico. Para isso, são realizadas ações de melhoria dos processos de aprendizagem, envolvendo projetos de aprendizagem criativa, inovativa, inventiva e tecnológica, que envolvem o pensamento computacional, permitindo que os participantes sejam capazes de criar e construir artefatos digitais para uso da comunidade escolar e comunidade social."
+        />
       </div>
     </div>
   );

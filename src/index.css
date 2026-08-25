@@ -3,8 +3,8 @@
   --feevale-verde: #1e6b45;
   --feevale-verde-coruja: #1a5632;
   --feevale-verde-limao: #8dc63f;
-  --feevale-laranja: #f8d000;
-  --feevale-laranja-escuro: #f8d000;
+  --feevale-laranja: #e6c000;
+  --feevale-laranja-escuro: #e6c000;
   --feevale-cinza: #6b7280;
   --feevale-cinza-claro: #eef1ee;
   --feevale-fundo: #f6f8f5;
@@ -139,6 +139,13 @@ a {
 .texto-boas-vindas {
   color: #3f4a44;
   max-width: 620px;
+  text-align: justify;
+}
+
+.card-base {
+  background: #ffffff;
+  border-radius: var(--feevale-raio-medio);
+  box-shadow: var(--feevale-sombra-card);
 }
 
 .chamada-quiz {
@@ -215,6 +222,47 @@ a {
   flex-shrink: 0;
 }
 
+.card-logicando {
+  width: 100%;
+  background: #ffffff;
+  border-left: 5px solid #00783c;
+  border-radius: var(--feevale-raio-medio);
+  box-shadow: var(--feevale-sombra-card);
+  padding: 1.5rem 1.7rem;
+}
+
+.card-logicando-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.card-logicando-icone {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #00783c;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.card-logicando-titulo {
+  color: var(--feevale-verde-escuro);
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.card-logicando-texto {
+  color: #3f4a44;
+  line-height: 1.65;
+  text-align: justify;
+}
+
 .titulo-secao {
   font-weight: 800;
   color: var(--feevale-verde-escuro);
@@ -225,13 +273,10 @@ a {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  background: #ffffff;
-  border-radius: var(--feevale-raio-medio);
-  padding: 1.25rem;
-  box-shadow: var(--feevale-sombra-card);
-  text-decoration: none;
-  color: inherit;
   height: 100%;
+  padding: 1.25rem;
+  color: inherit;
+  text-decoration: none;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -267,6 +312,7 @@ a {
   color: var(--feevale-cinza);
   font-size: 0.9rem;
   margin: 0.35rem 0 0.75rem;
+  text-align: justify;
 }
 
 .contagem-categoria {
@@ -310,9 +356,6 @@ a {
 }
 
 .card-duvida {
-  background: #fff;
-  border-radius: var(--feevale-raio-medio);
-  box-shadow: var(--feevale-sombra-card);
   border: 1px solid transparent;
   overflow: hidden;
 }
@@ -364,6 +407,7 @@ a {
   padding: 0 1.4rem 1.3rem;
   color: #3f4a44;
   line-height: 1.6;
+  text-align: justify;
 }
 
 .app-rodape {
@@ -374,6 +418,7 @@ a {
 .rodape-texto {
   color: var(--feevale-cinza);
   font-size: 0.85rem;
+  text-align: center;
 }
 
 @media (max-width: 576px) {

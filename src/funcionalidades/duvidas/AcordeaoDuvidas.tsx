@@ -36,7 +36,7 @@ export default function AcordeaoDuvidas({
         return (
           <div
             key={duvida.duvidaId}
-            className={`card-duvida ${duvidaEstaAberta ? "card-duvida-aberto" : ""}`}
+            className={`card-base card-duvida ${duvidaEstaAberta ? "card-duvida-aberto" : ""}`}
           >
             <button
               type="button"
