@@ -17,12 +17,11 @@ export default function Cabecalho() {
     <header className="app-cabecalho">
       <div className="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
         <a href="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
-          <img src="/mascote-fe.svg" alt="Mascote Fê" className="marca-mascote" />
+          <img src="/logo-feevale.png" alt="Logo da Universidade Feevale" className="marca-logo" />
           <span className="d-flex flex-column">
             <span className="marca-titulo">
               Feevale <span className="marca-destaque">Prouni</span>
             </span>
-            <span className="marca-subtitulo">UNIVERSIDADE FEEVALE</span>
           </span>
         </a>
 
@@ -39,11 +38,6 @@ export default function Cabecalho() {
             />
           </form>
 
-          <img
-            src="/logo-feevale.png"
-            alt="Logo da Universidade Feevale"
-            className="logo-feevale"
-          />
         </div>
       </div>
     </header>

@@ -1,6 +1,6 @@
 :root {
   --feevale-verde-escuro: #123524;
-  --feevale-verde: #1e6b45;
+  --feevale-verde: #00783c;
   --feevale-verde-coruja: #1a5632;
   --feevale-verde-limao: #8dc63f;
   --feevale-laranja: #e6c000;
@@ -40,9 +40,12 @@ a {
   color: inherit;
 }
 
-.marca-mascote {
-  width: 68px;
-  height: 68px;
+.marca-logo {
+  width: 76px;
+  height: 60px;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .marca-titulo {
@@ -50,6 +53,7 @@ a {
   font-size: 1.7rem;
   color: var(--feevale-verde);
   line-height: 1.1;
+  text-transform: uppercase;
 }
 
 .marca-destaque {
@@ -95,6 +99,9 @@ a {
 .logo-feevale {
   height: 80px;
   width: auto;
+  max-width: 76px;
+  object-fit: contain;
+  display: block;
 }
 
 .card-boas-vindas {
@@ -113,8 +120,10 @@ a {
 }
 
 .mascote-boas-vindas {
-  width: 96px;
-  height: 96px;
+  width: 128px;
+  height: 128px;
+  display: block;
+  object-fit: contain;
 }
 
 .eyebrow {
@@ -147,6 +156,30 @@ a {
   color: #3f4a44;
   max-width: 620px;
   text-align: justify;
+}
+
+@media (max-width: 767.98px) {
+  .card-boas-vindas .row {
+    text-align: center;
+  }
+
+  .card-boas-vindas .col-auto {
+    width: 100%;
+  }
+
+  .mascote-boas-vindas-wrap {
+    width: 100%;
+    height: 160px;
+  }
+
+  .mascote-boas-vindas {
+    width: 144px;
+    height: 144px;
+  }
+
+  .texto-boas-vindas {
+    text-align: center;
+  }
 }
 
 .card-base {
@@ -261,10 +294,11 @@ a {
   height: 34px;
   object-fit: contain;
   mix-blend-mode: multiply;
+  display: block;
 }
 
 .card-logicando-titulo {
-  color: var(--feevale-verde);
+  color: var(--feevale-verde-categoria);
   font-size: 1.45rem;
   font-weight: 800;
 }
@@ -324,7 +358,7 @@ a {
   color: var(--feevale-cinza);
   font-size: 0.9rem;
   margin: 0.35rem 0 0.75rem;
-  text-align: justify;
+  text-align: left;
 }
 
 .contagem-categoria {
@@ -434,28 +468,93 @@ a {
 }
 
 @media (max-width: 576px) {
+  .app-cabecalho .container {
+    align-items: stretch !important;
+    gap: 0.85rem !important;
+  }
+
+  .marca-bloco {
+    width: 100%;
+  }
+
+  .marca-titulo {
+    font-size: 1.45rem;
+  }
+
+  .app-cabecalho .container > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .form-busca {
+    flex: 1;
+    min-width: 0;
+  }
+
   .card-boas-vindas {
     padding: 1.25rem;
     text-align: center;
   }
 
+  .card-boas-vindas .row {
+    flex-direction: column;
+    gap: 0.4rem !important;
+  }
+
+  .card-boas-vindas .col {
+    width: 100%;
+  }
+
   .mascote-boas-vindas-wrap {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 140px;
     margin: 0 auto;
   }
 
   .mascote-boas-vindas {
-    width: 70px;
-    height: 70px;
+    width: 136px;
+    height: 136px;
   }
 
   .campo-busca {
-    min-width: 180px;
+    min-width: 0;
+    width: 100%;
+    font-size: 0.95rem;
   }
 
   .logo-feevale {
     height: 52px;
+    width: 52px;
+  }
+
+  .titulo-boas-vindas {
+    font-size: 1.75rem;
+  }
+
+  .texto-boas-vindas {
+    text-align: center;
+  }
+
+  .card-categoria {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .nome-categoria {
+    font-size: 1rem;
+  }
+
+  .descricao-categoria {
+    text-align: left;
+  }
+
+  .card-logicando {
+    padding: 1.2rem 1rem;
+  }
+
+  .card-logicando-texto {
+    text-align: left;
+    line-height: 1.55;
   }
 }
 
