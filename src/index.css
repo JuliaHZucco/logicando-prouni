@@ -8,6 +8,9 @@
   --feevale-cinza: #6b7280;
   --feevale-cinza-claro: #eef1ee;
   --feevale-fundo: #f6f8f5;
+  --feevale-verde-categoria: #24583e;
+  --logicando-azul: #287fbe;
+  --logicando-azul-claro: #eaf4fb;
   --feevale-sombra-card: 0 8px 24px rgba(18, 53, 36, 0.08);
   --feevale-raio-grande: 20px;
   --feevale-raio-medio: 14px;
@@ -45,7 +48,7 @@ a {
 .marca-titulo {
   font-weight: 800;
   font-size: 1.7rem;
-  color: var(--feevale-verde-escuro);
+  color: var(--feevale-verde);
   line-height: 1.1;
 }
 
@@ -125,10 +128,14 @@ a {
   color: var(--feevale-laranja-escuro);
 }
 
+.eyebrow-cinza {
+  color: var(--feevale-cinza);
+}
+
 .titulo-boas-vindas {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--feevale-verde-escuro);
+  color: var(--feevale-verde);
   line-height: 1.15;
 }
 
@@ -245,14 +252,19 @@ a {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  color: #ffffff;
-  background: #00783c;
-  font-size: 1.1rem;
+  background: var(--logicando-azul-claro);
   flex-shrink: 0;
 }
 
+.card-logicando-icone img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
 .card-logicando-titulo {
-  color: var(--feevale-verde-escuro);
+  color: var(--feevale-verde);
   font-size: 1.45rem;
   font-weight: 800;
 }
@@ -265,7 +277,7 @@ a {
 
 .titulo-secao {
   font-weight: 800;
-  color: var(--feevale-verde-escuro);
+  color: var(--feevale-verde);
   font-size: 1.6rem;
 }
 
@@ -301,7 +313,7 @@ a {
 .nome-categoria {
   font-weight: 800;
   font-size: 1.05rem;
-  color: #17251d;
+  color: var(--feevale-verde-categoria);
 }
 
 .seta-categoria {
@@ -387,7 +399,7 @@ a {
 
 .duvida-pergunta-texto {
   font-weight: 700;
-  color: #17251d;
+  color: var(--feevale-verde);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

@@ -37,7 +37,7 @@ export default function Inicio() {
       <section className="mt-4">
         <div className="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-3">
           <div>
-            <div className="eyebrow mb-1">EXPLORE POR TEMA</div>
+            <div className="eyebrow eyebrow-cinza mb-1">EXPLORE POR TEMA</div>
             <h2 className="titulo-secao mb-0">Categorias</h2>
           </div>
           <div className="d-flex align-items-center gap-2 text-muted small">
@@ -69,7 +69,6 @@ export default function Inicio() {
       <div className="mt-4">
         <CardInformativo
           cardTitulo="Logicando"
-          cardIcone="bi-lightbulb"
           cardTexto="O projeto social Logicando: Aprendizagem Criativa e Tecnologias Digitais no Desenvolvimento do Pensamento Computacional tem o objetivo de qualificar estudantes e professores de Ensino Fundamental e Médio a fim de promover o desenvolvimento tecnológico. Para isso, são realizadas ações de melhoria dos processos de aprendizagem, envolvendo projetos de aprendizagem criativa, inovativa, inventiva e tecnológica, que envolvem o pensamento computacional, permitindo que os participantes sejam capazes de criar e construir artefatos digitais para uso da comunidade escolar e comunidade social."
         />
       </div>
