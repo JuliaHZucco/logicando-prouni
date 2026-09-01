@@ -2,7 +2,6 @@ import { categorias } from "../funcionalidades/duvidas/dados/conteudo";
 import { useVisualizacoes } from "../funcionalidades/duvidas/hooks/useVisualizacoes";
 import ChamadaQuiz from "../funcionalidades/duvidas/ChamadaQuiz";
 import CardCategoria from "../componentes/CardCategoria";
-import CardInformativo from "../componentes/CardInformativo";
 
 export default function Inicio() {
   const { totalDuvidasVistas, totalGeralDuvidas, contarDuvidasVistasNaCategoria } =
@@ -66,12 +65,6 @@ export default function Inicio() {
         <ChamadaQuiz />
       </div>
 
-      <div className="mt-4">
-        <CardInformativo
-          cardTitulo="Logicando"
-          cardTexto="O projeto social Logicando: Aprendizagem Criativa e Tecnologias Digitais no Desenvolvimento do Pensamento Computacional tem o objetivo de qualificar estudantes e professores de Ensino Fundamental e Médio a fim de promover o desenvolvimento tecnológico. Para isso, são realizadas ações de melhoria dos processos de aprendizagem, envolvendo projetos de aprendizagem criativa, inovativa, inventiva e tecnológica, que envolvem o pensamento computacional, permitindo que os participantes sejam capazes de criar e construir artefatos digitais para uso da comunidade escolar e comunidade social."
-        />
-      </div>
     </div>
   );
 }
