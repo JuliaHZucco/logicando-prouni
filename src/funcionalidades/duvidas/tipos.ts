@@ -1,3 +1,9 @@
+export interface OpcaoQuiz {
+  opcaoId: string;
+  texto: string;
+  correta: boolean;
+}
+
 export interface ItemDuvida {
   duvidaId: string;
   duvidaPergunta: string;

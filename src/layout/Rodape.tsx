@@ -44,14 +44,16 @@ export default function Rodape() {
               </a>
             </div>
             <div className="rodape-contato-item">
-              <i className="bi bi-music-note-beamed" aria-hidden="true" />
+              <i className="bi bi-tiktok" aria-hidden="true" />
               <a href="https://www.tiktok.com/@feevale" target="_blank" rel="noreferrer">
                 @feevale
               </a>
             </div>
             <div className="rodape-contato-item">
-              <i className="bi bi-envelope" aria-hidden="true" />
-              <a href="mailto:falecomafeevale@feevale.br">falecomafeevale@feevale.br</a>
+              <i className="bi bi-headset" aria-hidden="true" />
+              <a href="https://feevale.apprbs.com.br/atendimentos/login" target="_blank" rel="noreferrer">
+                Atendimento Feevale
+              </a>
             </div>
           </div>
         </div>
