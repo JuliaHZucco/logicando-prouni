@@ -11,7 +11,7 @@ export const categorias: Categoria[] = [
         duvidaId: "eleg-1",
         duvidaPergunta: "Quem pode se inscrever no PROUNI?",
         duvidaResposta:
-          "Podem se inscrever brasileiros(as) sem diploma de curso superior que tenham participado de uma das duas edições mais recentes do ENEM (não valendo participação como 'treineiro'), com média mínima de 450 pontos nas provas objetivas e nota acima de zero na redação. Também é necessário se enquadrar em um dos critérios de renda por pessoa da família.",
+          "Podem se inscrever brasileiros(as) sem diploma de curso superior que tenham participado de uma das duas edições mais recentes do ENEM (não valendo participação como 'treineiro'), com média mínima de 450 pontos nas provas objetivas e nota acima de zero na redação. Também é necessário se enquadrar em um dos critérios de renda.",
       },
       {
         duvidaId: "eleg-2",
@@ -27,7 +27,7 @@ export const categorias: Categoria[] = [
       },
       {
         duvidaId: "eleg-4",
-        duvidaPergunta: "Já fiz faculdade antes. Posso participar mesmo assim?",
+        duvidaPergunta: "Já concluí uma faculdade antes. Posso participar mesmo assim?",
         duvidaResposta:
           "Não. O PROUNI é destinado a quem ainda não possui diploma de curso superior. Quem já concluiu uma graduação, mesmo que em outra área, não pode concorrer a uma bolsa.",
       },
@@ -35,13 +35,13 @@ export const categorias: Categoria[] = [
         duvidaId: "eleg-5",
         duvidaPergunta: "Existe alguma exceção à regra de escola pública ou de renda?",
         duvidaResposta:
-          "Sim. Também podem concorrer pessoas com deficiência, conforme critérios oficiais de avaliação, e professores da rede pública em efetivo exercício do magistério da educação básica — neste caso, apenas para bolsas em cursos de licenciatura e pedagogia, sem necessidade de atender ao limite de renda.",
+          "Sim. Professores da rede pública em efetivo exercício do magistério da educação básica — neste caso, apenas para bolsas em cursos de licenciatura e pedagogia, sem necessidade de atender ao limite de renda.",
       },
       {
         duvidaId: "eleg-6",
         duvidaPergunta: "Como calculo se minha renda familiar está dentro do limite do PROUNI?",
         duvidaResposta:
-          "Some a renda bruta de todos os integrantes do grupo familiar e divida pelo número de integrantes — esse é o valor da renda per capita. Para a bolsa integral, esse valor não pode ultrapassar 1,5 salário mínimo vigente. Por exemplo: uma família com renda total de R$ 2.500,00 e 4 integrantes tem renda per capita de R$ 625,00, dentro do limite.",
+          "Some a renda bruta de todos os integrantes do grupo familiar e divida pelo número de integrantes — esse é o valor da renda per capita. Para a bolsa integral, esse valor não pode ultrapassar 1,5 salário mínimo vigente. Por exemplo: uma família com renda bruta total de R$ 2.500,00 e 4 integrantes tem renda per capita de R$ 625,00, dentro do limite.",
       },
       {
         duvidaId: "eleg-7",
@@ -105,11 +105,11 @@ export const categorias: Categoria[] = [
         duvidaId: "doc-2",
         duvidaPergunta: "Como comprovo que estudei em escola pública?",
         duvidaResposta:
-          "É preciso apresentar o histórico escolar do ensino médio, emitido pela escola, mostrando as instituições onde cada série foi cursada.",
+          "É preciso apresentar o certificado e o histórico escolar completo do ensino médio, emitido pela escola, mostrando as instituições onde cada série foi cursada.",
       },
       {
         duvidaId: "doc-3",
-        duvidaPergunta: "Preciso de documento de identidade para a matrícula?",
+        duvidaPergunta: "Preciso de documento de identidade?",
         duvidaResposta:
           "Sim, é exigido documento oficial com foto (RG ou CNH — certidão de nascimento apenas se o(a) candidato(a) for menor de 18 anos e não tiver nenhum dos dois) e CPF, além dos documentos de renda e escolaridade. Também é exigido comprovante de residência atualizado de todos os membros do grupo familiar com mais de 18 anos — não basta apresentar apenas um comprovante em nome do candidato ou do responsável pela casa.",
       },
@@ -135,7 +135,7 @@ export const categorias: Categoria[] = [
         duvidaId: "doc-7",
         duvidaPergunta: "Preciso apresentar alguma certidão do INSS?",
         duvidaResposta:
-          "Sim, é obrigatória a Certidão Negativa ou Positiva de Benefícios do INSS de todos os integrantes do grupo familiar, gerada pelo Meu INSS (acesse com sua conta gov.br, vá em 'Outros Serviços' > 'Meus Benefícios' e baixe o documento). Se ocorrer algum erro na emissão, é preciso contatar diretamente o INSS.",
+          "Sim, é obrigatória a Certidão Negativa ou Positiva de Benefícios do INSS de todos os integrantes do grupo familiar a partir de 18 anos, gerada pelo Meu INSS (acesse com sua conta gov.br, vá em 'Outros Serviços' > 'Meus Benefícios' e baixe o documento). Se ocorrer algum erro na emissão, é preciso contatar diretamente o INSS.",
       },
       {
         duvidaId: "doc-8",
@@ -215,13 +215,13 @@ export const categorias: Categoria[] = [
         duvidaId: "prazo-4",
         duvidaPergunta: "Existe lista de espera no PROUNI?",
         duvidaResposta:
-          "Sim. Quem não é chamado nas primeiras chamadas pode manifestar interesse na lista de espera, que segue convocando candidatos conforme surgem vagas remanescentes.",
+          "Sim. Quem não é chamado na primeira ou na segunda chamada pode manifestar interesse na lista de espera, que segue convocando candidatos conforme vagas restantes no semestre.",
       },
       {
         duvidaId: "prazo-5",
         duvidaPergunta: "Quais são as etapas do processo seletivo do PROUNI?",
         duvidaResposta:
-          "O processo seletivo ocorre nos dois semestres do ano e é composto por três etapas: primeira chamada, segunda chamada e lista de espera. Quem não for pré-selecionado nas duas chamadas pode manifestar interesse na lista de espera, que segue convocando candidatos conforme surgem vagas remanescentes.",
+          "O processo seletivo ocorre nos dois semestres do ano e é composto por três etapas: primeira chamada, segunda chamada e lista de espera. Quem não for pré-selecionado nas duas chamadas pode manifestar interesse na lista de espera, que segue convocando candidatos conforme vagas restantes no semestre.",
       },
       {
         duvidaId: "prazo-6",
@@ -271,7 +271,7 @@ export const categorias: Categoria[] = [
         duvidaId: "renov-5",
         duvidaPergunta: "Se eu for reprovado(a) em uma disciplina, preciso pagar para cursá-la de novo?",
         duvidaResposta:
-          "Não. Como a Feevale oferece apenas bolsa integral, a instituição não pode cobrar do(a) bolsista pelas disciplinas cursadas novamente em caso de reprovação (dependências).",
+          "Não. Como a Feevale oferece apenas bolsa integral, a instituição não pode cobrar do(a) bolsista pelas disciplinas (que estão na grade curricular do curso) cursadas novamente em caso de reprovação (dependências).",
       },
     ],
   },
@@ -345,7 +345,7 @@ export const categorias: Categoria[] = [
         duvidaId: "perda-11",
         duvidaPergunta: "O que acontece se a bolsa for concedida depois que as aulas já começaram?",
         duvidaResposta:
-          "Se a matrícula do(a) bolsista ocorrer em período incompatível com o calendário letivo, impossibilitando a frequência e podendo gerar reprovação por faltas, a instituição deve emitir o Termo de Concessão de Bolsa e suspender seu usufruto até o período letivo seguinte, sem prejuízo ao(à) estudante.",
+          "Se a matrícula do(a) bolsista ocorrer em período incompatível com o calendário letivo, impossibilitando a frequência e podendo gerar reprovação por faltas, a instituição deve emitir o Termo de Concessão de Bolsa e suspender seu usufruto até o período letivo seguinte, sem prejuízo ao(à) estudante. Este semestre suspenso contará no prazo total para finalizar o curso.",
       },
     ],
   },
@@ -369,60 +369,54 @@ export const categorias: Categoria[] = [
       },
       {
         duvidaId: "dir-3",
-        duvidaPergunta: "Existe vaga de estágio exclusiva para bolsistas do PROUNI?",
-        duvidaResposta:
-          "Sim. Há convênio do MEC com a Caixa Econômica Federal para vagas de estágio, disponíveis a partir do 3º semestre (cursos de 3 anos) ou do 5º semestre (cursos de 4 ou 5 anos), com cadastro pelo CIEE. Há também convênio com a Febraban, que faz os bancos associados reservarem 10% de suas vagas de estágio para bolsistas do PROUNI.",
-      },
-      {
-        duvidaId: "dir-4",
         duvidaPergunta: "Posso ter bolsa PROUNI e bolsa de iniciação científica ao mesmo tempo?",
         duvidaResposta:
           "Sim, não existe impedimento legal para o bolsista do PROUNI se candidatar também a uma bolsa de iniciação científica.",
       },
       {
-        duvidaId: "dir-5",
+        duvidaId: "dir-4",
         duvidaPergunta: "Sou bolsista PROUNI e estou grávida. Tenho algum direito especial?",
         duvidaResposta:
           "Sim, a estudante gestante tem direito a até 90 dias de ausência justificada às aulas (Lei nº 6.202/1975). No entanto, continua obrigatória a realização de provas, a apresentação de trabalhos em datas especiais e a realização da matrícula.",
       },
       {
-        duvidaId: "dir-6",
+        duvidaId: "dir-5",
         duvidaPergunta: "O que é a Bolsa Permanência?",
         duvidaResposta:
           "É um benefício extra em dinheiro, com valor equivalente ao das bolsas federais de iniciação científica, pago mensalmente a bolsistas com bolsa integral do PROUNI em cursos presenciais de no mínimo 6 semestres de duração e carga horária média de pelo menos 6 horas diárias de aula.",
       },
       {
-        duvidaId: "dir-7",
+        duvidaId: "dir-6",
         duvidaPergunta: "Como faço para receber a Bolsa Permanência?",
         duvidaResposta:
-          "É preciso abrir uma conta corrente individual no Banco do Brasil ou na Caixa Econômica Federal (não pode ser poupança, conta eletrônica ou com mais de um titular) e depois ir à Coordenação do PROUNI da instituição, levando documento de identidade, CPF, comprovante bancário e comprovante de residência, para assinar o Termo de Concessão.",
+          "É preciso abrir uma conta corrente individual no Banco do Brasil ou na Caixa Econômica Federal (não pode ser poupança, conta eletrônica ou com mais de um titular) e depois ir à Coordenação do PROUNI da instituição, levando documento de identidade, CPF, comprovante bancário e comprovante de residência, para assinar o Termo de Concessão. Assim que liberado no sistema, o NAE entra em contato com o aluno (na Feevale apenas os alunos de Medicina recebem a Bolsa Permanência) solicitando as informações bancárias para cadastro no Sisprouni e solicitamos a assinatura eletrônica do termo.",
       },
       {
-        duvidaId: "dir-8",
+        duvidaId: "dir-7",
         duvidaPergunta: "Perco a Bolsa Permanência se minha bolsa PROUNI for suspensa?",
         duvidaResposta:
           "Sim, o pagamento da Bolsa Permanência é interrompido enquanto a bolsa PROUNI estiver suspensa, voltando a ser pago quando a bolsa PROUNI voltar a ser utilizada.",
       },
       {
-        duvidaId: "dir-9",
+        duvidaId: "dir-8",
         duvidaPergunta: "Se a Feevale sair do programa PROUNI, eu perco minha bolsa?",
         duvidaResposta:
           "Não. Ao aderir ao PROUNI, a instituição assume o compromisso de manter a bolsa dos estudantes já matriculados, mesmo que decida deixar o programa antes do fim do prazo de adesão.",
       },
       {
-        duvidaId: "dir-10",
+        duvidaId: "dir-9",
         duvidaPergunta: "Existem bolsas fora do processo seletivo regular?",
         duvidaResposta:
-          "Sim, são as chamadas bolsas remanescentes: vagas não preenchidas no processo seletivo, que podem ser oferecidas a estudantes já matriculados na instituição e que atendam aos critérios socioeconômicos do PROUNI, em prazo estabelecido pelo MEC. Diferente da bolsa regular, a bolsa remanescente não tem efeito retroativo — sua vigência começa a partir da data de emissão do Termo de Concessão, então o(a) estudante não tem direito ao ressarcimento de parcelas já pagas naquele semestre antes de ser contemplado.",
+          "Sim, são as chamadas bolsas remanescentes: vagas não preenchidas no processo seletivo, que podem ser oferecidas a estudantes já matriculados na instituição e que atendam aos critérios socioeconômicos do PROUNI, em prazo estabelecido pelo MEC. Diferente da bolsa regular, a bolsa remanescente não tem efeito retroativo — sua vigência começa a partir da data de emissão do Termo de Concessão, então o(a) estudante não tem direito ao ressarcimento de parcelas já pagas naquele semestre antes de ser contemplado. Porém, no momento a Feevale não possui bolsas remanescentes disponíveis.",
       },
       {
-        duvidaId: "dir-11",
+        duvidaId: "dir-10",
         duvidaPergunta: "Como funciona a seleção para a Bolsa Permanência?",
         duvidaResposta:
           "A seleção dos estudantes aptos é feita mensalmente, de forma automática, pelo sistema do PROUNI. O pagamento, porém, depende da disponibilidade orçamentária e financeira do Ministério da Educação, além da assinatura do Termo de Concessão pelo bolsista e do envio mensal da relação de beneficiários pela coordenação do PROUNI da instituição.",
       },
       {
-        duvidaId: "dir-12",
+        duvidaId: "dir-11",
         duvidaPergunta: "Em quais casos a Bolsa Permanência é encerrada definitivamente (não só suspensa)?",
         duvidaResposta:
           "A Bolsa Permanência é encerrada quando: o curso deixa de atender ao critério de carga horária média de pelo menos 6 horas diárias; a bolsa PROUNI do(a) estudante é encerrada; o(a) estudante é transferido(a) para um curso que não se enquadra nos critérios do benefício; é constatado que o valor não está sendo usado para despesas educacionais; há inidoneidade de documento ou informação falsa; ou por solicitação do(a) próprio(a) estudante.",
@@ -440,7 +434,7 @@ export const categorias: Categoria[] = [
         duvidaId: "feevale-1",
         duvidaPergunta: "Como funciona a entrega de documentos na Feevale?",
         duvidaResposta:
-          "Para pré-selecionados em primeira ou segunda chamada, e para quem está na lista de espera dentro da classificação de vagas, é preciso agendar horário para entrevista pelo telefone (51) 3586-8800, ramal 6545, com atendimento na sala 300L, prédio Lilás, Campus II. Quem manifestou interesse na lista de espera mas está fora da classificação de vagas entrega os documentos em envelope lacrado, sem agendamento, de segunda a sexta-feira, das 8h30 às 12h e das 13h às 20h, no mesmo local.",
+          "Para pré-selecionados em primeira ou segunda chamada, e para quem está na lista de espera dentro da classificação de vagas, é preciso agendar horário, dentro do prazo disponibilizado pelo MEC, para entrevista pelo telefone (51) 3586-8800, ramal 6545, com atendimento na sala 300L, prédio Lilás, Campus II. Quem manifestou interesse na lista de espera mas está fora da classificação de vagas entrega os documentos em envelope lacrado, sem agendamento, de segunda a sexta-feira, das 8h30 às 12h e das 13h às 20h, no mesmo local.",
       },
       {
         duvidaId: "feevale-2",
@@ -458,7 +452,7 @@ export const categorias: Categoria[] = [
         duvidaId: "feevale-4",
         duvidaPergunta: "Preciso avisar a Feevale se eu mudar de curso ou tiver alguma alteração na matrícula?",
         duvidaResposta:
-          "Sim. É responsabilidade do(a) bolsista comunicar ao Núcleo de Apoio ao Estudante (NAE) qualquer alteração em sua matrícula, para garantir a continuidade do benefício, além de manter os dados de contato sempre atualizados no sistema da instituição.",
+          "Sim. É responsabilidade do(a) bolsista comunicar ao Núcleo de Apoio ao Estudante (NAE) qualquer alteração em sua matrícula, para garantir a continuidade do benefício, além de manter os dados de contato sempre atualizados no sistema da instituição. No momento não há previsão para liberação de troca de curso para aluno PROUNI na instituição. Mas qualquer alteração ou solicitação, o aluno PROUNI deve procurar o NAE antes de qualquer coisa.",
       },
       {
         duvidaId: "feevale-5",
@@ -476,13 +470,13 @@ export const categorias: Categoria[] = [
         duvidaId: "feevale-7",
         duvidaPergunta: "Como peço reingresso depois de trancar a matrícula?",
         duvidaResposta:
-          "É preciso preencher o formulário de reingresso disponibilizado pela Feevale, dentro do prazo estipulado pela instituição. A solicitação é analisada pela Comissão do PROUNI, que dá o retorno por e-mail, e o deferimento fica condicionado à existência de vaga acadêmica. Ao reingressar, o(a) estudante fica sujeito ao currículo e às normas institucionais vigentes na data da matrícula.",
+          "É preciso preencher o formulário de reingresso disponibilizado pela Feevale, dentro do prazo estipulado pela instituição e apresentar toda a documentação para comprovação da situação socioeconômica. A solicitação é analisada pela Comissão do PROUNI, que dá o retorno por e-mail, e o deferimento fica condicionado à existência de vaga acadêmica. Ao reingressar, o(a) estudante fica sujeito ao currículo e às normas institucionais vigentes na data da matrícula.",
       },
       {
         duvidaId: "feevale-8",
         duvidaPergunta: "Existe alguma exceção à regra de não haver vagas para transferência?",
         duvidaResposta:
-          "Sim. Mesmo sem oferta geral de vagas, a instituição é obrigada por lei a aceitar transferência nos casos de extinção do curso ou da instituição de origem, ou quando o(a) estudante (ou seu dependente) for servidor(a) público(a) federal civil ou militar removido(a) ou transferido(a) de ofício, com mudança de domicílio por interesse da administração. Também é proibida a cobrança de qualquer taxa de matrícula como condição para analisar ou emitir documentos de transferência.",
+          "Não existe esta exceção na Feevale. A questão de transferência é uma definição institucional de cada universidade. A Universidade Feevale não aceita, neste momento, a transferência ou troca de curso.",
       },
       {
         duvidaId: "feevale-9",
@@ -494,7 +488,7 @@ export const categorias: Categoria[] = [
         duvidaId: "feevale-10",
         duvidaPergunta: "Sou menor de idade. Preciso levar alguém comigo na entrevista?",
         duvidaResposta:
-          "Sim. Se o(a) candidato(a) tiver menos de 18 anos, é obrigatório comparecer à entrevista de comprovação acompanhado de um responsável.",
+          "Sim. Se o(a) candidato(a) tiver menos de 18 anos, é obrigatório comparecer à entrevista de comprovação acompanhado de um responsável legal.",
       },
     ],
   },
