@@ -2,14 +2,39 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { categorias } from "../funcionalidades/duvidas/dados/conteudo";
 import { alternativasQuiz } from "../funcionalidades/duvidas/dados/alternativasQuiz.ts";
+import { perguntasQuizDerivadas } from "../funcionalidades/duvidas/dados/perguntasQuizDerivadas";
+import type { OpcaoQuiz } from "../funcionalidades/duvidas/tipos";
 
-const todasAsPerguntas = categorias.flatMap((categoria) =>
+const perguntasOriginais = categorias.flatMap((categoria) =>
   categoria.categoriaDuvidas.map((duvida) => ({
     ...duvida,
     categoriaId: categoria.categoriaId,
     categoriaNome: categoria.categoriaNome,
   })),
 );
+
+const perguntasDerivadas = Object.entries(perguntasQuizDerivadas).flatMap(
+  ([categoriaId, perguntas]) => {
+    const categoria = categorias.find((item) => item.categoriaId === categoriaId);
+    if (!categoria) return [];
+
+    return perguntas.flatMap((pergunta) => {
+      const duvidaBase = categoria.categoriaDuvidas.find(
+        (duvida) => duvida.duvidaId === pergunta.baseDuvidaId,
+      );
+      if (!duvidaBase) return [];
+
+      return {
+        ...pergunta,
+        duvidaResposta: duvidaBase.duvidaResposta,
+        categoriaId,
+        categoriaNome: categoria.categoriaNome,
+      };
+    });
+  },
+);
+
+const todasAsPerguntas = [...perguntasOriginais, ...perguntasDerivadas];
 
 function embaralhar<T>(itens: T[]): T[] {
   return [...itens].sort(() => Math.random() - 0.5);
@@ -46,19 +71,16 @@ export default function PaginaQuizMenu() {
   };
 
   const nenhumaCategoriaSelecionadaNoMisto = modo === "misto" && categoriasSelecionadasMisto.length === 0;
+  const minimoPerguntas = modo === "categoria" ? 5 : 1;
 
   const iniciarQuiz = () => {
-    const quantidade = Math.min(Math.max(quantidadePerguntas || 1, 1), 10);
+    const quantidade = Math.min(Math.max(quantidadePerguntas || minimoPerguntas, minimoPerguntas), 10);
 
     const perguntas = (() => {
       if (modo === "categoria") {
-        const categoria = categorias.find((item) => item.categoriaId === categoriaSelecionada);
-        if (!categoria) return [];
-        const perguntasDaCategoria = categoria.categoriaDuvidas.map((duvida) => ({
-          ...duvida,
-          categoriaId: categoria.categoriaId,
-          categoriaNome: categoria.categoriaNome,
-        }));
+        const perguntasDaCategoria = todasAsPerguntas.filter(
+          (pergunta) => pergunta.categoriaId === categoriaSelecionada,
+        );
         return embaralhar(perguntasDaCategoria).slice(0, quantidade);
       }
 
@@ -74,7 +96,10 @@ export default function PaginaQuizMenu() {
 
     const perguntasComOpcoes = perguntas.map((pergunta) => ({
       ...pergunta,
-      opcoesResposta: criarOpcoesResposta(pergunta.duvidaId),
+      opcoesResposta:
+        "opcoesResposta" in pergunta
+          ? embaralhar((pergunta as { opcoesResposta: OpcaoQuiz[] }).opcoesResposta)
+          : criarOpcoesResposta(pergunta.duvidaId),
     }));
 
     const estadoInicial = {
@@ -129,7 +154,10 @@ export default function PaginaQuizMenu() {
           <button
             type="button"
             className={`quiz-opcao ${modo === "categoria" ? "ativa" : ""}`}
-            onClick={() => setModo("categoria")}
+            onClick={() => {
+              setModo("categoria");
+              setQuantidadePerguntas((atual) => Math.max(atual, 5));
+            }}
           >
             <span className="quiz-opcao-icone">
               <i className="bi bi-folder2-open" aria-hidden="true" />
@@ -164,12 +192,12 @@ export default function PaginaQuizMenu() {
               <input
                 id="quantidadePerguntas"
                 type="number"
-                min={1}
+                min={minimoPerguntas}
                 max={10}
                 value={quantidadePerguntas}
                 onChange={(event) => {
                   const valor = Number(event.target.value);
-                  setQuantidadePerguntas(Math.min(Math.max(valor || 1, 1), 10));
+                  setQuantidadePerguntas(Math.min(Math.max(valor || minimoPerguntas, minimoPerguntas), 10));
                 }}
                 className="form-control quiz-input"
               />
