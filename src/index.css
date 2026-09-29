@@ -587,6 +587,13 @@ a {
   text-align: center;
 }
 
+.rodape-autoria {
+  color: rgba(63, 74, 68, 0.68);
+  font-size: 0.64rem;
+  line-height: 1.2;
+  text-align: right;
+}
+
 @media (max-width: 767.98px) {
   .rodape-barra {
     grid-template-columns: 1fr;

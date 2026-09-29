@@ -57,6 +57,7 @@ export default function Rodape() {
             </div>
           </div>
         </div>
+        <p className="rodape-autoria mb-0 mt-3">Desenvolvimento: Júlia Hadassa Zucco</p>
       </div>
     </footer>
   );

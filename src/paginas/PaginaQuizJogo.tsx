@@ -23,28 +23,44 @@ interface EstadoQuiz {
   perguntas: PerguntaQuiz[];
 }
 
-function tocarSomFinalizacao() {
-  const contexto = new AudioContext();
-  const ganho = contexto.createGain();
-  const agora = contexto.currentTime;
-  const frequencias = [523.25, 659.25, 783.99];
+function criarContextoAudio() {
+  const ConstrutorAudio = window.AudioContext;
+  if (!ConstrutorAudio) return null;
+  return new ConstrutorAudio();
+}
 
-  ganho.gain.setValueAtTime(0.0001, agora);
-  ganho.gain.exponentialRampToValueAtTime(0.16, agora + 0.03);
-  ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.9);
-  ganho.connect(contexto.destination);
+function tocarSomFinalizacao(aprovado: boolean) {
+  const caminho = aprovado ? "/som-aproveitamento-alto.mp3" : "/som-aproveitamento-baixo.mp3";
+  const audio = new Audio(caminho);
+  audio.volume = 1;
+  void audio.play().catch(() => undefined);
+}
+
+async function tocarSomResposta(acertou: boolean) {
+  const contexto = criarContextoAudio();
+  if (!contexto) return;
+  await contexto.resume();
+
+  const agora = contexto.currentTime;
+  const frequencias = acertou ? [784] : [330, 247];
+  const duracao = acertou ? 0.5 : 0.22;
 
   frequencias.forEach((frequencia, indice) => {
     const oscilador = contexto.createOscillator();
-    const inicio = agora + indice * 0.16;
-    oscilador.type = "sine";
+    const ganho = contexto.createGain();
+    const inicio = agora + indice * 0.12;
+    oscilador.type = "triangle";
     oscilador.frequency.setValueAtTime(frequencia, inicio);
+    ganho.gain.setValueAtTime(0.0001, inicio);
+    ganho.gain.exponentialRampToValueAtTime(acertou ? 0.4 : 0.27, inicio + 0.025);
+    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + duracao);
     oscilador.connect(ganho);
+    ganho.connect(contexto.destination);
     oscilador.start(inicio);
-    oscilador.stop(inicio + 0.25);
+    oscilador.stop(inicio + duracao);
   });
 
-  window.setTimeout(() => void contexto.close(), 1100);
+  window.setTimeout(() => void contexto.close(), acertou ? 650 : 550);
 }
 
 export default function PaginaQuizJogo() {
@@ -77,31 +93,13 @@ export default function PaginaQuizJogo() {
     return (perguntasConcluidas / totalPerguntas) * 100;
   }, [totalPerguntas, indiceAtual, quizFinalizado]);
 
-  const tocarSomResposta = (acertou: boolean) => {
-    const contexto = new AudioContext();
-    const oscilador = contexto.createOscillator();
-    const ganho = contexto.createGain();
-    const agora = contexto.currentTime;
-
-    oscilador.type = "sine";
-    oscilador.frequency.setValueAtTime(acertou ? 660 : 220, agora);
-    ganho.gain.setValueAtTime(0.0001, agora);
-    ganho.gain.exponentialRampToValueAtTime(0.18, agora + 0.02);
-    ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.35);
-    oscilador.connect(ganho);
-    ganho.connect(contexto.destination);
-    oscilador.start(agora);
-    oscilador.stop(agora + 0.35);
-    window.setTimeout(() => void contexto.close(), 500);
-  };
-
   const selecionarOpcao = (indiceOpcao: number) => {
     if (!perguntaAtual || resultadoResposta) return;
 
     const acertou = perguntaAtual.opcoesResposta[indiceOpcao].correta;
     setOpcaoSelecionada(indiceOpcao);
     setResultadoResposta(acertou ? "certa" : "errada");
-    tocarSomResposta(acertou);
+    void tocarSomResposta(acertou);
 
     if (acertou) {
       setAcertos((atual) => atual + 1);
@@ -118,7 +116,7 @@ export default function PaginaQuizJogo() {
       return;
     }
 
-    tocarSomFinalizacao();
+    void tocarSomFinalizacao((acertos + (resultadoResposta === "certa" ? 1 : 0)) / totalPerguntas > 0.5);
     setQuizFinalizado(true);
   };
 
@@ -158,6 +156,11 @@ export default function PaginaQuizJogo() {
             Você acertou {acertos} de {totalPerguntas}
           </h2>
           <p className="quiz-resultado-percentual mb-4">{percentualAcerto}% de aproveitamento</p>
+          {percentualAcerto > 50 ? (
+            <p className="quiz-resultado-mensagem mb-4">Parabéns pelo resultado!</p>
+          ) : (
+            <p className="quiz-resultado-mensagem mb-4">Tente novamente para melhorar seu resultado.</p>
+          )}
 
           <div className="quiz-resultado-acoes">
             <button type="button" className="quiz-botao-iniciar" onClick={jogarNovamente}>
