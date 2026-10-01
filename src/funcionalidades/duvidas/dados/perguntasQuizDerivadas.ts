@@ -20,7 +20,7 @@ export const perguntasQuizDerivadas: Record<string, PerguntaQuizDerivada[]> = {
     {
       duvidaId: "eleg-1-detalhe-enem",
       baseDuvidaId: "eleg-1",
-      duvidaPergunta: "Qual é a média mínima exigida nas provas objetivas do ENEM?",
+      duvidaPergunta: "Qual é a média mínima exigida nas provas objetivas do ENEM para se inscrever no PROUNI?",
       opcoesResposta: opcoes(1, "350 pontos", "450 pontos", "550 pontos", "Não há média mínima"),
     },
     {
@@ -40,7 +40,7 @@ export const perguntasQuizDerivadas: Record<string, PerguntaQuizDerivada[]> = {
     {
       duvidaId: "insc-1-detalhe-alteracao",
       baseDuvidaId: "insc-1",
-      duvidaPergunta: "Durante a inscrição, qual opção é válida?",
+      duvidaPergunta: "Durante a inscrição, qual opção de cursoé válida?",
       opcoesResposta: opcoes(3, "A primeira opção preenchida", "A opção enviada por e-mail", "A opção escolhida pela faculdade", "A última inscrição confirmada"),
     },
     {
