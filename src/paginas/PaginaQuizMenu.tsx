@@ -123,6 +123,12 @@ export default function PaginaQuizMenu() {
     navigate("/quiz/jogar", { state: estadoInicial });
   };
 
+  const alterarQuantidadePerguntas = (incremento: number) => {
+    setQuantidadePerguntas((quantidadeAtual) =>
+      Math.min(Math.max(quantidadeAtual + incremento, minimoPerguntas), 10),
+    );
+  };
+
   return (
     <div className="container py-4">
       <div className="quiz-menu-wrap">
@@ -196,18 +202,38 @@ export default function PaginaQuizMenu() {
               <label className="form-label quiz-label" htmlFor="quantidadePerguntas">
                 Quantidade de perguntas
               </label>
-              <input
-                id="quantidadePerguntas"
-                type="number"
-                min={minimoPerguntas}
-                max={10}
-                value={quantidadePerguntas}
-                onChange={(event) => {
-                  const valor = Number(event.target.value);
-                  setQuantidadePerguntas(Math.min(Math.max(valor || minimoPerguntas, minimoPerguntas), 10));
-                }}
-                className="form-control quiz-input"
-              />
+              <div className="quiz-quantidade-controle">
+                <button
+                  type="button"
+                  className="quiz-quantidade-botao"
+                  onClick={() => alterarQuantidadePerguntas(-1)}
+                  disabled={quantidadePerguntas <= minimoPerguntas}
+                  aria-label="Diminuir quantidade de perguntas"
+                >
+                  <i className="bi bi-chevron-down" aria-hidden="true" />
+                </button>
+                <input
+                  id="quantidadePerguntas"
+                  type="number"
+                  min={minimoPerguntas}
+                  max={10}
+                  value={quantidadePerguntas}
+                  onChange={(event) => {
+                    const valor = Number(event.target.value);
+                    setQuantidadePerguntas(Math.min(Math.max(valor || minimoPerguntas, minimoPerguntas), 10));
+                  }}
+                  className="form-control quiz-input"
+                />
+                <button
+                  type="button"
+                  className="quiz-quantidade-botao"
+                  onClick={() => alterarQuantidadePerguntas(1)}
+                  disabled={quantidadePerguntas >= 10}
+                  aria-label="Aumentar quantidade de perguntas"
+                >
+                  <i className="bi bi-chevron-up" aria-hidden="true" />
+                </button>
+              </div>
             </div>
 
             {modo === "categoria" && (

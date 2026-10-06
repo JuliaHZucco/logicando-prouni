@@ -24,44 +24,23 @@ interface EstadoQuiz {
   perguntas: PerguntaQuiz[];
 }
 
-function criarContextoAudio() {
-  const ConstrutorAudio = window.AudioContext;
-  if (!ConstrutorAudio) return null;
-  return new ConstrutorAudio();
+let audioQuizAtual: HTMLAudioElement | null = null;
+
+function tocarAudioQuiz(caminho: string) {
+  audioQuizAtual?.pause();
+  audioQuizAtual = new Audio(caminho);
+  audioQuizAtual.volume = 1;
+  void audioQuizAtual.play().catch(() => undefined);
 }
 
 function tocarSomFinalizacao(aprovado: boolean) {
   const caminho = aprovado ? "/som-aproveitamento-alto.mp3" : "/som-aproveitamento-baixo.mp3";
-  const audio = new Audio(caminho);
-  audio.volume = 1;
-  void audio.play().catch(() => undefined);
+  tocarAudioQuiz(caminho);
 }
 
-async function tocarSomResposta(acertou: boolean) {
-  const contexto = criarContextoAudio();
-  if (!contexto) return;
-  await contexto.resume();
-
-  const agora = contexto.currentTime;
-  const frequencias = acertou ? [784] : [330, 247];
-  const duracao = acertou ? 0.5 : 0.22;
-
-  frequencias.forEach((frequencia, indice) => {
-    const oscilador = contexto.createOscillator();
-    const ganho = contexto.createGain();
-    const inicio = agora + indice * 0.12;
-    oscilador.type = "triangle";
-    oscilador.frequency.setValueAtTime(frequencia, inicio);
-    ganho.gain.setValueAtTime(0.0001, inicio);
-    ganho.gain.exponentialRampToValueAtTime(acertou ? 0.4 : 0.5, inicio + 0.025);
-    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + duracao);
-    oscilador.connect(ganho);
-    ganho.connect(contexto.destination);
-    oscilador.start(inicio);
-    oscilador.stop(inicio + duracao);
-  });
-
-  window.setTimeout(() => void contexto.close(), acertou ? 650 : 550);
+function tocarSomResposta(acertou: boolean) {
+  const caminho = acertou ? "/som-acerto.mp3" : "/som-erro.mp3";
+  tocarAudioQuiz(caminho);
 }
 
 export default function PaginaQuizJogo() {
