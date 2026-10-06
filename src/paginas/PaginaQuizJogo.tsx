@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { registrarResultadoQuiz } from "../funcionalidades/duvidas/dados/historicoQuiz";
 
 interface PerguntaQuiz {
@@ -67,11 +67,7 @@ async function tocarSomResposta(acertou: boolean) {
 export default function PaginaQuizJogo() {
   const location = useLocation();
   const navigate = useNavigate();
-  const estadoQuiz = (location.state as EstadoQuiz | null) ?? {
-    modo: "aleatorio",
-    quantidadePerguntas: 5,
-    perguntas: [],
-  };
+  const estadoQuiz = location.state as EstadoQuiz | null;
 
   const [indiceAtual, setIndiceAtual] = useState(0);
   const [opcaoSelecionada, setOpcaoSelecionada] = useState<number | null>(null);
@@ -79,10 +75,11 @@ export default function PaginaQuizJogo() {
   const [acertos, setAcertos] = useState(0);
   const [quizFinalizado, setQuizFinalizado] = useState(false);
 
-  const perguntaAtual = estadoQuiz.perguntas[indiceAtual];
-  const totalPerguntas = estadoQuiz.perguntas.length;
+  const perguntas = estadoQuiz?.perguntas ?? [];
+  const perguntaAtual = perguntas[indiceAtual];
+  const totalPerguntas = perguntas.length;
   const categoriasExibidas =
-    estadoQuiz.modo === "misto" && estadoQuiz.categoriasSelecionadas?.length
+    estadoQuiz?.modo === "misto" && estadoQuiz.categoriasSelecionadas?.length
       ? estadoQuiz.categoriasSelecionadas
       : perguntaAtual?.categoriaNome
         ? [perguntaAtual.categoriaNome]
@@ -93,6 +90,10 @@ export default function PaginaQuizJogo() {
     const perguntasConcluidas = quizFinalizado ? totalPerguntas : indiceAtual;
     return (perguntasConcluidas / totalPerguntas) * 100;
   }, [totalPerguntas, indiceAtual, quizFinalizado]);
+
+  if (!estadoQuiz?.perguntas?.length) {
+    return <Navigate to="/quiz" replace />;
+  }
 
   const selecionarOpcao = (indiceOpcao: number) => {
     if (!perguntaAtual || resultadoResposta) return;
@@ -129,23 +130,6 @@ export default function PaginaQuizJogo() {
     setAcertos(0);
     setQuizFinalizado(false);
   };
-
-  if (!totalPerguntas) {
-    return (
-      <div className="container py-4">
-        <div className="quiz-vazio">
-          <i className="bi bi-emoji-frown quiz-vazio-icone" aria-hidden="true" />
-          <h2 className="titulo-secao mb-2">Nenhuma pergunta disponível</h2>
-          <p className="quiz-vazio-texto mb-4">
-            Escolha um modo de jogo para começar a testar seus conhecimentos.
-          </p>
-          <Link to="/quiz" className="quiz-botao-iniciar">
-            Voltar ao menu do quiz
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   if (quizFinalizado) {
     const percentualAcerto = Math.round((acertos / totalPerguntas) * 100);
