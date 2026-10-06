@@ -53,7 +53,7 @@ async function tocarSomResposta(acertou: boolean) {
     oscilador.type = "triangle";
     oscilador.frequency.setValueAtTime(frequencia, inicio);
     ganho.gain.setValueAtTime(0.0001, inicio);
-    ganho.gain.exponentialRampToValueAtTime(acertou ? 0.4 : 0.27, inicio + 0.025);
+    ganho.gain.exponentialRampToValueAtTime(acertou ? 0.4 : 0.5, inicio + 0.025);
     ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + duracao);
     oscilador.connect(ganho);
     ganho.connect(contexto.destination);

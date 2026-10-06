@@ -63,15 +63,20 @@ export default function PaginaQuizMenu() {
   );
 
   const alternarCategoriaMisto = (categoriaId: string) => {
-    setCategoriasSelecionadasMisto((atuais) =>
-      atuais.includes(categoriaId)
+    setCategoriasSelecionadasMisto((atuais) => {
+      const proximasCategorias = atuais.includes(categoriaId)
         ? atuais.filter((id) => id !== categoriaId)
-        : [...atuais, categoriaId],
-    );
+        : [...atuais, categoriaId];
+      setQuantidadePerguntas((quantidadeAtual) =>
+        Math.max(quantidadeAtual, Math.max(1, proximasCategorias.length)),
+      );
+      return proximasCategorias;
+    });
   };
 
   const nenhumaCategoriaSelecionadaNoMisto = modo === "misto" && categoriasSelecionadasMisto.length === 0;
-  const minimoPerguntas = 1;
+  const minimoPerguntas =
+    modo === "misto" ? Math.max(1, categoriasSelecionadasMisto.length) : 1;
 
   const iniciarQuiz = () => {
     const quantidade = Math.min(Math.max(quantidadePerguntas || minimoPerguntas, minimoPerguntas), 10);
@@ -168,7 +173,12 @@ export default function PaginaQuizMenu() {
           <button
             type="button"
             className={`quiz-opcao ${modo === "misto" ? "ativa" : ""}`}
-            onClick={() => setModo("misto")}
+            onClick={() => {
+              setModo("misto");
+              setQuantidadePerguntas((quantidadeAtual) =>
+                Math.max(quantidadeAtual, Math.max(1, categoriasSelecionadasMisto.length)),
+              );
+            }}
           >
             <span className="quiz-opcao-icone">
               <i className="bi bi-grid-3x3-gap" aria-hidden="true" />

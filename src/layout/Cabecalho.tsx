@@ -1,9 +1,16 @@
-import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Cabecalho() {
+  const localizacao = useLocation();
   const navegar = useNavigate();
   const [termoBusca, setTermoBusca] = useState("");
+
+  useEffect(() => {
+    if (localizacao.pathname !== "/buscar") {
+      setTermoBusca("");
+    }
+  }, [localizacao.pathname]);
 
   const aoEnviarBusca = (e: FormEvent) => {
     e.preventDefault();

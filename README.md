@@ -39,7 +39,7 @@ A rota `/quiz` apresenta o menu de configuração. O usuário pode escolher entr
 
 1. Modo aleatório, com perguntas de qualquer categoria.
 2. Uma categoria, com perguntas filtradas pela categoria escolhida.
-3. Misto, com perguntas das categorias selecionadas.
+3. Misto, com perguntas das categorias selecionadas. Nesse modo, o mínimo de perguntas é igual ao número de categorias selecionadas, garantindo pelo menos uma pergunta de cada categoria.
 
 O usuário escolhe entre 1 e 10 perguntas. A rota `/quiz/jogar` recebe a configuração pela navegação do React Router, embaralha as perguntas e as alternativas, mostra o feedback de cada resposta e apresenta o resultado ao final.
 
