@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { registrarResultadoQuiz } from "../funcionalidades/duvidas/dados/historicoQuiz";
 
 interface PerguntaQuiz {
   duvidaId: string;
@@ -99,6 +100,7 @@ export default function PaginaQuizJogo() {
     const acertou = perguntaAtual.opcoesResposta[indiceOpcao].correta;
     setOpcaoSelecionada(indiceOpcao);
     setResultadoResposta(acertou ? "certa" : "errada");
+    registrarResultadoQuiz(perguntaAtual.duvidaId, acertou);
     void tocarSomResposta(acertou);
 
     if (acertou) {

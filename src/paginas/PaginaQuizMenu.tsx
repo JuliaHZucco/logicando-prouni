@@ -71,7 +71,7 @@ export default function PaginaQuizMenu() {
   };
 
   const nenhumaCategoriaSelecionadaNoMisto = modo === "misto" && categoriasSelecionadasMisto.length === 0;
-  const minimoPerguntas = modo === "categoria" ? 5 : 1;
+  const minimoPerguntas = 1;
 
   const iniciarQuiz = () => {
     const quantidade = Math.min(Math.max(quantidadePerguntas || minimoPerguntas, minimoPerguntas), 10);
@@ -154,10 +154,7 @@ export default function PaginaQuizMenu() {
           <button
             type="button"
             className={`quiz-opcao ${modo === "categoria" ? "ativa" : ""}`}
-            onClick={() => {
-              setModo("categoria");
-              setQuantidadePerguntas((atual) => Math.max(atual, 5));
-            }}
+            onClick={() => setModo("categoria")}
           >
             <span className="quiz-opcao-icone">
               <i className="bi bi-folder2-open" aria-hidden="true" />
