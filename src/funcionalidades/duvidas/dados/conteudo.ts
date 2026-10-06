@@ -35,13 +35,13 @@ export const categorias: Categoria[] = [
         duvidaId: "eleg-5",
         duvidaPergunta: "Existe alguma exceção à regra de escola pública ou de renda?",
         duvidaResposta:
-          "Sim. Professores da rede pública em efetivo exercício do magistério da educação básica — neste caso, apenas para bolsas em cursos de licenciatura e pedagogia, sem necessidade de atender ao limite de renda.",
+          "Sim. Professores da rede pública em efetivo exercício do magistério da educação básica. Neste caso, apenas para bolsas em cursos de licenciatura e pedagogia, sem necessidade de atender ao limite de renda.",
       },
       {
         duvidaId: "eleg-6",
         duvidaPergunta: "Como calculo se minha renda familiar está dentro do limite do PROUNI?",
         duvidaResposta:
-          "Some a renda bruta de todos os integrantes do grupo familiar e divida pelo número de integrantes — esse é o valor da renda per capita. Para a bolsa integral, esse valor não pode ultrapassar 1,5 salário mínimo vigente. Por exemplo: uma família com renda bruta total de R$ 2.500,00 e 4 integrantes tem renda per capita de R$ 625,00, dentro do limite.",
+          "Some a renda bruta de todos os integrantes do grupo familiar e divida pelo número de integrantes. Esse é o valor da renda per capita. Para a bolsa integral, esse valor não pode ultrapassar 1,5 salário mínimo vigente. Por exemplo: uma família com renda bruta total de R$ 2.500,00 e 4 integrantes tem renda per capita de R$ 625,00, dentro do limite.",
       },
       {
         duvidaId: "eleg-7",
@@ -67,7 +67,7 @@ export const categorias: Categoria[] = [
         duvidaId: "insc-1",
         duvidaPergunta: "Onde e como faço a inscrição do PROUNI?",
         duvidaResposta:
-          "A inscrição é feita em etapa única e gratuita, exclusivamente pelo site oficial do PROUNI, usando o login único gov.br. Durante o período de inscrição é possível alterar as opções escolhidas quantas vezes quiser — só vale a última inscrição confirmada. Não existe inscrição por e-mail, WhatsApp ou presencialmente na faculdade.",
+          "A inscrição é feita em etapa única e gratuita, exclusivamente pelo site oficial do PROUNI, usando o login único gov.br. Durante o período de inscrição é possível alterar as opções escolhidas quantas vezes quiser. Só vale a última inscrição confirmada. Não existe inscrição por e-mail, WhatsApp ou presencialmente na faculdade.",
       },
       {
         duvidaId: "insc-2",
@@ -111,7 +111,7 @@ export const categorias: Categoria[] = [
         duvidaId: "doc-3",
         duvidaPergunta: "Preciso de documento de identidade?",
         duvidaResposta:
-          "Sim, é exigido documento oficial com foto (RG ou CNH — certidão de nascimento apenas se o(a) candidato(a) for menor de 18 anos e não tiver nenhum dos dois) e CPF, além dos documentos de renda e escolaridade. Também é exigido comprovante de residência atualizado de todos os membros do grupo familiar com mais de 18 anos — não basta apresentar apenas um comprovante em nome do candidato ou do responsável pela casa.",
+          "Sim, é exigido documento oficial com foto (RG ou CNH. A certidão de nascimento é aceita apenas se o(a) candidato(a) for menor de 18 anos e não tiver nenhum dos dois) e CPF, além dos documentos de renda e escolaridade. Também é exigido comprovante de residência atualizado de todos os membros do grupo familiar com mais de 18 anos. Não basta apresentar apenas um comprovante em nome do candidato ou do responsável pela casa.",
       },
       {
         duvidaId: "doc-4",
@@ -147,19 +147,19 @@ export const categorias: Categoria[] = [
         duvidaId: "doc-9",
         duvidaPergunta: "Sou sócio(a) ou diretor(a) de empresa. Quais documentos de renda preciso apresentar?",
         duvidaResposta:
-          "Se a empresa for enquadrada como Simples, Limitada ou Microempresa, é obrigatória a DECORE (Declaração Comprobatória de Percepção de Rendimentos) dos últimos três meses, assinada por contador(a) inscrito(a) no CRC, além da declaração completa do Imposto de Renda Pessoa Jurídica do último exercício, do Contrato Social (obrigatório) e alterações, se houver, e do extrato bancário dos últimos três meses da conta em que a renda é movimentada. Atenção: DECORE e Pró-Labore são documentos diferentes, e o Pró-Labore sozinho não é aceito. Se for MEI, os documentos mudam — veja a próxima dúvida.",
+          "Se a empresa for enquadrada como Simples, Limitada ou Microempresa, é obrigatória a DECORE (Declaração Comprobatória de Percepção de Rendimentos) dos últimos três meses, assinada por contador(a) inscrito(a) no CRC, além da declaração completa do Imposto de Renda Pessoa Jurídica do último exercício, do Contrato Social (obrigatório) e alterações, se houver, e do extrato bancário dos últimos três meses da conta em que a renda é movimentada. Atenção: DECORE e Pró-Labore são documentos diferentes, e o Pró-Labore sozinho não é aceito. Se for MEI, os documentos mudam. Veja a próxima dúvida.",
       },
       {
         duvidaId: "doc-10",
         duvidaPergunta: "Sou MEI. Quais documentos preciso apresentar?",
         duvidaResposta:
-          "É preciso apresentar o Comprovante de MEI (emitido no site do governo, na área de serviços para MEI), uma declaração de renda informando o tipo de atividade e o valor médio mensal (modelo disponível em www.feevale.br/prouni), a declaração exigida pela Feevale para esse item — no caso do MEI, a DASN-SIMEI (Declaração Anual do Simples Nacional para o MEI) — e o extrato bancário dos últimos três meses da conta em que a renda é movimentada.",
+          "É preciso apresentar o Comprovante de MEI (emitido no site do governo, na área de serviços para MEI), uma declaração de renda informando o tipo de atividade e o valor médio mensal (modelo disponível em www.feevale.br/prouni), a declaração exigida pela Feevale para esse item, no caso do MEI, a DASN-SIMEI (Declaração Anual do Simples Nacional para o MEI), e o extrato bancário dos últimos três meses da conta em que a renda é movimentada.",
       },
       {
         duvidaId: "doc-11",
         duvidaPergunta: "Como devem ser assinadas as declarações exigidas no processo?",
         duvidaResposta:
-          "Todas as declarações emitidas pelo(a) candidato(a) devem ser entregues em via original. A assinatura do(a) declarante precisa ser reconhecida em cartório (sendo aceito o reconhecimento por semelhança) ou feita eletronicamente pelo GOV.BR. Se o modelo de declaração pedir testemunhas — como na declaração de separação não legalizada — elas só precisam assinar o documento, sem necessidade de cartório, mas não podem ser membros do grupo familiar.",
+          "Todas as declarações emitidas pelo(a) candidato(a) devem ser entregues em via original. A assinatura do(a) declarante precisa ser reconhecida em cartório (sendo aceito o reconhecimento por semelhança) ou feita eletronicamente pelo GOV.BR. Se o modelo de declaração pedir testemunhas, como na declaração de separação não legalizada, elas só precisam assinar o documento, sem necessidade de cartório, mas não podem ser membros do grupo familiar.",
       },
       {
         duvidaId: "doc-12",
@@ -227,13 +227,13 @@ export const categorias: Categoria[] = [
         duvidaId: "prazo-6",
         duvidaPergunta: "O que acontece depois que meus documentos são aprovados?",
         duvidaResposta:
-          "Após a instituição aprovar a comprovação das informações, o candidato assina o Termo de Concessão de Bolsa e realiza a matrícula. É responsabilidade do próprio candidato verificar, junto à instituição, os horários e o local de comparecimento para a comprovação — perder o prazo ou não comprovar as informações resulta automaticamente na reprovação do candidato.",
+          "Após a instituição aprovar a comprovação das informações, o candidato assina o Termo de Concessão de Bolsa e realiza a matrícula. É responsabilidade do próprio candidato verificar, junto à instituição, os horários e o local de comparecimento para a comprovação. Perder o prazo ou não comprovar as informações resulta automaticamente na reprovação do candidato.",
       },
       {
         duvidaId: "prazo-7",
         duvidaPergunta: "De quem é a responsabilidade por cumprir os prazos do PROUNI?",
         duvidaResposta:
-          "Todos os prazos referentes aos procedimentos acadêmicos e à bolsa do PROUNI — como inscrição, comprovação de documentos e renovação — são de responsabilidade exclusiva do(a) estudante bolsista. Perder um prazo, inclusive o de renovação da bolsa, pode acarretar a suspensão automática do benefício.",
+          "Todos os prazos referentes aos procedimentos acadêmicos e à bolsa do PROUNI, como inscrição, comprovação de documentos e renovação, são de responsabilidade exclusiva do(a) estudante bolsista. Perder um prazo, inclusive o de renovação da bolsa, pode acarretar a suspensão automática do benefício.",
       },
     ],
   },
@@ -297,7 +297,7 @@ export const categorias: Categoria[] = [
         duvidaId: "perda-3",
         duvidaPergunta: "Se minha renda familiar aumentar, posso perder a bolsa?",
         duvidaResposta:
-          "Sim. A instituição pode realizar reavaliação socioeconômica periódica, e uma mudança substancial na condição socioeconômica do(a) estudante — como um aumento de renda que ultrapasse o limite exigido — pode levar ao encerramento da bolsa.",
+          "Sim. A instituição pode realizar reavaliação socioeconômica periódica, e uma mudança substancial na condição socioeconômica do(a) estudante, como um aumento de renda que ultrapasse o limite exigido, pode levar ao encerramento da bolsa.",
       },
       {
         duvidaId: "perda-4",
@@ -333,13 +333,13 @@ export const categorias: Categoria[] = [
         duvidaId: "perda-9",
         duvidaPergunta: "Posso usar bolsa PROUNI e financiamento FIES ao mesmo tempo?",
         duvidaResposta:
-          "Não. É proibido usufruir, ao mesmo tempo, de bolsa PROUNI e financiamento do FIES em curso ou instituição diferentes — isso leva ao encerramento da bolsa PROUNI. Se você já tinha um contrato de financiamento do FIES antes de receber a bolsa integral do PROUNI, deve solicitar o encerramento desse contrato diretamente com o agente financeiro (banco).",
+          "Não. É proibido usufruir, ao mesmo tempo, de bolsa PROUNI e financiamento do FIES em curso ou instituição diferentes. Isso leva ao encerramento da bolsa PROUNI. Se você já tinha um contrato de financiamento do FIES antes de receber a bolsa integral do PROUNI, deve solicitar o encerramento desse contrato diretamente com o agente financeiro (banco).",
       },
       {
         duvidaId: "perda-10",
         duvidaPergunta: "Perder a bolsa é a mesma coisa que ficar com ela suspensa?",
         duvidaResposta:
-          "Não. A suspensão é temporária — por exemplo, durante um trancamento de matrícula dentro do prazo permitido, ou por falta de atualização do usufruto pelo coordenador — e o período suspenso é descontado do prazo total de uso da bolsa, sem que o estudante perca a bolsa ou fique devendo nesse período. Já o encerramento é definitivo.",
+          "Não. A suspensão é temporária, por exemplo, durante um trancamento de matrícula dentro do prazo permitido ou por falta de atualização do usufruto pelo coordenador. O período suspenso é descontado do prazo total de uso da bolsa, sem que o estudante perca a bolsa ou fique devendo nesse período. Já o encerramento é definitivo.",
       },
       {
         duvidaId: "perda-11",
@@ -407,7 +407,7 @@ export const categorias: Categoria[] = [
         duvidaId: "dir-9",
         duvidaPergunta: "Existem bolsas fora do processo seletivo regular?",
         duvidaResposta:
-          "Sim, são as chamadas bolsas remanescentes: vagas não preenchidas no processo seletivo, que podem ser oferecidas a estudantes já matriculados na instituição e que atendam aos critérios socioeconômicos do PROUNI, em prazo estabelecido pelo MEC. Diferente da bolsa regular, a bolsa remanescente não tem efeito retroativo — sua vigência começa a partir da data de emissão do Termo de Concessão, então o(a) estudante não tem direito ao ressarcimento de parcelas já pagas naquele semestre antes de ser contemplado. Porém, no momento a Feevale não possui bolsas remanescentes disponíveis.",
+          "Sim, são as chamadas bolsas remanescentes: vagas não preenchidas no processo seletivo, que podem ser oferecidas a estudantes já matriculados na instituição e que atendam aos critérios socioeconômicos do PROUNI, em prazo estabelecido pelo MEC. Diferente da bolsa regular, a bolsa remanescente não tem efeito retroativo. Sua vigência começa a partir da data de emissão do Termo de Concessão, então o(a) estudante não tem direito ao ressarcimento de parcelas já pagas naquele semestre antes de ser contemplado. Porém, no momento a Feevale não possui bolsas remanescentes disponíveis.",
       },
       {
         duvidaId: "dir-10",
@@ -440,7 +440,7 @@ export const categorias: Categoria[] = [
         duvidaId: "feevale-2",
         duvidaPergunta: "Posso transferir minha bolsa PROUNI para a Feevale ou trocar de curso mantendo a bolsa?",
         duvidaResposta:
-          "No momento, a Feevale não possui previsão de oferta de vagas PROUNI para transferências internas ou externas. Há exceções previstas em lei a essa regra — veja a próxima dúvida.",
+          "No momento, a Feevale não possui previsão de oferta de vagas PROUNI para transferências internas ou externas. Há exceções previstas em lei a essa regra. Veja a próxima dúvida.",
       },
       {
         duvidaId: "feevale-3",

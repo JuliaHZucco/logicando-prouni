@@ -20,7 +20,7 @@ export default function AcordeaoDuvidas({
 
   useEffect(() => {
     if (duvidaIdAbertaPadrao) marcarDuvidaComoVista(duvidaIdAbertaPadrao);
-  }, [duvidaIdAbertaPadrao]);
+  }, [duvidaIdAbertaPadrao, marcarDuvidaComoVista]);
 
   const alternarDuvida = (duvidaId: string) => {
     const vaiAbrir = duvidaIdAberta !== duvidaId;

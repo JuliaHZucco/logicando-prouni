@@ -7,7 +7,8 @@ import PaginaCategoria from "./paginas/PaginaCategoria";
 import ResultadoBusca from "./paginas/ResultadoBusca";
 import PaginaQuizMenu from "./paginas/PaginaQuizMenu";
 import PaginaQuizJogo from "./paginas/PaginaQuizJogo";
-import { ProvedorVisualizacoes } from "./funcionalidades/duvidas/contexto/ContextoVisualizacoes";
+import PaginaNaoEncontrada from "./paginas/PaginaNaoEncontrada";
+import ProvedorVisualizacoes from "./funcionalidades/duvidas/contexto/ProvedorVisualizacoes";
 
 function ScrollParaOTopo() {
   const { pathname, search } = useLocation();
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/buscar" element={<ResultadoBusca />} />
             <Route path="/quiz" element={<PaginaQuizMenu />} />
             <Route path="/quiz/jogar" element={<PaginaQuizJogo />} />
+            <Route path="*" element={<PaginaNaoEncontrada />} />
           </Routes>
         </main>
         <Rodape />

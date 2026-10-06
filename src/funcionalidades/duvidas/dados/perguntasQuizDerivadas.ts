@@ -40,7 +40,7 @@ export const perguntasQuizDerivadas: Record<string, PerguntaQuizDerivada[]> = {
     {
       duvidaId: "insc-1-detalhe-alteracao",
       baseDuvidaId: "insc-1",
-      duvidaPergunta: "Durante a inscrição, qual opção de cursoé válida?",
+      duvidaPergunta: "Durante a inscrição, qual opção de curso é válida?",
       opcoesResposta: opcoes(3, "A primeira opção preenchida", "A opção enviada por e-mail", "A opção escolhida pela faculdade", "A última inscrição confirmada"),
     },
     {

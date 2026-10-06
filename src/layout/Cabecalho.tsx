@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Cabecalho() {
   const navegar = useNavigate();
@@ -16,14 +16,14 @@ export default function Cabecalho() {
   return (
     <header className="app-cabecalho">
       <div className="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
-        <a href="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
+        <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
           <img src="/logo-feevale.png" alt="Logo da Universidade Feevale" className="marca-logo" />
           <span className="d-flex flex-column">
             <span className="marca-titulo">
               Feevale <span className="marca-destaque">Prouni</span>
             </span>
           </span>
-        </a>
+        </Link>
 
         <div className="d-flex align-items-center gap-3">
           <form className="form-busca" onSubmit={aoEnviarBusca} role="search">
