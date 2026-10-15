@@ -167,6 +167,3 @@ CREATE INDEX idx_respostas_individuais_pergunta ON respostas_individuais (pergun
 CREATE INDEX idx_salas_moderador_data ON salas (moderador_id, data_criacao DESC);
 CREATE INDEX idx_participantes_visitante ON participantes (visitante_id);
 CREATE INDEX idx_respostas_participante ON respostas (participante_id);
-
-INSERT INTO moderadores (email, senha_hash)
-VALUES ('moderador@feevale.br', crypt('troque-esta-senha', gen_salt('bf', 10)));
