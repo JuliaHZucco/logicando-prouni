@@ -15,11 +15,10 @@ O front é em React, TypeScript, Vite e Bootstrap. O backend é em C# (.NET 10, 
 - [Páginas do site](#páginas-do-site)
 - [Regras de negócio principais](#regras-de-negócio-principais)
 - [API e tempo real](#api-e-tempo-real)
-- [Decisões tomadas](#decisões-tomadas)
 
 ## Começando
 
-No Windows, é possível rodar o projeto pelo Visual Studio ou somente pelo VS Code. O VS Code não precisa abrir o arquivo `.sln`: basta abrir a pasta do projeto e usar o terminal integrado.
+No Windows, o projeto pode ser executado pelo VS Code. Basta abrir a pasta do projeto e usar o terminal integrado.
 
 Na primeira vez é preciso preparar o banco e cadastrar um moderador. O passo a passo está em [Como rodar](#como-rodar).
 
@@ -104,7 +103,7 @@ As migrations executam `backend/QuizProuni.Api/Dados/Migrations/001-criacao.sql`
 
 ### 5. Cadastrar um moderador (uma vez)
 
-Nenhum moderador vem pronto: nem as migrations nem o seed criam um. Com a API **parada** (o comando recompila, e o Visual Studio trava o executável enquanto depura), rode:
+Nenhum moderador vem pronto: nem as migrations nem o seed criam um. Com a API **parada**, rode:
 
 ```
 dotnet run --project backend/QuizProuni.Api -- criar-moderador <email> <senha>
@@ -120,8 +119,6 @@ Exemplo: `dotnet run --project backend/QuizProuni.Api -- criar-moderador profess
 - A senha digitada na linha de comando fica no histórico do terminal. Use uma senha que você troque depois, se isso for um problema.
 
 ### 6. Rodar a aplicação
-
-#### Pelo VS Code
 
 Depois da configuração e do cadastro do moderador, no terminal do VS Code inicie a API:
 
@@ -141,14 +138,17 @@ npm run dev
 
 Abra o endereço mostrado pelo Vite, normalmente `http://localhost:5173`. O front de desenvolvimento encaminha as chamadas `/api` e `/hubs` para a API em `http://localhost:5098`. Para parar qualquer processo, clique no ícone de lixeira do terminal correspondente ou pressione `Ctrl+C`.
 
-- **Visual Studio:** abra `QuizProuni.sln`, deixe `QuizProuni.Api` como projeto de inicialização e clique em play (F5). O Solution Explorer mostra também o front, o banco e a documentação (projeto `Repositorio`), então uma janela só serve para ver o código e rodar.
-- **Terminal:** `dotnet run --project backend/QuizProuni.Api`.
-
 A API serve o site em **`http://localhost:5098`**. No primeiro build, ela instala as dependências do front e o compila para `backend/QuizProuni.Api/wwwroot` (essa pasta é gerada e não vai para o git). Nos builds seguintes o front só é recompilado se algum arquivo dele mudar. Para pular essa etapa, use `-p:PularFront=true`.
 
 ### 7. Testes
 
-`dotnet test` na pasta raiz, ou no Visual Studio: **Testes > Executar Todos os Testes**. Eles usam o banco `quiz_prouni_teste`.
+No terminal integrado do VS Code, execute na pasta raiz:
+
+```powershell
+dotnet test
+```
+
+Os testes usam o banco `quiz_prouni_teste`.
 
 Para o front: `cd frontend`, depois `npm run lint` e `npm run build`.
 
@@ -156,18 +156,19 @@ Para o front: `cd frontend`, depois `npm run lint` e `npm run build`.
 
 Cada assunto tem **um lugar só**. Tudo sobre o Quiz, por exemplo, está em uma pasta do backend (`Funcionalidades/Quiz`) e em uma pasta do front (`funcionalidades/quiz`).
 
-### Visão geral
+### Visão geral no VS Code
 
 ```text
 logicando-prouni/
-├── QuizProuni.sln         solution: abra este arquivo no Visual Studio
-├── README.md              a documentação do projeto (este arquivo)
-├── .config/               ferramentas do .NET (dotnet-ef)
-├── backend/               tudo em C# (.NET)
-│   ├── QuizProuni.Api/        a aplicação: API, tempo real e o site compilado
-│   ├── QuizProuni.Testes/     testes de integração
-│   └── Repositorio/           projeto sem código, só mostra o repositório inteiro no Visual Studio
-├── frontend/              o site em React + TypeScript
+├── .config/                    ferramenta local dotnet-ef
+├── backend/                    código C# e testes automatizados
+│   ├── QuizProuni.Api/         API, SignalR e site compilado
+│   ├── QuizProuni.Testes/      testes de integração
+│   └── Repositorio/            projeto auxiliar para visualizar o repositório
+├── frontend/                   site em React, TypeScript e Vite
+├── configurar-projeto.ps1      configura PostgreSQL, arquivos appsettings e migrations
+├── QuizProuni.sln              arquivo da solução .NET (não é necessário abrir no VS Code)
+└── README.md                   documentação do projeto (este arquivo)
 ```
 
 ### Backend: `backend/QuizProuni.Api`
@@ -191,9 +192,12 @@ QuizProuni.Api/
 ├── Dados/                          banco de dados
 │   ├── QuizProuniContext.cs            mapeamento do EF Core
 │   ├── Entidades/                      uma classe por tabela
-│   └── Migrations/                     migrations do EF e os .sql que elas executam
+│   └── Migrations/                     migrations do EF e scripts SQL incorporados
 │       ├── 001-criacao.sql                 schema
-│       └── 002-seed.sql                    perguntas
+│       ├── 002-seed.sql                    perguntas
+│       ├── 20261027010344_Inicial.cs       migration do schema
+│       ├── 20261027010351_Seed.cs          migration das perguntas
+│       └── ScriptSql.cs                     lê os scripts SQL incorporados
 └── wwwroot/                        site compilado (gerado no build, não vai para o git)
 ```
 
@@ -244,7 +248,7 @@ src/
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `001-criacao.sql` | Schema completo (16 tabelas). É a única fonte oficial do schema |
+| `001-criacao.sql` | Schema completo (16 tabelas) |
 | `002-seed.sql` | Carga inicial: 8 categorias e 87 perguntas, cada uma com 4 alternativas |
 
 Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs` e `Seed.cs`, na mesma pasta) embutem estes `.sql` e os rodam com `migrationBuilder.Sql`. Alterações futuras do schema devem entrar como novos arquivos numerados (por exemplo `003-...sql`), com uma nova migration do EF que os execute, sem editar uma migração já aplicada em um banco.
@@ -326,12 +330,3 @@ Métodos que o cliente chama (todos devolvem `{ ok, erro }`): `EntrarSala`, `Res
 | `nova-rodada` | O moderador abriu uma nova rodada. Não faz parte da lista original de eventos, mas "Jogar novamente" precisa dele |
 
 O evento `sala-criada` da lista original não existe, porque a sala é criada por uma chamada comum da API e não precisa avisar ninguém.
-
-## Decisões tomadas
-
-- **Percentual de acerto da pergunta:** é calculado sobre quem respondeu. Quem não respondeu aparece à parte, em `naoResponderam`.
-- **Apelido:** no máximo 20 caracteres (limite do protótipo), único na sala sem diferenciar maiúsculas e minúsculas. O schema aceita 30.
-- **Apelido obrigatório:** a API responde 400 com `code: "PrecisaApelido"`. A tela de entrada usa esse `code` para pedir o apelido.
-- **"Jogar de novo" no quiz individual:** as perguntas repetem na mesma ordem e as alternativas são embaralhadas de novo, porque o schema não guarda a ordem das alternativas.
-- **Resposta do quiz individual:** devolve `correta`, `alternativaCorretaId`, `explicacao` e `baseDuvidaId`.
-- **Resultado do quiz individual:** vem do servidor (`GET /api/quiz/partidas/{id}/resultado`), inclusive a regra de que só mais de 50% é positivo.
