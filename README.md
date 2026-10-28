@@ -16,39 +16,86 @@ O front é em React, TypeScript, Vite e Bootstrap. O backend é em C# (.NET 10, 
 - [Regras de negócio principais](#regras-de-negócio-principais)
 - [API e tempo real](#api-e-tempo-real)
 - [Decisões tomadas](#decisões-tomadas)
-- [Limitações conhecidas](#limitações-conhecidas)
-- [Trabalhos futuros](#trabalhos-futuros)
 
 ## Começando
 
-Abra **`QuizProuni.sln`** no Visual Studio, deixe `QuizProuni.Api` como projeto de inicialização e clique em play (F5). A API serve o site em `http://localhost:5098`.
+No Windows, é possível rodar o projeto pelo Visual Studio ou somente pelo VS Code. O VS Code não precisa abrir o arquivo `.sln`: basta abrir a pasta do projeto e usar o terminal integrado.
 
 Na primeira vez é preciso preparar o banco e cadastrar um moderador. O passo a passo está em [Como rodar](#como-rodar).
 
 ## Como rodar
 
-Passo a passo completo, do zero até o site no ar. Todos os comandos são executados **na pasta raiz do repositório** (onde está o `QuizProuni.sln`). No Visual Studio, o terminal (**Exibir > Terminal**) já abre nessa pasta.
+Passo a passo completo, do zero até o site no ar. Todos os comandos são executados **na pasta raiz do repositório** (onde estão `QuizProuni.sln`, `README.md` e `configurar-projeto.ps1`).
 
 ### 1. Pré-requisitos
 
 - **.NET SDK 10** (confira com `dotnet --version`).
 - **Node.js** (confira com `node --version`). A API usa o Node para compilar o front durante o build.
+- **Visual Studio Code** com a extensão **C# Dev Kit**, da Microsoft.
 - **PostgreSQL** instalado e **rodando**. No Windows ele roda como serviço (`postgresql-x64-18`, início automático). Para conferir: Win+R, `services.msc`, procure `postgresql` e veja se está "Em execução". Se estiver parado, clique com o botão direito e escolha "Iniciar".
 
-### 2. Criar os bancos (uma vez)
+### 2. Abrir o projeto no VS Code
 
-Crie dois bancos vazios, `quiz_prouni` (desenvolvimento) e `quiz_prouni_teste` (testes), no pgAdmin ou com o comando `CREATE DATABASE quiz_prouni;`.
+1. Abra o **Visual Studio Code**.
+2. Clique em **File > Open Folder...**.
+3. Selecione a pasta do projeto, por exemplo:
 
-### 3. Configuração (uma vez)
+   ```text
+   C:\Users\julia.zucco\Desktop\logicando-prouni
+   ```
+
+   Escolha a pasta que contém `README.md`, `QuizProuni.sln`, `backend` e `frontend`.
+4. Abra **Terminal > New Terminal**. O terminal deve abrir na pasta raiz do projeto.
+5. Se o caminho exibido no terminal não terminar em `logicando-prouni`, execute:
+
+   ```powershell
+   cd C:\caminho\para\logicando-prouni
+   ```
+
+### 3. Configuração automática (uma vez)
+
+Não copie o conteúdo do script para o PowerShell. O arquivo [configurar-projeto.ps1](C:/Users/julia.zucco/Desktop/logicando-prouni/configurar-projeto.ps1) já está na pasta raiz. No terminal do VS Code, execute:
+
+```powershell
+.\configurar-projeto.ps1
+```
+
+Se o PowerShell bloquear a execução do script, permita somente para o terminal atual e execute-o novamente:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\configurar-projeto.ps1
+```
+
+O script fará algumas perguntas no terminal. Use estes valores, se forem os padrões da instalação:
+
+1. Em **Host do PostgreSQL**, pressione `Enter` para usar `localhost`.
+2. Em **Porta do PostgreSQL**, pressione `Enter` para usar `5432`.
+3. Em **Usuário do PostgreSQL**, pressione `Enter` para usar `postgres`.
+4. Em **Senha do PostgreSQL**, digite a senha definida na instalação do PostgreSQL. A senha não aparecerá enquanto for digitada; pressione `Enter` ao terminar.
+5. Em **Chave JWT**, pressione `Enter` para o script gerar uma chave automaticamente.
+
+O script então:
+
+- cria os bancos `quiz_prouni` e `quiz_prouni_teste`, caso ainda não existam;
+- cria `backend/QuizProuni.Api/appsettings.Development.json` e `backend/QuizProuni.Testes/appsettings.Teste.json`;
+- restaura a ferramenta `dotnet-ef`;
+- cria as tabelas e carrega as perguntas no banco de desenvolvimento.
+
+Portanto, usando o script, **não é necessário criar os bancos nem executar as migrations separadamente**. O PostgreSQL precisa estar instalado, em execução, e o comando `psql` precisa estar disponível no `PATH`.
+
+#### Configuração manual
 
 1. Copie `backend/QuizProuni.Api/appsettings.Development.example.json` para `backend/QuizProuni.Api/appsettings.Development.json`. Troque `SUA_SENHA` pela senha do PostgreSQL e `Jwt:Chave` por um texto de pelo menos 32 caracteres.
 2. Copie `backend/QuizProuni.Testes/appsettings.Teste.example.json` para `backend/QuizProuni.Testes/appsettings.Teste.json` e faça o mesmo (banco `quiz_prouni_teste`).
 
 Edite só os arquivos **sem** `.example` no nome. Eles estão no `.gitignore`, e os `.example.json` não podem receber senha real.
 
-### 4. Criar as tabelas e carregar as perguntas (uma vez)
+### 4. Configuração manual das tabelas (alternativa)
 
-```
+Se não usar `configurar-projeto.ps1`, crie primeiro os bancos vazios `quiz_prouni` e `quiz_prouni_teste` no pgAdmin. Depois execute na pasta raiz:
+
+```powershell
 dotnet tool restore
 dotnet ef database update --project backend/QuizProuni.Api
 ```
@@ -72,14 +119,32 @@ Exemplo: `dotnet run --project backend/QuizProuni.Api -- criar-moderador profess
 - O comando usa o banco de `ConnectionStrings:QuizProuni`. Para cadastrar no banco de testes, defina a variável de ambiente `ConnectionStrings__QuizProuni` apontando para ele.
 - A senha digitada na linha de comando fica no histórico do terminal. Use uma senha que você troque depois, se isso for um problema.
 
-### 6. Rodar
+### 6. Rodar a aplicação
+
+#### Pelo VS Code
+
+Depois da configuração e do cadastro do moderador, no terminal do VS Code inicie a API:
+
+```powershell
+dotnet run --project backend/QuizProuni.Api
+```
+
+Quando aparecer que a aplicação está ouvindo em `http://localhost:5098`, abra esse endereço no navegador. Não feche o terminal enquanto estiver usando o site.
+
+Para desenvolver o front com atualização automática, deixe a API rodando e abra um segundo terminal pelo botão **+** no painel do terminal. Nesse segundo terminal, execute:
+
+```
+cd frontend
+npm install
+npm run dev
+```
+
+Abra o endereço mostrado pelo Vite, normalmente `http://localhost:5173`. O front de desenvolvimento encaminha as chamadas `/api` e `/hubs` para a API em `http://localhost:5098`. Para parar qualquer processo, clique no ícone de lixeira do terminal correspondente ou pressione `Ctrl+C`.
 
 - **Visual Studio:** abra `QuizProuni.sln`, deixe `QuizProuni.Api` como projeto de inicialização e clique em play (F5). O Solution Explorer mostra também o front, o banco e a documentação (projeto `Repositorio`), então uma janela só serve para ver o código e rodar.
 - **Terminal:** `dotnet run --project backend/QuizProuni.Api`.
 
 A API serve o site em **`http://localhost:5098`**. No primeiro build, ela instala as dependências do front e o compila para `backend/QuizProuni.Api/wwwroot` (essa pasta é gerada e não vai para o git). Nos builds seguintes o front só é recompilado se algum arquivo dele mudar. Para pular essa etapa, use `-p:PularFront=true`.
-
-**Desenvolvimento do front (opcional):** com a API rodando, abra outro terminal e rode `cd frontend`, `npm install` e `npm run dev`. O site de desenvolvimento fica em `http://localhost:5173` (recarrega ao salvar), e o Vite repassa `/api` e `/hubs` para a API.
 
 ### 7. Testes
 
@@ -270,16 +335,3 @@ O evento `sala-criada` da lista original não existe, porque a sala é criada po
 - **"Jogar de novo" no quiz individual:** as perguntas repetem na mesma ordem e as alternativas são embaralhadas de novo, porque o schema não guarda a ordem das alternativas.
 - **Resposta do quiz individual:** devolve `correta`, `alternativaCorretaId`, `explicacao` e `baseDuvidaId`.
 - **Resultado do quiz individual:** vem do servidor (`GET /api/quiz/partidas/{id}/resultado`), inclusive a regra de que só mais de 50% é positivo.
-
-## Limitações conhecidas
-
-- O cronômetro das perguntas não é retomado se o servidor reiniciar com uma pergunta aberta. O moderador encerra a pergunta manualmente.
-- O projeto roda em ambiente local, em um único processo (a API serve o site). Não há configuração de HTTPS, CORS nem publicação.
-
-## Trabalhos futuros
-
-Estes pontos foram discutidos e **não foram implementados**:
-
-- Exportação de resultados (CSV, Excel ou PDF).
-- Tempo de retenção das salas.
-- Funcionamento sem internet.
