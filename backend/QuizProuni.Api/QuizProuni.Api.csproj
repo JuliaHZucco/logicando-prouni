@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+    <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Dados\Migrations\001-criacao.sql" LogicalName="001-criacao.sql" />
+    <EmbeddedResource Include="Dados\Migrations\002-seed.sql" LogicalName="002-seed.sql" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PastaDoFront>$(MSBuildProjectDirectory)\..\..\frontend\</PastaDoFront>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ArquivosDoFront Include="$(PastaDoFront)src\**\*;$(PastaDoFront)public\**\*;$(PastaDoFront)index.html;$(PastaDoFront)package.json;$(PastaDoFront)vite.config.ts;$(PastaDoFront)tsconfig*.json" />
+  </ItemGroup>
+
+  <Target Name="CompilarFront" BeforeTargets="BeforeBuild" Condition="'$(PularFront)' != 'true' And Exists('$(PastaDoFront)package.json')" Inputs="@(ArquivosDoFront)" Outputs="$(MSBuildProjectDirectory)\wwwroot\index.html">
+    <Exec Command="npm install" WorkingDirectory="$(PastaDoFront)" Condition="!Exists('$(PastaDoFront)node_modules')" ContinueOnError="WarnAndContinue" />
+    <Exec Command="npm run build" WorkingDirectory="$(PastaDoFront)" ContinueOnError="WarnAndContinue" />
+  </Target>
+
+</Project>

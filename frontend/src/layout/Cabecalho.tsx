@@ -1,0 +1,55 @@
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+export default function Cabecalho() {
+  const localizacao = useLocation();
+  const navegar = useNavigate();
+  const [termoBusca, setTermoBusca] = useState("");
+
+  useEffect(() => {
+    if (localizacao.pathname !== "/buscar") {
+      setTermoBusca("");
+    }
+  }, [localizacao.pathname]);
+
+  const aoEnviarBusca = (e: FormEvent) => {
+    e.preventDefault();
+    const termoBuscaLimpo = termoBusca.trim();
+    if (termoBuscaLimpo.length > 0) {
+      navegar(`/buscar?q=${encodeURIComponent(termoBuscaLimpo)}`);
+    }
+  };
+
+  return (
+    <header className="app-cabecalho">
+      <div className="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
+        <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
+          <img src="/logo-feevale.png" alt="Logo da Universidade Feevale" className="marca-logo" />
+          <span className="d-flex flex-column">
+            <span className="marca-titulo">
+              Feevale <span className="marca-destaque">Prouni</span>
+            </span>
+          </span>
+        </Link>
+
+        <div className="d-flex align-items-center gap-3">
+          <form className="form-busca" onSubmit={aoEnviarBusca} role="search">
+            <i className="bi bi-search icone-busca" aria-hidden="true" />
+            <input
+              type="search"
+              className="form-control campo-busca"
+              placeholder="Buscar dúvida..."
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
+              aria-label="Buscar dúvida"
+            />
+          </form>
+
+          <Link to="/moderador/login" className="botao-moderador" aria-label="Área do moderador" title="Área do moderador">
+            <i className="bi bi-person" aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+}

@@ -1,0 +1,26 @@
+<Project>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <RaizDoRepositorio>$(MSBuildProjectDirectory)\..\..\</RaizDoRepositorio>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(RaizDoRepositorio)README.md" LinkBase="raiz" />
+    <None Include="$(RaizDoRepositorio).gitignore" LinkBase="raiz" />
+    <None Include="$(RaizDoRepositorio).config\**\*" LinkBase="raiz\.config" />
+
+    <None Include="$(RaizDoRepositorio)frontend\**\*" Exclude="$(RaizDoRepositorio)frontend\node_modules\**;$(RaizDoRepositorio)frontend\dist\**" LinkBase="frontend" />
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <Target Name="CoreCompile" />
+  <Target Name="CopyFilesToOutputDirectory" />
+
+</Project>
