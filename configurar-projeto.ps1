@@ -1,20 +1,43 @@
 $ErrorActionPreference = 'Stop'
 
+function Find-Psql {
+    $fromPath = Get-Command 'psql' -ErrorAction SilentlyContinue
+    if ($fromPath) {
+        return $fromPath.Source
+    }
+
+    $standardPaths = @(
+        'C:\Program Files\PostgreSQL\*\bin\psql.exe',
+        'C:\Program Files (x86)\PostgreSQL\*\bin\psql.exe'
+    )
+    $found = @()
+    foreach ($path in $standardPaths) {
+        $found += Get-Item $path -ErrorAction SilentlyContinue
+    }
+    $found = $found | Sort-Object FullName -Descending | Select-Object -First 1
+
+    if ($found) {
+        return $found.FullName
+    }
+
+    throw "O psql.exe não foi encontrado. Instale o PostgreSQL."
+}
+
 function Test-CommandExists([string]$Name) {
     if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
-        throw "O comando '$Name' não foi encontrado. Instale o PostgreSQL e adicione a pasta bin ao PATH."
+        throw "O comando '$Name' não foi encontrado."
     }
 }
 
 function Invoke-Psql([string[]]$Arguments) {
-    & psql @Arguments
+    & $PsqlPath @Arguments
     if ($LASTEXITCODE -ne 0) {
         throw "O comando psql falhou."
     }
 }
 
 function Ensure-Database([string]$Name) {
-    $exists = (& psql -h $PgHost -p $PgPort -U $PgUser -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname = '$Name'").Trim()
+    $exists = "$(& $PsqlPath -h $PgHost -p $PgPort -U $PgUser -d postgres -tAc `"SELECT 1 FROM pg_database WHERE datname = '$Name'`")".Trim()
     if ($LASTEXITCODE -ne 0) {
         throw "Não foi possível consultar os bancos do PostgreSQL."
     }
@@ -35,7 +58,7 @@ function Write-AppSettings([string]$ExamplePath, [string]$OutputPath, [string]$D
     $settings | ConvertTo-Json -Depth 10 | Set-Content $OutputPath -Encoding utf8
 }
 
-Test-CommandExists 'psql'
+$PsqlPath = Find-Psql
 Test-CommandExists 'dotnet'
 
 $PgHost = Read-Host 'Host do PostgreSQL [localhost]'

@@ -81,7 +81,7 @@ O script então:
 - restaura a ferramenta `dotnet-ef`;
 - cria as tabelas e carrega as perguntas no banco de desenvolvimento.
 
-Portanto, usando o script, **não é necessário criar os bancos nem executar as migrations separadamente**. O PostgreSQL precisa estar instalado, em execução, e o comando `psql` precisa estar disponível no `PATH`.
+Portanto, usando o script, **não é necessário criar os bancos nem executar as migrations separadamente**. O PostgreSQL precisa estar instalado e em execução. O script procura o `psql.exe` no `PATH` e também nas pastas padrão de instalação do PostgreSQL, então não é necessário configurar o `PATH` manualmente na instalação padrão.
 
 #### Configuração manual
 
