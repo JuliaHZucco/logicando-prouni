@@ -78,7 +78,7 @@ O script então:
 
 - cria os bancos `quiz_prouni` e `quiz_prouni_teste`, caso ainda não existam;
 - cria `backend/QuizProuni.Api/appsettings.Development.json` e `backend/QuizProuni.Testes/appsettings.Teste.json`;
-- restaura a ferramenta `dotnet-ef`;
+- restaura a ferramenta `dotnet-ef` e baixa os pacotes NuGet do projeto;
 - cria as tabelas e carrega as perguntas no banco de desenvolvimento.
 
 Portanto, usando o script, **não é necessário criar os bancos nem executar as migrations separadamente**. O PostgreSQL precisa estar instalado e em execução. O script procura o `psql.exe` no `PATH` e também nas pastas padrão de instalação do PostgreSQL, então não é necessário configurar o `PATH` manualmente na instalação padrão.
@@ -96,6 +96,7 @@ Se não usar `configurar-projeto.ps1`, crie primeiro os bancos vazios `quiz_prou
 
 ```powershell
 dotnet tool restore
+dotnet restore backend/QuizProuni.Api
 dotnet ef database update --project backend/QuizProuni.Api
 ```
 
@@ -151,6 +152,92 @@ dotnet test
 Os testes usam o banco `quiz_prouni_teste`.
 
 Para o front: `cd frontend`, depois `npm run lint` e `npm run build`.
+
+### 8. Alterar o banco: criar uma nova migration
+
+Neste projeto o schema **não é gerado pelo EF Core**. Ele é escrito à mão em arquivos `.sql`, e cada migration só executa um desses arquivos com `migrationBuilder.Sql`. Por isso uma alteração no banco tem três partes que precisam ficar iguais: o **SQL**, a **classe da entidade** (e o `QuizProuniContext`, se houver algo especial) e a **migration**.
+
+**Regra de ouro:** nunca edite uma migration (nem um `.sql`) que já foi aplicada em algum banco. Sempre crie uma nova.
+
+O exemplo abaixo adiciona a coluna `descricao` na tabela `salas`. Todos os comandos rodam na pasta raiz, com o PostgreSQL ligado e a **API parada**.
+
+**1. Escreva o SQL.** Crie `backend/QuizProuni.Api/Dados/Migrations/003-descricao-da-sala.sql`, seguindo a numeração dos arquivos existentes:
+
+```sql
+ALTER TABLE salas ADD COLUMN descricao varchar(200);
+```
+
+**2. Incorpore o arquivo ao projeto.** Em `backend/QuizProuni.Api/QuizProuni.Api.csproj`, junto das linhas `EmbeddedResource` já existentes, acrescente:
+
+```xml
+<EmbeddedResource Include="Dados\Migrations\003-descricao-da-sala.sql" LogicalName="003-descricao-da-sala.sql" />
+```
+
+Sem essa linha, a migration falha com `Script 003-descricao-da-sala.sql não encontrado`.
+
+**3. Atualize a entidade.** Em `backend/QuizProuni.Api/Dados/Entidades/Sala.cs`, acrescente a propriedade:
+
+```csharp
+public string? Descricao { get; set; }
+```
+
+Só mexa em `Dados/QuizProuniContext.cs` se a mudança tiver algo além de uma coluna simples (índice, valor padrão, chave estrangeira, tabela nova). Para uma tabela nova, crie também a classe em `Entidades/` e o `DbSet` no contexto.
+
+**4. Gere a migration.**
+
+```powershell
+dotnet tool restore
+dotnet ef migrations add DescricaoDaSala --project backend/QuizProuni.Api
+```
+
+O comando cria `AAAAMMDDHHMMSS_DescricaoDaSala.cs` e o `.Designer.cs` em `Dados/Migrations/` e atualiza o `QuizProuniContextModelSnapshot.cs`. Não apague nem edite o snapshot e o Designer.
+
+**5. Troque o conteúdo gerado pelo padrão do projeto.** O EF escreve sozinho um `AddColumn` (ou o código equivalente à mudança). Abra o arquivo novo e deixe os métodos assim, para a migration executar o seu SQL como as migrations `Inicial` e `Seed`:
+
+```csharp
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.Sql(ScriptSql.Ler("003-descricao-da-sala.sql"));
+}
+
+protected override void Down(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.Sql("ALTER TABLE salas DROP COLUMN descricao;");
+}
+```
+
+O `Down` desfaz a alteração. Escreva sempre, porque ele permite voltar atrás. Se você alterou só o SQL e não a entidade, o EF gera uma migration vazia, e basta preencher os dois métodos do mesmo jeito.
+
+**6. Aplique no banco de desenvolvimento.**
+
+```powershell
+dotnet ef database update --project backend/QuizProuni.Api
+```
+
+O EF consulta a tabela `__EFMigrationsHistory`, descobre quais migrations ainda não rodaram e executa só essas.
+
+**7. Rode os testes.**
+
+```powershell
+dotnet test
+```
+
+Os testes aplicam as migrations sozinhos no banco `quiz_prouni_teste`, então já validam o seu SQL. Se a alteração mexer nas perguntas do seed, atualize os números fixos de `backend/QuizProuni.Testes/Banco/SeedTestes.cs` (8 categorias, 87 perguntas).
+
+**Outros comandos úteis**
+
+| Comando | O que faz |
+| --- | --- |
+| `dotnet ef migrations list --project backend/QuizProuni.Api` | Lista as migrations e mostra quais já foram aplicadas |
+| `dotnet ef database update <MigrationAnterior> --project backend/QuizProuni.Api` | Volta o banco até aquela migration (executa os `Down`) |
+| `dotnet ef migrations remove --project backend/QuizProuni.Api` | Apaga a **última** migration. Só use se ela ainda **não** foi aplicada em nenhum banco |
+
+**Cuidados**
+
+- Se a migration já foi aplicada, não use `remove`. Volte o banco com `database update <MigrationAnterior>` ou crie uma nova migration que corrija.
+- Antes de uma alteração destrutiva (apagar coluna, mudar tipo), faça backup do banco.
+- Quem clonar o projeto depois recebe a migration junto: o `configurar-projeto.ps1` (ou o passo 4) aplica todas as pendentes.
+- Os arquivos `appsettings.Development.json` e `appsettings.Teste.json` precisam existir, como no passo 3.
 
 ## Estrutura do projeto
 
@@ -251,7 +338,7 @@ src/
 | `001-criacao.sql` | Schema completo (16 tabelas) |
 | `002-seed.sql` | Carga inicial: 8 categorias e 87 perguntas, cada uma com 4 alternativas |
 
-Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs` e `Seed.cs`, na mesma pasta) embutem estes `.sql` e os rodam com `migrationBuilder.Sql`. Alterações futuras do schema devem entrar como novos arquivos numerados (por exemplo `003-...sql`), com uma nova migration do EF que os execute, sem editar uma migração já aplicada em um banco.
+Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs` e `Seed.cs`, na mesma pasta) embutem estes `.sql` e os rodam com `migrationBuilder.Sql`. Alterações futuras do schema devem entrar como novos arquivos numerados (por exemplo `003-...sql`), com uma nova migration do EF que os execute, sem editar uma migração já aplicada em um banco. O passo a passo está em [8. Alterar o banco: criar uma nova migration](#8-alterar-o-banco-criar-uma-nova-migration).
 
 ### Onde mexer quando eu quero...
 

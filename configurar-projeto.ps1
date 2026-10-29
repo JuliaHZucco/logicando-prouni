@@ -104,6 +104,10 @@ try {
     & dotnet tool restore
     if ($LASTEXITCODE -ne 0) { throw 'Não foi possível restaurar a ferramenta dotnet-ef.' }
 
+    Write-Host 'Baixando os pacotes NuGet do projeto...'
+    & dotnet restore backend/QuizProuni.Api
+    if ($LASTEXITCODE -ne 0) { throw 'Não foi possível baixar os pacotes NuGet do projeto.' }
+
     Write-Host 'Criando as tabelas e carregando as perguntas...'
     & dotnet ef database update --project backend/QuizProuni.Api
     if ($LASTEXITCODE -ne 0) { throw 'Não foi possível aplicar as migrations.' }
