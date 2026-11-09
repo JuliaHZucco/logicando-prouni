@@ -189,6 +189,11 @@ public static class ConsultasDaSala
         return ranking.Where(x => x.Posicao <= QuantidadeNoPodio).ToList();
     }
 
+    public static bool PrazoVencido(DateTimeOffset dataAbertura, int? segundosPorPergunta)
+    {
+        return segundosPorPergunta != null && DateTimeOffset.UtcNow >= dataAbertura.AddSeconds(segundosPorPergunta.Value);
+    }
+
     private static int? CalcularSegundosRestantes(Sala sala, Exibicao exibicao)
     {
         if (sala.SegundosPorPergunta == null || sala.Status != StatusPerguntaAberta)

@@ -9,18 +9,15 @@ public class SalaAoVivoService
     private readonly QuizProuniContext db;
     private readonly ILogger<SalaAoVivoService> logger;
     private readonly NotificadorDaSala notificador;
-    private readonly CronometroDasSalas cronometro;
 
     public SalaAoVivoService(
         QuizProuniContext db,
         ILogger<SalaAoVivoService> logger,
-        NotificadorDaSala notificador,
-        CronometroDasSalas cronometro)
+        NotificadorDaSala notificador)
     {
         this.db = db;
         this.logger = logger;
         this.notificador = notificador;
-        this.cronometro = cronometro;
     }
 
     public async Task<RespostaBase> AvancarAsync(int moderadorId, string codigo)
@@ -36,19 +33,25 @@ public class SalaAoVivoService
         }
 
         await notificador.PerguntaIniciadaAsync(response.Codigo, response.Pergunta!);
-        if (response.SegundosPorPergunta != null)
-            cronometro.Agendar(response.Codigo, response.SegundosPorPergunta.Value);
-
         return response;
     }
 
-    public async Task<RespostaBase> EncerrarPerguntaAsync(int? moderadorId, string codigo)
+    public async Task<RespostaBase> EncerrarPerguntaAsync(int moderadorId, string codigo)
     {
         var response = await PartidaAoVivoRegras.EncerrarPerguntaAsync(db, moderadorId, codigo, logger);
         if (response.TemErro)
             return response;
 
-        cronometro.Cancelar(response.Codigo);
+        await notificador.PerguntaEncerradaAsync(response.Codigo, response.Ordem, response.Resultado);
+        return response;
+    }
+
+    public async Task<RespostaBase> EncerrarPerguntaVencidaAsync(string codigo)
+    {
+        var response = await PartidaAoVivoRegras.EncerrarPerguntaVencidaAsync(db, codigo, logger);
+        if (response.TemErro)
+            return response;
+
         await notificador.PerguntaEncerradaAsync(response.Codigo, response.Ordem, response.Resultado);
         return response;
     }
@@ -59,7 +62,6 @@ public class SalaAoVivoService
         if (response.TemErro)
             return response;
 
-        cronometro.Cancelar(response.Codigo);
         await notificador.QuizFinalizadoAsync(response.Codigo, response.Podio, salaEncerrada: true);
         return response;
     }

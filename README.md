@@ -14,6 +14,7 @@ O front é em React, TypeScript, Vite e Bootstrap. O backend é em C# (.NET 10, 
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Páginas do site](#páginas-do-site)
 - [Logs](#logs)
+- [Cronômetro das perguntas](#cronômetro-das-perguntas)
 - [Regras de negócio principais](#regras-de-negócio-principais)
 - [API e tempo real](#api-e-tempo-real)
 
@@ -268,7 +269,7 @@ QuizProuni.Api/
 ├── Funcionalidades/                uma pasta por assunto do sistema
 │   ├── Quiz/                           quiz individual (partidas, respostas, resultado)
 │   ├── Salas/                          salas em grupo
-│   │   └── TempoReal/                      SignalR: SalaHub, NotificadorDaSala, CronometroDasSalas
+│   │   └── TempoReal/                      SignalR: SalaHub, NotificadorDaSala e EncerradorDePerguntasVencidas
 │   ├── Moderadores/                    login, sessão (JWT) e o comando criar-moderador
 │   ├── Visitantes/                     identificação do visitante pelo cookie
 │   ├── Conteudo/                       categorias e dúvidas do site
@@ -408,6 +409,14 @@ DELETE FROM logs WHERE data_hora < now() - interval '30 days';
 
 **Como funciona:** o código está em `backend/QuizProuni.Api/Compartilhado/Logs/`. Cada log vai para uma fila na memória e um serviço em segundo plano (`GravadorDeLogs`) grava em lotes, para não atrasar a resposta ao usuário. Se o banco estiver fora do ar, a falha da gravação aparece apenas no terminal e a API continua funcionando. Os logs do próprio EF Core e do Npgsql não são gravados, para evitar um ciclo (gravar um log gera outro log). A tabela **não é limpa automaticamente**: use o `DELETE` acima de tempos em tempos.
 
+## Cronômetro das perguntas
+
+Quando a sala usa cronômetro, o **banco é quem sabe se o prazo acabou**: cada pergunta aberta guarda a hora de abertura (`exibicoes.data_abertura`) e a sala guarda os segundos por pergunta. Não existe temporizador em memória.
+
+O serviço `EncerradorDePerguntasVencidas` (em `Funcionalidades/Salas/TempoReal`) roda em segundo plano e, a cada 0,25 segundo, procura as salas com pergunta aberta e prazo vencido. Para cada uma, pede ao `SalaAoVivoService` que encerre a pergunta, o que grava o resultado e avisa a sala por SignalR, igual ao encerramento feito pelo moderador.
+
+Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira varredura encerra na hora as perguntas cujo prazo passou durante a parada. Também é seguro se o moderador encerrar a pergunta no mesmo instante, ou se houver mais de uma instância da API: o encerramento trava a sala no banco e confere de novo o estado e o prazo, então só um deles vale. A resposta do participante continua recusada depois do prazo (com 1 segundo de folga para a rede), com ou sem a varredura.
+
 ## Regras de negócio principais
 
 - O servidor guarda e valida a resposta correta. O front só recebe a alternativa correta depois de responder (no quiz individual) ou quando a pergunta fecha (na sala, inclusive para o moderador).
@@ -447,7 +456,7 @@ Métodos que o cliente chama (todos devolvem `{ ok, erro }`): `EntrarSala`, `Res
 | `participante-entrou` | Alguém entrou na sala. Traz a lista de participantes e o total |
 | `pergunta-iniciada` | O moderador abriu uma pergunta. Traz o enunciado e as alternativas, sem a correta |
 | `resposta-registrada` | Um participante respondeu (só para o moderador). Traz quantas respostas já chegaram |
-| `pergunta-encerrada` | A pergunta fechou, pelo moderador ou pelo cronômetro do servidor |
+| `pergunta-encerrada` | A pergunta fechou, pelo moderador ou porque o prazo acabou (veja "Cronômetro das perguntas") |
 | `resultado-disponivel` | Logo depois de `pergunta-encerrada`: resultado da pergunta com a alternativa correta, o gráfico e a explicação |
 | `quiz-finalizado` | Fim do quiz: ranking com o pódio (`encerrada: false`) ou sala encerrada pelo moderador (`encerrada: true`) |
 | `nova-rodada` | O moderador abriu uma nova rodada. Não faz parte da lista original de eventos, mas "Jogar novamente" precisa dele |

@@ -24,7 +24,7 @@ builder.Services.AddHostedService<GravadorDeLogs>();
 
 builder.Services.AddSingleton<TokenModerador>();
 builder.Services.AddSingleton<NotificadorDaSala>();
-builder.Services.AddSingleton<CronometroDasSalas>();
+builder.Services.AddHostedService<EncerradorDePerguntasVencidas>();
 builder.Services.AddScoped<VisitanteContexto>();
 builder.Services.AddScoped<ModeradorContexto>();
 builder.Services.AddTransient<AuthService>();

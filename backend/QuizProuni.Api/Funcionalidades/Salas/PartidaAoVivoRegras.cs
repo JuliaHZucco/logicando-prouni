@@ -71,7 +71,17 @@ public static class PartidaAoVivoRegras
         }
     }
 
-    public static async Task<EncerrarPerguntaResponse> EncerrarPerguntaAsync(QuizProuniContext db, int? moderadorId, string codigo, ILogger logger)
+    public static Task<EncerrarPerguntaResponse> EncerrarPerguntaAsync(QuizProuniContext db, int moderadorId, string codigo, ILogger logger)
+    {
+        return EncerrarAsync(db, moderadorId, false, codigo, logger);
+    }
+
+    public static Task<EncerrarPerguntaResponse> EncerrarPerguntaVencidaAsync(QuizProuniContext db, string codigo, ILogger logger)
+    {
+        return EncerrarAsync(db, null, true, codigo, logger);
+    }
+
+    private static async Task<EncerrarPerguntaResponse> EncerrarAsync(QuizProuniContext db, int? moderadorId, bool somenteSeVencida, string codigo, ILogger logger)
     {
         var codigoNormalizado = ConsultasDaSala.NormalizarCodigo(codigo);
 
@@ -89,10 +99,13 @@ public static class PartidaAoVivoRegras
             if (sala.Status != ConsultasDaSala.StatusPerguntaAberta)
                 return RespostaBase.ComErro<EncerrarPerguntaResponse>("Não há pergunta aberta nesta sala.", TipoDeErro.Conflito, "EstadoInvalido");
 
-            sala.Status = ConsultasDaSala.StatusResultadoPergunta;
-
             var salaPergunta = await db.SalaPerguntas.FirstAsync(x => x.SalaId == sala.SalaId && x.Ordem == sala.PerguntaAtual);
             var exibicao = await db.Exibicoes.FirstAsync(x => x.SalaPerguntaId == salaPergunta.SalaPerguntaId && x.Rodada == sala.RodadaAtual);
+
+            if (somenteSeVencida && !ConsultasDaSala.PrazoVencido(exibicao.DataAbertura, sala.SegundosPorPergunta))
+                return RespostaBase.ComErro<EncerrarPerguntaResponse>("A pergunta ainda está dentro do prazo.", TipoDeErro.Conflito, "PerguntaEmAndamento");
+
+            sala.Status = ConsultasDaSala.StatusResultadoPergunta;
             exibicao.DataEncerramento = DateTimeOffset.UtcNow;
 
             await db.SaveChangesAsync();
