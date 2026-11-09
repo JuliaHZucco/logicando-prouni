@@ -160,6 +160,18 @@ CREATE TABLE respostas (
     REFERENCES sala_pergunta_alternativas(sala_pergunta_id, alternativa_id) ON DELETE CASCADE
 );
 
+CREATE TABLE logs (
+  log_id BIGSERIAL PRIMARY KEY,
+  data_hora TIMESTAMPTZ NOT NULL DEFAULT now(),
+  nivel VARCHAR(20) NOT NULL,
+  categoria VARCHAR(300) NOT NULL,
+  mensagem TEXT NOT NULL,
+  excecao TEXT,
+  request_id VARCHAR(100),
+  metodo VARCHAR(10),
+  caminho VARCHAR(500)
+);
+
 CREATE INDEX idx_perguntas_categoria ON perguntas (categoria_id);
 CREATE INDEX idx_perguntas_base ON perguntas (pergunta_base_id);
 CREATE INDEX idx_partidas_visitante ON partidas_individuais (visitante_id);
@@ -167,3 +179,5 @@ CREATE INDEX idx_respostas_individuais_pergunta ON respostas_individuais (pergun
 CREATE INDEX idx_salas_moderador_data ON salas (moderador_id, data_criacao DESC);
 CREATE INDEX idx_participantes_visitante ON participantes (visitante_id);
 CREATE INDEX idx_respostas_participante ON respostas (participante_id);
+CREATE INDEX idx_logs_data ON logs (data_hora DESC);
+CREATE INDEX idx_logs_nivel_data ON logs (nivel, data_hora DESC);

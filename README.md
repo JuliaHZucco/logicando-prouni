@@ -13,6 +13,7 @@ O front é em React, TypeScript, Vite e Bootstrap. O backend é em C# (.NET 10, 
 - [Como rodar](#como-rodar)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Páginas do site](#páginas-do-site)
+- [Logs](#logs)
 - [Regras de negócio principais](#regras-de-negócio-principais)
 - [API e tempo real](#api-e-tempo-real)
 
@@ -275,7 +276,8 @@ QuizProuni.Api/
 ├── Compartilhado/                  o que todas as funcionalidades usam
 │   ├── RespostaBase.cs                 resposta com erro de negócio
 │   ├── Excecoes/                       BLException (400), Conflito (409), 401, 403 e 404
-│   └── Middlewares/                    ExceptionMiddleware (exceção vira JSON)
+│   ├── Middlewares/                    ExceptionMiddleware (exceção vira JSON)
+│   └── Logs/                           grava os logs na tabela logs (provider, fila e gravador)
 ├── Dados/                          banco de dados
 │   ├── QuizProuniContext.cs            mapeamento do EF Core
 │   ├── Entidades/                      uma classe por tabela
@@ -306,6 +308,7 @@ QuizProuni.Testes/
 ├── Moderadores/        AuthTestes e CriarModeradorComandoTestes
 ├── Conteudo/           ConteudoTestes (conteúdo e dúvidas vistas)
 ├── Banco/              SeedTestes (confere as 87 perguntas carregadas)
+├── Logs/               LogsTestes (confere que os erros são gravados na tabela logs)
 └── Suporte/            FabricaDaApi, TestesDeApi e ClienteDeTeste (base dos testes)
 ```
 
@@ -335,7 +338,7 @@ src/
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `001-criacao.sql` | Schema completo (16 tabelas) |
+| `001-criacao.sql` | Schema completo (17 tabelas, incluindo `logs`, onde a API grava os avisos e erros; veja [Logs](#logs)) |
 | `002-seed.sql` | Carga inicial: 8 categorias e 87 perguntas, cada uma com 4 alternativas |
 
 Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs` e `Seed.cs`, na mesma pasta) embutem estes `.sql` e os rodam com `migrationBuilder.Sql`. Alterações futuras do schema devem entrar como novos arquivos numerados (por exemplo `003-...sql`), com uma nova migration do EF que os execute, sem editar uma migração já aplicada em um banco. O passo a passo está em [8. Alterar o banco: criar uma nova migration](#8-alterar-o-banco-criar-uma-nova-migration).
@@ -371,6 +374,39 @@ Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs
 | `/moderador/salas/nova` | Criar sala |
 | `/moderador/sala/:codigo` | Condução da sala ao vivo |
 | `/moderador/sala/:codigo/ranking` | Ranking geral (só o moderador dono) |
+
+## Logs
+
+Os avisos e erros da API são gravados na tabela **`logs`** do banco (além de aparecerem no terminal). Assim, se algo der errado com quem está usando o site, dá para consultar depois o que aconteceu.
+
+**O que é gravado:** por padrão, tudo de nível `Warning` para cima: erros de negócio (400), conflitos (409), acessos negados (403) e erros inesperados (500, com o *stack trace* completo). Avisos meramente informativos, como "não encontrado" (404) e "não autorizado" (401), ficam só no terminal. O nível é configurado em `backend/QuizProuni.Api/appsettings.json`, em `Logging:Banco:LogLevel:Default` (por exemplo `Error` para gravar só os erros graves, ou `Information` para gravar mais).
+
+| Coluna | Conteúdo |
+| --- | --- |
+| `data_hora` | Quando aconteceu (UTC) |
+| `nivel` | `Warning`, `Error` ou `Critical` |
+| `categoria` | De onde veio o log (por exemplo, `QuizProuni.Api.Compartilhado.Middlewares.ExceptionMiddleware`) |
+| `mensagem` | Texto do log |
+| `excecao` | Detalhes técnicos e *stack trace*, quando houve uma exceção |
+| `request_id`, `metodo`, `caminho` | Identificam a requisição HTTP, quando o log veio dela (por exemplo `POST` em `/api/salas`) |
+
+**Consultas úteis** (no pgAdmin ou com `psql -d quiz_prouni`):
+
+```sql
+-- os 50 logs mais recentes
+SELECT log_id, data_hora, nivel, metodo, caminho, mensagem FROM logs ORDER BY log_id DESC LIMIT 50;
+
+-- só os erros inesperados (500), com os detalhes
+SELECT data_hora, caminho, mensagem, excecao FROM logs WHERE nivel = 'Error' ORDER BY log_id DESC;
+
+-- tudo o que aconteceu em uma requisição (o request_id aparece na mensagem)
+SELECT * FROM logs WHERE request_id = '0HNPUFTMLE0BE:00000001' ORDER BY log_id;
+
+-- apagar logs com mais de 30 dias
+DELETE FROM logs WHERE data_hora < now() - interval '30 days';
+```
+
+**Como funciona:** o código está em `backend/QuizProuni.Api/Compartilhado/Logs/`. Cada log vai para uma fila na memória e um serviço em segundo plano (`GravadorDeLogs`) grava em lotes, para não atrasar a resposta ao usuário. Se o banco estiver fora do ar, a falha da gravação aparece apenas no terminal e a API continua funcionando. Os logs do próprio EF Core e do Npgsql não são gravados, para evitar um ciclo (gravar um log gera outro log). A tabela **não é limpa automaticamente**: use o `DELETE` acima de tempos em tempos.
 
 ## Regras de negócio principais
 

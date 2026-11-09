@@ -25,6 +25,7 @@ public class QuizProuniContext : DbContext
     public DbSet<SalaPerguntaAlternativa> SalaPerguntaAlternativas => Set<SalaPerguntaAlternativa>();
     public DbSet<Participante> Participantes => Set<Participante>();
     public DbSet<Resposta> Respostas => Set<Resposta>();
+    public DbSet<RegistroDeLog> Logs => Set<RegistroDeLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,6 +35,7 @@ public class QuizProuniContext : DbContext
         MapearPartidasIndividuais(modelBuilder);
         MapearSalas(modelBuilder);
         MapearRespostasDasSalas(modelBuilder);
+        MapearLogs(modelBuilder);
     }
 
     private static void MapearModeradores(ModelBuilder modelBuilder)
@@ -222,6 +224,25 @@ public class QuizProuniContext : DbContext
             resposta.HasOne<SalaPerguntaAlternativa>().WithMany()
                 .HasForeignKey(x => new { x.SalaPerguntaId, x.AlternativaId })
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
+    private static void MapearLogs(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RegistroDeLog>(log =>
+        {
+            log.ToTable("logs");
+            log.HasKey(x => x.LogId);
+            log.Property(x => x.DataHora).HasDefaultValueSql("now()");
+            log.Property(x => x.Nivel).HasMaxLength(20);
+            log.Property(x => x.Categoria).HasMaxLength(300);
+            log.Property(x => x.RequestId).HasMaxLength(100);
+            log.Property(x => x.Metodo).HasMaxLength(10);
+            log.Property(x => x.Caminho).HasMaxLength(500);
+            log.HasIndex(x => x.DataHora).IsDescending().HasDatabaseName("idx_logs_data");
+            log.HasIndex(x => new { x.Nivel, x.DataHora })
+                .IsDescending(false, true)
+                .HasDatabaseName("idx_logs_nivel_data");
         });
     }
 }

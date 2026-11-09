@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using QuizProuni.Api.Compartilhado.Logs;
 using QuizProuni.Api.Compartilhado.Middlewares;
 using QuizProuni.Api.Dados;
 using QuizProuni.Api.Funcionalidades.Conteudo;
@@ -16,6 +17,10 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<QuizProuniContext>(opcoes =>
     opcoes.UseNpgsql(builder.Configuration.GetConnectionString("QuizProuni")).UseSnakeCaseNamingConvention());
+
+builder.Services.AddSingleton<FilaDeLogs>();
+builder.Services.AddSingleton<ILoggerProvider, LogNoBancoProvider>();
+builder.Services.AddHostedService<GravadorDeLogs>();
 
 builder.Services.AddSingleton<TokenModerador>();
 builder.Services.AddSingleton<NotificadorDaSala>();

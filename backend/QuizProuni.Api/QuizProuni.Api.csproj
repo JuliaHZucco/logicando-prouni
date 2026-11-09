@@ -19,8 +19,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Dados\Migrations\001-criacao.sql" LogicalName="001-criacao.sql" />
-    <EmbeddedResource Include="Dados\Migrations\002-seed.sql" LogicalName="002-seed.sql" />
-  </ItemGroup>
+    <EmbeddedResource Include="Dados\Migrations\002-seed.sql" LogicalName="002-seed.sql" />  </ItemGroup>
 
   <PropertyGroup>
     <PastaDoFront>$(MSBuildProjectDirectory)\..\..\frontend\</PastaDoFront>
