@@ -1,11 +1,16 @@
+using System.ComponentModel.DataAnnotations;
 using QuizProuni.Api.Compartilhado;
 
 namespace QuizProuni.Api.Funcionalidades.Quiz;
 
 public class ConfiguracaoQuizRequest
 {
+    [StringLength(20)]
     public string Modo { get; set; } = string.Empty;
+
+    [MaxLength(20)]
     public List<string> Categorias { get; set; } = new();
+
     public int Quantidade { get; set; }
 }
 
@@ -37,7 +42,9 @@ public class OpcaoRespostaBag
 
 public class ResponderPerguntaRequest
 {
+    [StringLength(80)]
     public string PerguntaId { get; set; } = string.Empty;
+
     public int AlternativaId { get; set; }
 }
 

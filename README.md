@@ -74,7 +74,7 @@ O script fará algumas perguntas no terminal. Use estes valores, se forem os pad
 2. Em **Porta do PostgreSQL**, pressione `Enter` para usar `5432`.
 3. Em **Usuário do PostgreSQL**, pressione `Enter` para usar `postgres`.
 4. Em **Senha do PostgreSQL**, digite a senha definida na instalação do PostgreSQL. A senha não aparecerá enquanto for digitada; pressione `Enter` ao terminar.
-5. Em **Chave JWT**, pressione `Enter` para o script gerar uma chave automaticamente.
+5. Em **Chave JWT**, pressione `Enter` para o script gerar uma chave automaticamente. Se digitar uma, ela também não aparecerá na tela.
 
 O script então:
 
@@ -278,7 +278,8 @@ QuizProuni.Api/
 │   ├── RespostaBase.cs                 resposta com erro de negócio
 │   ├── Excecoes/                       BLException (400), Conflito (409), 401, 403 e 404
 │   ├── Middlewares/                    ExceptionMiddleware (exceção vira JSON)
-│   └── Logs/                           grava os logs na tabela logs (provider, fila e gravador)
+│   ├── Logs/                           grava os logs na tabela logs (provider, fila e gravador)
+│   └── Seguranca/                      limites de uso (rate limiting) e origem da requisição
 ├── Dados/                          banco de dados
 │   ├── QuizProuniContext.cs            mapeamento do EF Core
 │   ├── Entidades/                      uma classe por tabela
@@ -310,6 +311,7 @@ QuizProuni.Testes/
 ├── Conteudo/           ConteudoTestes (conteúdo e dúvidas vistas)
 ├── Banco/              SeedTestes (confere as 87 perguntas carregadas)
 ├── Logs/               LogsTestes (confere que os erros são gravados na tabela logs)
+├── Seguranca/          limites de uso e tamanho das entradas
 └── Suporte/            FabricaDaApi, TestesDeApi e ClienteDeTeste (base dos testes)
 ```
 
@@ -380,7 +382,7 @@ Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs
 
 Os avisos e erros da API são gravados na tabela **`logs`** do banco (além de aparecerem no terminal). Assim, se algo der errado com quem está usando o site, dá para consultar depois o que aconteceu.
 
-**O que é gravado:** por padrão, tudo de nível `Warning` para cima: erros de negócio (400), conflitos (409), acessos negados (403) e erros inesperados (500, com o *stack trace* completo). Avisos meramente informativos, como "não encontrado" (404) e "não autorizado" (401), ficam só no terminal. O nível é configurado em `backend/QuizProuni.Api/appsettings.json`, em `Logging:Banco:LogLevel:Default` (por exemplo `Error` para gravar só os erros graves, ou `Information` para gravar mais).
+**O que é gravado:** por padrão, tudo de nível `Warning` para cima: erros de negócio (400), conflitos (409), acessos negados (403), erros inesperados (500, com o *stack trace* completo), **tentativas de login que falharam** e **bloqueios por excesso de requisições** (ambos com o IP de origem). Avisos meramente informativos, como "não encontrado" (404) e "não autorizado" (401), ficam só no terminal. O nível é configurado em `backend/QuizProuni.Api/appsettings.json`, em `Logging:Banco:LogLevel:Default` (por exemplo `Error` para gravar só os erros graves, ou `Information` para gravar mais).
 
 | Coluna | Conteúdo |
 | --- | --- |
@@ -402,20 +404,16 @@ SELECT data_hora, caminho, mensagem, excecao FROM logs WHERE nivel = 'Error' ORD
 
 -- tudo o que aconteceu em uma requisição (o request_id aparece na mensagem)
 SELECT * FROM logs WHERE request_id = '0HNPUFTMLE0BE:00000001' ORDER BY log_id;
-
--- apagar logs com mais de 30 dias
-DELETE FROM logs WHERE data_hora < now() - interval '30 days';
 ```
 
-**Como funciona:** o código está em `backend/QuizProuni.Api/Compartilhado/Logs/`. Cada log vai para uma fila na memória e um serviço em segundo plano (`GravadorDeLogs`) grava em lotes, para não atrasar a resposta ao usuário. Se o banco estiver fora do ar, a falha da gravação aparece apenas no terminal e a API continua funcionando. Os logs do próprio EF Core e do Npgsql não são gravados, para evitar um ciclo (gravar um log gera outro log). A tabela **não é limpa automaticamente**: use o `DELETE` acima de tempos em tempos.
-
+**Como funciona:** o código está em `backend/QuizProuni.Api/Compartilhado/Logs/`. Cada log vai para uma fila na memória e um serviço em segundo plano (`GravadorDeLogs`) grava em lotes, para não atrasar a resposta ao usuário. Se o banco estiver fora do ar, a falha da gravação aparece apenas no terminal e a API continua funcionando. Os logs do próprio EF Core e do Npgsql não são gravados, para evitar um ciclo (gravar um log gera outro log).
 ## Cronômetro das perguntas
 
 Quando a sala usa cronômetro, o **banco é quem sabe se o prazo acabou**: cada pergunta aberta guarda a hora de abertura (`exibicoes.data_abertura`) e a sala guarda os segundos por pergunta. Não existe temporizador em memória.
 
 O serviço `EncerradorDePerguntasVencidas` (em `Funcionalidades/Salas/TempoReal`) roda em segundo plano e, a cada 0,25 segundo, procura as salas com pergunta aberta e prazo vencido. Para cada uma, pede ao `SalaAoVivoService` que encerre a pergunta, o que grava o resultado e avisa a sala por SignalR, igual ao encerramento feito pelo moderador.
 
-Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira varredura encerra na hora as perguntas cujo prazo passou durante a parada. Também é seguro se o moderador encerrar a pergunta no mesmo instante, ou se houver mais de uma instância da API: o encerramento trava a sala no banco e confere de novo o estado e o prazo, então só um deles vale. A resposta do participante continua recusada depois do prazo (com 1 segundo de folga para a rede), com ou sem a varredura.
+Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira varredura encerra na hora as perguntas cujo prazo passou durante a parada. Também é seguro se o moderador encerrar a pergunta no mesmo instante: o encerramento trava a sala no banco e confere de novo o estado e o prazo, então só um deles vale. A resposta do participante continua recusada depois do prazo (com 1 segundo de folga para a rede), com ou sem a varredura.
 
 ## Regras de negócio principais
 
@@ -459,6 +457,4 @@ Métodos que o cliente chama (todos devolvem `{ ok, erro }`): `EntrarSala`, `Res
 | `pergunta-encerrada` | A pergunta fechou, pelo moderador ou porque o prazo acabou (veja "Cronômetro das perguntas") |
 | `resultado-disponivel` | Logo depois de `pergunta-encerrada`: resultado da pergunta com a alternativa correta, o gráfico e a explicação |
 | `quiz-finalizado` | Fim do quiz: ranking com o pódio (`encerrada: false`) ou sala encerrada pelo moderador (`encerrada: true`) |
-| `nova-rodada` | O moderador abriu uma nova rodada. Não faz parte da lista original de eventos, mas "Jogar novamente" precisa dele |
-
-O evento `sala-criada` da lista original não existe, porque a sala é criada por uma chamada comum da API e não precisa avisar ninguém.
+| `nova-rodada` | O moderador abriu uma nova rodada ("Jogar novamente") |

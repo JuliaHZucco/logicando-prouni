@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuizProuni.Api.Compartilhado.Logs;
 using QuizProuni.Api.Compartilhado.Middlewares;
+using QuizProuni.Api.Compartilhado.Seguranca;
 using QuizProuni.Api.Dados;
 using QuizProuni.Api.Funcionalidades.Conteudo;
 using QuizProuni.Api.Funcionalidades.DuvidasVistas;
@@ -10,13 +11,19 @@ using QuizProuni.Api.Funcionalidades.Salas;
 using QuizProuni.Api.Funcionalidades.Salas.TempoReal;
 using QuizProuni.Api.Funcionalidades.Visitantes;
 
+const int TamanhoMaximoDoCorpoEmBytes = 64 * 1024;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(opcoes => opcoes.Limits.MaxRequestBodySize = TamanhoMaximoDoCorpoEmBytes);
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<QuizProuniContext>(opcoes =>
     opcoes.UseNpgsql(builder.Configuration.GetConnectionString("QuizProuni")).UseSnakeCaseNamingConvention());
+
+builder.Services.AddLimitesDeUso(builder.Configuration);
 
 builder.Services.AddSingleton<FilaDeLogs>();
 builder.Services.AddSingleton<ILoggerProvider, LogNoBancoProvider>();
@@ -50,6 +57,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseRateLimiter();
 
 app.MapControllers();
 app.MapHub<SalaHub>("/hubs/sala");

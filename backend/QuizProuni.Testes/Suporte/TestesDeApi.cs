@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.Connections;
@@ -46,6 +47,39 @@ public abstract class TestesDeApi : IClassFixture<FabricaDaApi>
     {
         using var escopo = fabrica.Services.CreateScope();
         return await consulta(escopo.ServiceProvider.GetRequiredService<QuizProuniContext>());
+    }
+
+    protected async Task<(ClienteDeTeste Moderador, HubConnection ConexaoDoModerador, string Codigo)> PrepararSalaAsync(int quantidade = 2, int? segundos = null)
+    {
+        var moderador = await CriarModeradorLogadoAsync();
+        var codigo = await CriarSalaAsync(moderador, quantidade, segundos);
+        var conexao = await ConectarAsync(moderador);
+        Assert.True(await InvocarAsync(conexao, "EntrarSala", codigo));
+        return (moderador, conexao, codigo);
+    }
+
+    protected async Task<(ClienteDeTeste Cliente, HubConnection Conexao)> EntrarComoParticipanteAsync(string codigo, string apelido)
+    {
+        var cliente = CriarVisitante();
+        await EntrarNaSalaAsync(cliente, codigo, apelido);
+        var conexao = await ConectarAsync(cliente);
+        Assert.True(await InvocarAsync(conexao, "EntrarSala", codigo));
+        return (cliente, conexao);
+    }
+
+    protected async Task<RegistroDeLog?> AguardarLogAsync(Expression<Func<RegistroDeLog, bool>> condicao)
+    {
+        var limite = DateTime.UtcNow.AddSeconds(10);
+        while (DateTime.UtcNow < limite)
+        {
+            var log = await UsarBancoAsync(db => db.Logs.Where(condicao).OrderByDescending(x => x.LogId).FirstOrDefaultAsync());
+            if (log != null)
+                return log;
+
+            await Task.Delay(100);
+        }
+
+        return null;
     }
 
     protected static async Task<JsonElement> LerJsonAsync(HttpResponseMessage resposta)

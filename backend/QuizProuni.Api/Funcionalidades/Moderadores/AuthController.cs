@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using QuizProuni.Api.Compartilhado.Excecoes;
+using QuizProuni.Api.Compartilhado.Seguranca;
 
 namespace QuizProuni.Api.Funcionalidades.Moderadores;
 
@@ -16,12 +18,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting(PoliticasDeLimite.Login)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         if (!ModelState.IsValid)
             throw new BLException("Dados inválidos.", "DadosInvalidos");
 
-        var response = await authService.LoginAsync(request);
+        var response = await authService.LoginAsync(request, OrigemDaRequisicao.Ip(HttpContext));
         response.LancarSeHouverErro();
 
         moderadorContexto.IniciarSessao(response.ModeradorId);

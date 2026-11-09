@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using QuizProuni.Api.Compartilhado;
 
 namespace QuizProuni.Api.Funcionalidades.DuvidasVistas;
 
 public class RegistrarDuvidaVistaRequest
 {
+    [StringLength(80)]
     public string DuvidaId { get; set; } = string.Empty;
 }
 

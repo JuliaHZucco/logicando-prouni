@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using QuizProuni.Api.Compartilhado.Excecoes;
+using QuizProuni.Api.Compartilhado.Seguranca;
 using QuizProuni.Api.Dados;
 using QuizProuni.Api.Dados.Entidades;
 
@@ -10,11 +12,13 @@ public class VisitanteContexto
 
     private readonly QuizProuniContext db;
     private readonly IHttpContextAccessor acessoAoHttp;
+    private readonly LimitadorDeNovosVisitantes limitadorDeNovosVisitantes;
 
-    public VisitanteContexto(QuizProuniContext db, IHttpContextAccessor acessoAoHttp)
+    public VisitanteContexto(QuizProuniContext db, IHttpContextAccessor acessoAoHttp, LimitadorDeNovosVisitantes limitadorDeNovosVisitantes)
     {
         this.db = db;
         this.acessoAoHttp = acessoAoHttp;
+        this.limitadorDeNovosVisitantes = limitadorDeNovosVisitantes;
     }
 
     public Task<int?> ObterVisitanteIdAsync()
@@ -45,11 +49,14 @@ public class VisitanteContexto
         if (visitanteId != null)
             return visitanteId.Value;
 
+        var contextoHttp = acessoAoHttp.HttpContext!;
+        if (!limitadorDeNovosVisitantes.Permitir(OrigemDaRequisicao.Ip(contextoHttp)))
+            throw new LimiteExcedidoException();
+
         var novoVisitante = new Visitante();
         db.Visitantes.Add(novoVisitante);
         await db.SaveChangesAsync();
 
-        var contextoHttp = acessoAoHttp.HttpContext!;
         contextoHttp.Response.Cookies.Append(NomeDoCookie, novoVisitante.Token.ToString(), new CookieOptions
         {
             HttpOnly = true,

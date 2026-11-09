@@ -1,8 +1,5 @@
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.EntityFrameworkCore;
-using QuizProuni.Api.Dados.Entidades;
 using QuizProuni.Testes.Suporte;
 
 namespace QuizProuni.Testes.Logs;
@@ -30,18 +27,18 @@ public class LogsTestes : TestesDeApi
         Assert.Contains("ExceptionMiddleware", log.Categoria);
     }
 
-    private async Task<RegistroDeLog?> AguardarLogAsync(Expression<Func<RegistroDeLog, bool>> condicao)
+    [Fact]
+    public async Task Falha_de_login_e_gravada_com_o_ip_e_o_email_informado()
     {
-        var limite = DateTime.UtcNow.AddSeconds(10);
-        while (DateTime.UtcNow < limite)
-        {
-            var log = await UsarBancoAsync(db => db.Logs.Where(condicao).OrderByDescending(x => x.LogId).FirstOrDefaultAsync());
-            if (log != null)
-                return log;
+        var inicio = DateTimeOffset.UtcNow;
+        var email = $"tentativa-{Guid.NewGuid():N}@teste.com";
 
-            await Task.Delay(100);
-        }
+        var resposta = await CriarVisitante().PostAsJsonAsync("/api/auth/login", new { email, senha = "errada" });
+        var log = await AguardarLogAsync(x => x.DataHora >= inicio && x.Mensagem.Contains("Falha de login") && x.Mensagem.Contains(email));
 
-        return null;
+        Assert.Equal(HttpStatusCode.Unauthorized, resposta.StatusCode);
+        Assert.NotNull(log);
+        Assert.Equal("Warning", log.Nivel);
+        Assert.Contains("ip=", log.Mensagem);
     }
 }

@@ -6,7 +6,9 @@ namespace QuizProuni.Api.Funcionalidades.Moderadores;
 
 public static class AuthRegras
 {
-    public static async Task<LoginResponse> LoginAsync(QuizProuniContext db, LoginRequest request, ILogger logger)
+    private const int TamanhoMaximoDoEmailNoLog = 100;
+
+    public static async Task<LoginResponse> LoginAsync(QuizProuniContext db, LoginRequest request, string ip, ILogger logger)
     {
         if (request == null)
             return RespostaBase.ComErro<LoginResponse>("Informe e-mail e senha.");
@@ -17,7 +19,10 @@ public static class AuthRegras
             var moderador = await db.Moderadores.FirstOrDefaultAsync(x => x.Email == email);
 
             if (moderador == null || !BCrypt.Net.BCrypt.Verify(request.Senha, moderador.SenhaHash))
+            {
+                logger.LogWarning("Falha de login | ip={Ip} email={Email}", ip, ResumirParaLog(email));
                 return RespostaBase.ComErro<LoginResponse>("E-mail ou senha incorretos.", TipoDeErro.NaoAutorizado);
+            }
 
             return new LoginResponse { ModeradorId = moderador.ModeradorId, Email = moderador.Email };
         }
@@ -43,5 +48,13 @@ public static class AuthRegras
             logger.LogError(ex, "Erro ao obter moderador. ModeradorId: {ModeradorId}", moderadorId);
             return RespostaBase.ComErro<LoginResponse>("Erro ao carregar o moderador.");
         }
+    }
+
+    private static string ResumirParaLog(string texto)
+    {
+        var semCaracteresDeControle = new string(texto.Where(caractere => !char.IsControl(caractere)).ToArray());
+        return semCaracteresDeControle.Length > TamanhoMaximoDoEmailNoLog
+            ? semCaracteresDeControle[..TamanhoMaximoDoEmailNoLog]
+            : semCaracteresDeControle;
     }
 }

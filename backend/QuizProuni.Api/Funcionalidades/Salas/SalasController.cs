@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using QuizProuni.Api.Compartilhado.Excecoes;
+using QuizProuni.Api.Compartilhado.Seguranca;
 using QuizProuni.Api.Funcionalidades.Moderadores;
 using QuizProuni.Api.Funcionalidades.Salas.TempoReal;
 using QuizProuni.Api.Funcionalidades.Visitantes;
@@ -63,6 +65,7 @@ public class SalasController : ControllerBase
     }
 
     [HttpPost("{codigo}/participantes")]
+    [EnableRateLimiting(PoliticasDeLimite.AcessoASala)]
     public async Task<IActionResult> Entrar(string codigo, [FromBody] EntrarNaSalaRequest? request)
     {
         var visitanteId = await visitanteContexto.ObterOuCriarVisitanteIdAsync();
@@ -78,6 +81,7 @@ public class SalasController : ControllerBase
     }
 
     [HttpGet("{codigo}/estado")]
+    [EnableRateLimiting(PoliticasDeLimite.AcessoASala)]
     public async Task<IActionResult> ObterEstado(string codigo)
     {
         var moderadorId = moderadorContexto.ObterModeradorId();

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using QuizProuni.Api.Compartilhado;
 using QuizProuni.Api.Funcionalidades.Quiz;
 
@@ -5,6 +6,7 @@ namespace QuizProuni.Api.Funcionalidades.Salas;
 
 public class CriarSalaRequest : ConfiguracaoQuizRequest
 {
+    [StringLength(100)]
     public string Nome { get; set; } = string.Empty;
     public short? SegundosPorPergunta { get; set; }
 }

@@ -29,6 +29,17 @@ function Test-CommandExists([string]$Name) {
     }
 }
 
+function Read-Secret([string]$Prompt) {
+    $secure = Read-Host $Prompt -AsSecureString
+    $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try {
+        return [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+    }
+    finally {
+        [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
+    }
+}
+
 function Invoke-Psql([string[]]$Arguments) {
     & $PsqlPath @Arguments
     if ($LASTEXITCODE -ne 0) {
@@ -70,12 +81,12 @@ if ([string]::IsNullOrWhiteSpace($PgPort)) { $PgPort = '5432' }
 $PgUser = Read-Host 'Usuário do PostgreSQL [postgres]'
 if ([string]::IsNullOrWhiteSpace($PgUser)) { $PgUser = 'postgres' }
 
-$PgPassword = Read-Host 'Senha do PostgreSQL'
+$PgPassword = Read-Secret 'Senha do PostgreSQL'
 if ([string]::IsNullOrWhiteSpace($PgPassword)) {
     throw 'A senha do PostgreSQL é obrigatória.'
 }
 
-$JwtKey = Read-Host 'Chave JWT [gerar automaticamente]'
+$JwtKey = Read-Secret 'Chave JWT [gerar automaticamente]'
 if ([string]::IsNullOrWhiteSpace($JwtKey)) {
     $JwtKey = "chave-local-$([Guid]::NewGuid().ToString('N'))-$([Guid]::NewGuid().ToString('N'))"
 }

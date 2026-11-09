@@ -13,9 +13,9 @@ public class AuthService
         this.logger = logger;
     }
 
-    public Task<LoginResponse> LoginAsync(LoginRequest request)
+    public Task<LoginResponse> LoginAsync(LoginRequest request, string ip)
     {
-        return AuthRegras.LoginAsync(db, request, logger);
+        return AuthRegras.LoginAsync(db, request, ip, logger);
     }
 
     public Task<LoginResponse> ObterModeradorAsync(int moderadorId)
