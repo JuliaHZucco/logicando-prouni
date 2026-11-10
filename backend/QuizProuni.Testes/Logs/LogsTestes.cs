@@ -40,5 +40,8 @@ public class LogsTestes : TestesDeApi
         Assert.NotNull(log);
         Assert.Equal("Warning", log.Nivel);
         Assert.Contains("ip=", log.Mensagem);
+        Assert.Equal("POST", log.Metodo);
+        Assert.Equal("/api/auth/login", log.Caminho);
+        Assert.False(string.IsNullOrEmpty(log.RequestId));
     }
 }

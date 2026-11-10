@@ -13,12 +13,14 @@ public class LogNoBancoLogger : ILogger
 
     private readonly string categoria;
     private readonly FilaDeLogs fila;
+    private readonly IHttpContextAccessor acessoAoHttp;
     private readonly bool categoriaIgnorada;
 
-    public LogNoBancoLogger(string categoria, FilaDeLogs fila)
+    public LogNoBancoLogger(string categoria, FilaDeLogs fila, IHttpContextAccessor acessoAoHttp)
     {
         this.categoria = categoria;
         this.fila = fila;
+        this.acessoAoHttp = acessoAoHttp;
         categoriaIgnorada = CategoriasIgnoradas.Any(prefixo => categoria.StartsWith(prefixo, StringComparison.Ordinal));
     }
 
@@ -37,6 +39,8 @@ public class LogNoBancoLogger : ILogger
         if (!IsEnabled(nivel))
             return;
 
+        var requisicao = acessoAoHttp.HttpContext;
+
         fila.Enfileirar(new RegistroDeLog
         {
             DataHora = DateTimeOffset.UtcNow,
@@ -44,9 +48,9 @@ public class LogNoBancoLogger : ILogger
             Categoria = Limitar(categoria, 300)!,
             Mensagem = Limitar(formatador(estado, excecao), null)!,
             Excecao = Limitar(excecao?.ToString(), null),
-            RequestId = Limitar(Propriedade(estado, "RequestId"), 100),
-            Metodo = Limitar(Propriedade(estado, "Metodo"), 10),
-            Caminho = Limitar(Propriedade(estado, "Caminho"), 500)
+            RequestId = Limitar(Propriedade(estado, "RequestId") ?? requisicao?.TraceIdentifier, 100),
+            Metodo = Limitar(Propriedade(estado, "Metodo") ?? requisicao?.Request.Method, 10),
+            Caminho = Limitar(Propriedade(estado, "Caminho") ?? requisicao?.Request.Path.Value, 500)
         });
     }
 

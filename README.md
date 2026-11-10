@@ -39,23 +39,13 @@ Passo a passo completo, do zero até o site no ar. Todos os comandos são execut
 
 1. Abra o **Visual Studio Code**.
 2. Clique em **File > Open Folder...**.
-3. Selecione a pasta do projeto, por exemplo:
-
-   ```text
-   C:\Users\julia.zucco\Desktop\logicando-prouni
-   ```
-
-   Escolha a pasta que contém `README.md`, `QuizProuni.sln`, `backend` e `frontend`.
+3. Selecione a pasta do projeto, a que contém `README.md`, `QuizProuni.sln`, `backend` e `frontend`.
 4. Abra **Terminal > New Terminal**. O terminal deve abrir na pasta raiz do projeto.
-5. Se o caminho exibido no terminal não terminar em `logicando-prouni`, execute:
-
-   ```powershell
-   cd C:\caminho\para\logicando-prouni
-   ```
+5. Se o caminho exibido no terminal não terminar em `logicando-prouni`, use o comando `cd` para entrar na pasta onde o projeto foi baixado.
 
 ### 3. Configuração automática (uma vez)
 
-Não copie o conteúdo do script para o PowerShell. O arquivo [configurar-projeto.ps1](C:/Users/julia.zucco/Desktop/logicando-prouni/configurar-projeto.ps1) já está na pasta raiz. No terminal do VS Code, execute:
+Não copie o conteúdo do script para o PowerShell. O arquivo [configurar-projeto.ps1](configurar-projeto.ps1) já está na pasta raiz. No terminal do VS Code, execute:
 
 ```powershell
 .\configurar-projeto.ps1
@@ -153,7 +143,7 @@ dotnet test
 
 Os testes usam o banco `quiz_prouni_teste`.
 
-Para o front: `cd frontend`, depois `npm run lint` e `npm run build`.
+Para o front: `cd frontend`, depois `npm test` (testes automatizados, com Vitest), `npm run lint` e `npm run build`. Para deixar os testes rodando enquanto você edita o código, use `npm run test:watch`.
 
 ### 8. Alterar o banco: criar uma nova migration
 
@@ -292,7 +282,7 @@ QuizProuni.Api/
 └── wwwroot/                        site compilado (gerado no build, não vai para o git)
 ```
 
-**Dentro de cada pasta de `Funcionalidades`**, os arquivos seguem sempre o mesmo padrão (o mesmo do CaixaDigital):
+**Dentro de cada pasta de `Funcionalidades`**, os arquivos seguem sempre o mesmo padrão:
 
 | Arquivo | Papel |
 | --- | --- |
@@ -334,8 +324,11 @@ src/
 │       (cada uma com as subpastas componentes/, hooks/, servicos/, contexto/, telas/ e utilitarios/ que precisar)
 ├── layout/                  estrutura de página do site e do moderador
 ├── componentes/             componentes usados em várias áreas (alerta, carregando, pódio, gráfico)
+├── testes/                  configuração e dados de apoio dos testes
 └── utilitarios/api.ts       buscarJson, enviarJson, tratarErro e ErroApi
 ```
+
+Os testes do front ficam **ao lado do código que testam**, em arquivos `*.test.ts` e `*.test.tsx`.
 
 ### Banco de dados: `backend/QuizProuni.Api/Dados/Migrations`
 
@@ -358,7 +351,8 @@ Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs
 | a chamada de uma tela à API | `frontend/src/funcionalidades/<assunto>/servicos/` |
 | o texto ou conteúdo das dúvidas | `backend/QuizProuni.Api/Dados/Migrations/002-seed.sql` |
 | as cores e o visual | `frontend/src/index.css` |
-| um teste | `backend/QuizProuni.Testes/<assunto>/` |
+| um teste da API | `backend/QuizProuni.Testes/<assunto>/` |
+| um teste do front | ao lado do arquivo testado, em `frontend/src/**/*.test.ts(x)` |
 
 ## Páginas do site
 
@@ -402,7 +396,7 @@ SELECT log_id, data_hora, nivel, metodo, caminho, mensagem FROM logs ORDER BY lo
 -- só os erros inesperados (500), com os detalhes
 SELECT data_hora, caminho, mensagem, excecao FROM logs WHERE nivel = 'Error' ORDER BY log_id DESC;
 
--- tudo o que aconteceu em uma requisição (o request_id aparece na mensagem)
+-- tudo o que aconteceu em uma requisição (copie o request_id de um log)
 SELECT * FROM logs WHERE request_id = '0HNPUFTMLE0BE:00000001' ORDER BY log_id;
 ```
 
