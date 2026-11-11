@@ -1,4 +1,8 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
+
+Get-ChildItem -Path $PSScriptRoot -Recurse -File -Force -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -notmatch '\\(node_modules|\.git|bin|obj)\\' } |
+    Unblock-File -ErrorAction SilentlyContinue
 
 function Find-Psql {
     $fromPath = Get-Command 'psql' -ErrorAction SilentlyContinue
