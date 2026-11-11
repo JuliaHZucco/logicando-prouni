@@ -59,9 +59,9 @@ describe("PaginaQuizJogo", () => {
 
     expect(responderPergunta).toHaveBeenCalledExactlyOnceWith(7, "eleg-1", 102);
     expect(await screen.findByRole("status")).toHaveTextContent("Você acertou!");
-    expect(screen.getByText(/Porque a renda é limitada\./)).toBeInTheDocument();
+    expect(screen.queryByText(/Porque a renda é limitada\./)).not.toBeInTheDocument();
     expect(tocarSomResposta).toHaveBeenCalledExactlyOnceWith(true);
-    expect(screen.getByRole("link", { name: "Ler a dúvida completa" })).toHaveAttribute("href", "/categoria/elegibilidade?duvida=eleg-1");
+    expect(screen.queryByRole("link", { name: /dúvida completa/ })).not.toBeInTheDocument();
   });
 
   it("no erro mostra qual foi a resposta marcada e qual era a correta", async () => {

@@ -6,7 +6,6 @@ import { buscarResultadoDaPartida, repetirPartida, responderPergunta } from "../
 import type { PartidaQuiz, ResultadoPartida, ResultadoResposta } from "../../funcionalidades/quiz/tipos";
 import { classeDaAlternativa } from "../../funcionalidades/quiz/utilitarios/alternativas";
 import { tocarSomFinalizacao, tocarSomResposta } from "../../utilitarios/sons";
-
 interface RespostaDada {
   duvidaId: string;
   duvidaPergunta: string;
@@ -261,20 +260,6 @@ export default function PaginaQuizJogo() {
                 aria-hidden="true"
               />
               <strong>{resultadoResposta.correta ? "Você acertou!" : "Não foi dessa vez."}</strong>
-            </div>
-
-            <div className="quiz-resposta-revelada mt-3">
-              <div className="quiz-resposta-revelada-eyebrow">EXPLICAÇÃO</div>
-              {resultadoResposta.explicacao}
-            </div>
-
-            <div className="mt-3">
-              <Link
-                to={`/categoria/${perguntaAtual.categoriaId}?duvida=${resultadoResposta.baseDuvidaId}`}
-                className="link-limpar"
-              >
-                Ler a dúvida completa
-              </Link>
             </div>
 
             <button type="button" className="quiz-botao-iniciar quiz-botao-proxima" onClick={proximaPergunta}>
