@@ -25,6 +25,9 @@ public static class PartidaAoVivoRegras
             if (sala!.Status != ConsultasDaSala.StatusAguardando && sala.Status != ConsultasDaSala.StatusResultadoPergunta)
                 return RespostaBase.ComErro<AvancarResponse>("A sala não pode avançar agora.", TipoDeErro.Conflito, "EstadoInvalido");
 
+            if (sala.Status == ConsultasDaSala.StatusAguardando && await ConsultasDaSala.ContarParticipantesAsync(db, sala.SalaId) == 0)
+                return RespostaBase.ComErro<AvancarResponse>("Aguarde pelo menos um participante entrar na sala para iniciar.", TipoDeErro.Conflito, "SemParticipantes");
+
             var perguntaAnterior = sala.PerguntaAtual ?? 0;
             if (perguntaAnterior >= sala.QuantidadePerguntas)
             {

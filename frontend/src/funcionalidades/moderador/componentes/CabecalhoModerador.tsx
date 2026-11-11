@@ -22,7 +22,7 @@ export default function CabecalhoModerador({ email }: PropsCabecalhoModerador) {
   return (
     <header className="app-cabecalho">
       <div className="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
-        <Link to="/moderador/salas" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
+        <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
           <img src="/logo-feevale.png" alt="Logo da Universidade Feevale" className="marca-logo" />
           <span className="d-flex flex-column">
             <span className="marca-titulo marca-titulo-pequena">
@@ -33,6 +33,9 @@ export default function CabecalhoModerador({ email }: PropsCabecalhoModerador) {
         </Link>
 
         <div className="d-flex align-items-center gap-3 flex-wrap">
+          <Link to="/moderador/salas" className="link-limpar">
+            Minhas salas
+          </Link>
           <span className="moderador-email">{email}</span>
           <button type="button" className="botao-sair" onClick={sair} disabled={saindo}>
             Sair

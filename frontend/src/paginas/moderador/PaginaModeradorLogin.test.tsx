@@ -2,13 +2,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { entrarComoModerador, sairDoModerador } from "../../funcionalidades/moderador/servicos/moderadorApi";
+import { buscarModeradorLogado, entrarComoModerador } from "../../funcionalidades/moderador/servicos/moderadorApi";
 import { ErroApi } from "../../utilitarios/api";
 import PaginaModeradorLogin from "./PaginaModeradorLogin";
 
 vi.mock("../../funcionalidades/moderador/servicos/moderadorApi", () => ({
   entrarComoModerador: vi.fn(),
-  sairDoModerador: vi.fn(),
+  buscarModeradorLogado: vi.fn(),
 }));
 
 function renderizar() {
@@ -30,13 +30,23 @@ async function preencherEEnviar(email = "prof@feevale.br", senha = "Senha1234") 
 
 describe("PaginaModeradorLogin", () => {
   beforeEach(() => {
-    vi.mocked(sairDoModerador).mockResolvedValue(undefined);
+    vi.mocked(buscarModeradorLogado).mockRejectedValue(
+      new ErroApi({ status: 401, codigo: "ERRO_HTTP", tipo: "unauthorized", mensagem: "Entre como moderador para continuar." }),
+    );
   });
 
-  it("encerra qualquer sessão anterior ao abrir a tela", async () => {
+  it("quem já está logado vai direto para a lista de salas, sem encerrar a sessão", async () => {
+    vi.mocked(buscarModeradorLogado).mockResolvedValue({ email: "prof@feevale.br" });
     renderizar();
 
-    await waitFor(() => expect(sairDoModerador).toHaveBeenCalledOnce());
+    expect(await screen.findByText("Minhas salas")).toBeInTheDocument();
+  });
+
+  it("sem sessão mostra o formulário de login", async () => {
+    renderizar();
+
+    await waitFor(() => expect(buscarModeradorLogado).toHaveBeenCalledOnce());
+    expect(screen.getByRole("heading", { name: "Entrar" })).toBeInTheDocument();
   });
 
   it("entra com o e-mail e a senha digitados e vai para a lista de salas", async () => {

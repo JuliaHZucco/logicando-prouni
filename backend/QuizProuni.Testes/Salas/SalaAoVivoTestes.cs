@@ -152,6 +152,17 @@ public class SalaAoVivoTestes : TestesDeApi
     }
 
     [Fact]
+    public async Task Nao_inicia_a_partida_sem_nenhum_participante_na_sala()
+    {
+        var (_, moderador, codigo) = await PrepararSalaAsync();
+
+        Assert.False(await InvocarAsync(moderador, "Avancar", codigo));
+
+        await EntrarComoParticipanteAsync(codigo, "Ana");
+        Assert.True(await InvocarAsync(moderador, "Avancar", codigo));
+    }
+
+    [Fact]
     public async Task Participante_nao_pode_avancar_encerrar_nem_abrir_nova_rodada()
     {
         var (_, _, codigo) = await PrepararSalaAsync();
@@ -177,6 +188,7 @@ public class SalaAoVivoTestes : TestesDeApi
     public async Task Nao_avanca_com_pergunta_aberta_e_nao_encerra_pergunta_que_nao_esta_aberta()
     {
         var (_, moderador, codigo) = await PrepararSalaAsync();
+        await EntrarComoParticipanteAsync(codigo, "Ana");
 
         Assert.False(await InvocarAsync(moderador, "EncerrarPergunta", codigo));
         Assert.True(await InvocarAsync(moderador, "Avancar", codigo));

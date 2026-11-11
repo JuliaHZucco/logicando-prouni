@@ -362,11 +362,11 @@ Quem executa os arquivos é a aplicação: as migrations do EF Core (`Inicial.cs
 | `/categoria/:categoriaId` | Dúvidas da categoria (`?duvida=id` abre uma dúvida específica) |
 | `/buscar?q=termo` | Resultados da busca, com "N dúvidas encontradas" |
 | `/quiz` | Menu do quiz individual (aleatório, uma categoria ou misto) |
-| `/quiz/jogar` | Partida individual, com explicação a cada resposta e resultado final |
+| `/quiz/jogar` | Partida individual, que mostra a alternativa correta a cada resposta, e resultado final |
 | `/quiz/sala` | Entrar em uma sala com o código |
 | `/sala/:codigo/apelido` | Escolher o apelido |
 | `/sala/:codigo` | Partida do participante (celular) |
-| `/moderador/login` | Entrada do moderador |
+| `/moderador/login` | Entrada do moderador (quem já está logado vai direto para as salas) |
 | `/moderador/salas` | Minhas salas, com filtros de nome, status e datas |
 | `/moderador/salas/nova` | Criar sala |
 | `/moderador/sala/:codigo` | Condução da sala ao vivo |
@@ -416,6 +416,8 @@ Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira v
 - A quantidade de perguntas vai de 1 a 10. No modo misto, o mínimo é uma pergunta por categoria escolhida.
 - Cada participante responde uma vez por pergunta em cada rodada. A violação devolve 409.
 - O apelido tem até 20 caracteres e é único na sala, sem diferenciar maiúsculas e minúsculas.
+- O moderador só inicia a partida com pelo menos um participante na sala. O servidor recusa a ação sem ninguém, e o botão "Iniciar partida" fica desabilitado até a primeira pessoa entrar.
+- A sessão do moderador dura 12 horas. Ele pode navegar pelo site, pelas dúvidas e pela busca sem perder o login (o logo do painel leva à página inicial); só sai pelo botão "Sair" ou quando a sessão expira, e nesse caso é levado à tela de login.
 - "Jogar novamente" na sala abre uma nova rodada, com os mesmos participantes, placar zerado e respostas anteriores preservadas.
 - Os participantes veem só o pódio com os três primeiros e a própria posição. O ranking geral é exclusivo do moderador.
 

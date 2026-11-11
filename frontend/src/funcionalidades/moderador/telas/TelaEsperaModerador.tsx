@@ -29,10 +29,13 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
               type="button"
               className="quiz-botao-iniciar"
               onClick={() => aoAcionar("Avancar")}
-              disabled={ocupado}
+              disabled={ocupado || estado.totalParticipantes < 1}
             >
               Iniciar partida
             </button>
+            {estado.totalParticipantes < 1 && (
+              <small className="sala-texto">Aguarde pelo menos um participante entrar para iniciar.</small>
+            )}
             <button type="button" className="quiz-botao-iniciar botao-perigo alt-d" onClick={aoPedirEncerramento} disabled={ocupado}>
               Encerrar sala
             </button>

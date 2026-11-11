@@ -43,6 +43,7 @@ public class EncerramentoPorPrazoTestes : TestesDeApi, IClassFixture<FabricaComE
     public async Task Encerramento_por_prazo_nao_fecha_pergunta_que_ainda_esta_dentro_do_prazo()
     {
         var (_, moderador, codigo) = await PrepararSalaAsync(quantidade: 1, segundos: 60);
+        await EntrarComoParticipanteAsync(codigo, "Ana");
         await InvocarAsync(moderador, "Avancar", codigo);
 
         using var escopo = fabrica.Services.CreateScope();
@@ -57,6 +58,7 @@ public class EncerramentoPorPrazoTestes : TestesDeApi, IClassFixture<FabricaComE
     public async Task Varredura_nao_encerra_pergunta_de_sala_sem_cronometro()
     {
         var (_, moderador, codigo) = await PrepararSalaAsync(quantidade: 1);
+        await EntrarComoParticipanteAsync(codigo, "Ana");
         await InvocarAsync(moderador, "Avancar", codigo);
         await EnvelhecerPerguntaAsync(codigo, segundosDesdeAAbertura: 3600);
 

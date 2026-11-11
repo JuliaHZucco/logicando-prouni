@@ -40,11 +40,21 @@ export async function enviarJson<T>(rota: string, corpo?: unknown): Promise<Resu
   return { resposta, dados: await lerJson<T>(resposta) };
 }
 
+const ROTA_DO_LOGIN = "/moderador/login";
+
+function levarParaOLoginDoModerador() {
+  const { pathname } = window.location;
+  if (pathname.startsWith("/moderador") && pathname !== ROTA_DO_LOGIN) {
+    window.location.replace(ROTA_DO_LOGIN);
+  }
+}
+
 export function tratarErro<T>(resultado: ResultadoRequisicao<T>): T {
   const { resposta, dados } = resultado;
   if (resposta.ok) return dados;
 
   const erro = dados as { type?: string; code?: string; message?: string };
+  if (resposta.status === 401) levarParaOLoginDoModerador();
   throw new ErroApi({
     status: resposta.status,
     codigo: erro?.code || "ERRO_HTTP",

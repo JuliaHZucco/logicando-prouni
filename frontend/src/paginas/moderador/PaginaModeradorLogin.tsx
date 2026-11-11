@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Alerta from "../../componentes/Alerta";
-import { entrarComoModerador, sairDoModerador } from "../../funcionalidades/moderador/servicos/moderadorApi";
+import { buscarModeradorLogado, entrarComoModerador } from "../../funcionalidades/moderador/servicos/moderadorApi";
 
 export default function PaginaModeradorLogin() {
   const navigate = useNavigate();
@@ -11,8 +11,16 @@ export default function PaginaModeradorLogin() {
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
 
   useEffect(() => {
-    sairDoModerador().catch(() => undefined);
-  }, []);
+    let cancelado = false;
+    buscarModeradorLogado()
+      .then(() => {
+        if (!cancelado) navigate("/moderador/salas", { replace: true });
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelado = true;
+    };
+  }, [navigate]);
 
   const entrar = async (evento: FormEvent) => {
     evento.preventDefault();

@@ -59,6 +59,14 @@ describe("TelaEsperaModerador", () => {
     expect(props.aoPedirEncerramento).toHaveBeenCalledOnce();
   });
 
+  it("sem participantes na sala não deixa iniciar a partida", () => {
+    mostrar(<TelaEsperaModerador {...propsBase({ participantes: [], totalParticipantes: 0 })} />);
+
+    expect(screen.getByRole("button", { name: "Iniciar partida" })).toBeDisabled();
+    expect(screen.getByText("Aguarde pelo menos um participante entrar para iniciar.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Encerrar sala" })).toBeEnabled();
+  });
+
   it("trava os botões enquanto uma ação está em andamento", () => {
     mostrar(<TelaEsperaModerador {...propsBase({}, true)} />);
 

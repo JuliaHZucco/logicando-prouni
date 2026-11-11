@@ -44,7 +44,8 @@ describe("CabecalhoModerador", () => {
 
     expect(screen.getByText("prof@feevale.br")).toBeInTheDocument();
     expect(screen.getByText("PAINEL DO MODERADOR")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Feevale Prouni/ })).toHaveAttribute("href", "/moderador/salas");
+    expect(screen.getByRole("link", { name: /Feevale Prouni/ })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "Minhas salas" })).toHaveAttribute("href", "/moderador/salas");
   });
 
   it("'Sair' encerra a sessão e leva à tela de login", async () => {
