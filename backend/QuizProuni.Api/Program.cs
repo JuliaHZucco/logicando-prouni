@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using QuizProuni.Api.Compartilhado.Logs;
 using QuizProuni.Api.Compartilhado.Middlewares;
@@ -12,12 +14,19 @@ using QuizProuni.Api.Funcionalidades.Salas.TempoReal;
 using QuizProuni.Api.Funcionalidades.Visitantes;
 
 const int TamanhoMaximoDoCorpoEmBytes = 64 * 1024;
+const string PastaDeArquivosComHash = "/assets/";
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(opcoes => opcoes.Limits.MaxRequestBodySize = TamanhoMaximoDoCorpoEmBytes);
 
 builder.Services.AddControllers();
+builder.Services.AddResponseCompression(opcoes =>
+{
+    opcoes.EnableForHttps = true;
+    opcoes.Providers.Add<BrotliCompressionProvider>();
+    opcoes.Providers.Add<GzipCompressionProvider>();
+});
 builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<QuizProuniContext>(opcoes =>
@@ -54,17 +63,34 @@ if (args.Length > 0 && args[0] == CriarModeradorComando.Nome)
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseResponseCompression();
+
+var opcoesDeArquivosEstaticos = new StaticFileOptions { OnPrepareResponse = DefinirCacheDoArquivoEstatico };
+
 app.UseDefaultFiles();
-app.UseStaticFiles();
+app.UseStaticFiles(opcoesDeArquivosEstaticos);
 app.UseRouting();
 app.UseRateLimiter();
 
 app.MapControllers();
 app.MapHub<SalaHub>("/hubs/sala");
-app.MapFallbackToFile("/{*caminho:regex(^(?!api/|hubs/).*$)}", "index.html");
+app.MapFallbackToFile("/{*caminho:regex(^(?!api/|hubs/).*$)}", "index.html", opcoesDeArquivosEstaticos);
 
 app.Run();
 return 0;
+
+static void DefinirCacheDoArquivoEstatico(StaticFileResponseContext contexto)
+{
+    var cabecalhos = contexto.Context.Response.Headers;
+    var caminho = contexto.Context.Request.Path.Value ?? string.Empty;
+
+    if (caminho.StartsWith(PastaDeArquivosComHash, StringComparison.OrdinalIgnoreCase))
+        cabecalhos.CacheControl = "public,max-age=31536000,immutable";
+    else if (contexto.File.Name.Equals("index.html", StringComparison.OrdinalIgnoreCase))
+        cabecalhos.CacheControl = "no-cache";
+    else
+        cabecalhos.CacheControl = "public,max-age=86400";
+}
 
 public partial class Program
 {

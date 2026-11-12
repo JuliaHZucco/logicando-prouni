@@ -4,9 +4,8 @@
   --feevale-verde-hover: #1f9d5b;
   --feevale-verde-desativado: #9fc9b0;
   --feevale-verde-limao: #8dc63f;
-  --feevale-laranja: #e6c000;
-  --feevale-laranja-escuro: #e6c000;
-  --feevale-cinza: #6b7280;
+  --feevale-laranja: #fdb913;
+  --feevale-cinza: #5d5e61;
   --feevale-cinza-escuro: #3f4a44;
   --feevale-cinza-claro: #eef1ee;
   --feevale-fundo: #f6f8f5;
@@ -19,7 +18,7 @@
   --bs-body-color: #3f4a44;
   --bs-body-color-rgb: 63, 74, 68;
   --bs-emphasis-color: #3f4a44;
-  --bs-secondary-color: rgba(63, 74, 68, 0.75);
+  --bs-secondary-color: #59635d;
 }
 
 .table {
@@ -163,7 +162,7 @@ a {
 }
 
 .eyebrow-laranja {
-  color: var(--feevale-laranja-escuro);
+  color: var(--feevale-verde);
 }
 
 .eyebrow-cinza {
@@ -173,12 +172,12 @@ a {
 .titulo-boas-vindas {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--feevale-verde);
+  color: var(--feevale-cinza-escuro);
   line-height: 1.15;
 }
 
 .texto-destaque {
-  color: var(--feevale-laranja);
+  color: var(--feevale-verde);
 }
 
 .texto-boas-vindas {
@@ -224,11 +223,11 @@ a {
   max-width: 100%;
   margin: 0 auto;
   justify-content: space-between;
-  background: #3ca040;
+  background: var(--feevale-verde);
   border-radius: 999px;
   padding: 1rem 1.6rem 1rem 0.9rem;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(60, 160, 64, 0.28);
+  box-shadow: 0 6px 16px rgba(0, 120, 60, 0.28);
   animation: destaque-quiz 3.8s ease-in-out infinite;
 }
 
@@ -237,12 +236,12 @@ a {
   55%,
   100% {
     transform: translateY(0) scale(1);
-    box-shadow: 0 6px 16px rgba(60, 160, 64, 0.28);
+    box-shadow: 0 6px 16px rgba(0, 120, 60, 0.28);
   }
   62%,
   72% {
     transform: translateY(-3px) scale(1.025);
-    box-shadow: 0 12px 26px rgba(60, 160, 64, 0.42);
+    box-shadow: 0 12px 26px rgba(0, 120, 60, 0.42);
   }
 }
 
@@ -250,12 +249,12 @@ a {
   0%,
   55%,
   100% {
-    box-shadow: 0 6px 16px rgba(60, 160, 64, 0.28);
+    box-shadow: 0 6px 16px rgba(0, 120, 60, 0.28);
     transform: translateY(0) scale(1);
   }
   62%,
   72% {
-    box-shadow: 0 8px 18px rgba(60, 160, 64, 0.32);
+    box-shadow: 0 8px 18px rgba(0, 120, 60, 0.32);
     transform: translateY(-1px) scale(1.01);
   }
 }
@@ -286,7 +285,6 @@ a {
   font-size: 0.88rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  opacity: 0.85;
   text-align: center;
 }
 
@@ -296,7 +294,7 @@ a {
 }
 
 .chamada-quiz-selo {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(0, 0, 0, 0.22);
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
   font-size: 0.74rem;
@@ -2212,4 +2210,15 @@ a {
   letter-spacing: 0.06em;
   line-height: 1;
   text-transform: uppercase;
+}
+
+/* Reserva a largura do ícone para o texto não pular quando a fonte de ícones termina de carregar. */
+.bi::before {
+  width: 1em;
+  text-align: center;
+}
+
+/* Enquanto o conteúdo carrega, ocupa a altura da tela para o rodapé não aparecer e depois pular para baixo. */
+.conteudo-carregando {
+  min-height: 100vh;
 }

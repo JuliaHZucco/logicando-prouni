@@ -57,7 +57,7 @@ export default function ProvedorConteudo({ children }: { children: ReactNode }) 
 
   if (!categorias) {
     return (
-      <div className="container py-5">
+      <div className="container py-5 conteudo-carregando">
         <AreaCarregando mensagem="Carregando conteúdo..." />
       </div>
     );
