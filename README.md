@@ -150,7 +150,7 @@ Para o front: `cd frontend`, depois `npm test` (testes automatizados, com Vitest
 
 Neste projeto o schema **não é gerado pelo EF Core**. Ele é escrito à mão em arquivos `.sql`, e cada migration só executa um desses arquivos com `migrationBuilder.Sql`. Por isso uma alteração no banco tem três partes que precisam ficar iguais: o **SQL**, a **classe da entidade** (e o `QuizProuniContext`, se houver algo especial) e a **migration**.
 
-**Regra de ouro:** nunca edite uma migration (nem um `.sql`) que já foi aplicada em algum banco. Sempre crie uma nova.
+Nunca edite uma migration (nem um `.sql`) que já foi aplicada em algum banco. Sempre crie uma nova.
 
 O exemplo abaixo adiciona a coluna `descricao` na tabela `salas`. Todos os comandos rodam na pasta raiz, com o PostgreSQL ligado e a **API parada**.
 
@@ -334,7 +334,7 @@ Se o site ficar atrás de um proxy ou balanceador, configure estas variáveis. E
 
 Toda resposta leva `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` e uma `Content-Security-Policy`. A política só aceita conteúdo do próprio site (sem scripts em linha) e libera o WebSocket do mesmo endereço.
 
-Na prática, qualquer recurso externo novo (fonte do Google, Google Analytics, vídeo incorporado, CDN) fica bloqueado pelo navegador até a política ser ajustada em `Compartilhado/Middlewares/CabecalhosDeSegurancaMiddleware.cs`.
+Qualquer recurso externo novo (fonte do Google, Google Analytics, vídeo incorporado, CDN) fica bloqueado pelo navegador até a política ser ajustada em `Compartilhado/Middlewares/CabecalhosDeSegurancaMiddleware.cs`.
 
 ### 6. Cadastrar o primeiro moderador
 
