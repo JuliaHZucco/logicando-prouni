@@ -2194,6 +2194,11 @@ a {
 }
 
 /* QR grande por padrão (a tela costuma ser projetada), encolhendo em telas estreitas */
+.entrada-rapida-carregando {
+  min-height: 24rem;
+  justify-content: center;
+}
+
 .entrada-rapida-qr {
   width: min(100%, 360px);
   padding: 0.8rem;

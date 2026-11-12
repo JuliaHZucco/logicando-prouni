@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { ErroApi } from "../../../utilitarios/api";
 import { respostaJson } from "../../../testes/respostas";
-import { buscarModeradorLogado, buscarRankingGeral, criarSala, entrarComoModerador, listarMinhasSalas, sairDoModerador } from "./moderadorApi";
+import { buscarEnderecoPublico, buscarModeradorLogado, buscarRankingGeral, criarSala, entrarComoModerador, listarMinhasSalas, sairDoModerador } from "./moderadorApi";
 
 function simularFetch(resposta: Response) {
   const fetchFalso = vi.fn().mockResolvedValue(resposta);
@@ -75,6 +75,19 @@ describe("moderadorApi", () => {
     await listarMinhasSalas({ ...semFiltros, busca: "   " });
 
     expect(fetchFalso.mock.calls[0][0]).toBe("/api/salas/minhas");
+  });
+
+  it("buscarEnderecoPublico devolve o endereço configurado no servidor", async () => {
+    const fetchFalso = simularFetch(respostaJson({ enderecoPublico: "https://prouni.feevale.br" }));
+
+    expect(await buscarEnderecoPublico()).toBe("https://prouni.feevale.br");
+    expect(fetchFalso.mock.calls[0][0]).toBe("/api/configuracao/publica");
+  });
+
+  it("buscarEnderecoPublico devolve null quando o servidor não tem endereço configurado", async () => {
+    simularFetch(respostaJson({ enderecoPublico: null }));
+
+    expect(await buscarEnderecoPublico()).toBeNull();
   });
 
   it("buscarRankingGeral consulta o ranking da sala pelo código", async () => {

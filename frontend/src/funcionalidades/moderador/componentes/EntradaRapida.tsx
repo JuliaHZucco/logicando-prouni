@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import AreaCarregando from "../../../componentes/AreaCarregando";
+import { buscarEnderecoPublico } from "../servicos/moderadorApi";
 
 interface PropsEntradaRapida {
   codigo: string;
@@ -10,14 +12,27 @@ type SituacaoDaCopia = "parado" | "copiado" | "falhou";
 const TEMPO_DO_AVISO_EM_MS = 2500;
 
 export default function EntradaRapida({ codigo }: PropsEntradaRapida) {
-  const endereco = `${window.location.origin}/sala/${codigo}`;
-  const enderecoCurto = `${window.location.host}/sala/${codigo}`;
+  // undefined = ainda consultando. Sem endereço público configurado no servidor (ou se a consulta falhar),
+  // usa o endereço em que o moderador abriu o painel.
+  const [base, setBase] = useState<string | undefined>(undefined);
   const [situacao, setSituacao] = useState<SituacaoDaCopia>("parado");
   const temporizador = useRef<number | undefined>(undefined);
 
   useEffect(() => () => window.clearTimeout(temporizador.current), []);
 
-  const copiar = async () => {
+  useEffect(() => {
+    let cancelado = false;
+    buscarEnderecoPublico()
+      .catch(() => null)
+      .then((enderecoPublico) => {
+        if (!cancelado) setBase(enderecoPublico ?? window.location.origin);
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, []);
+
+  const copiar = async (endereco: string) => {
     try {
       await navigator.clipboard.writeText(endereco);
       setSituacao("copiado");
@@ -27,6 +42,17 @@ export default function EntradaRapida({ codigo }: PropsEntradaRapida) {
     window.clearTimeout(temporizador.current);
     temporizador.current = window.setTimeout(() => setSituacao("parado"), TEMPO_DO_AVISO_EM_MS);
   };
+
+  if (base === undefined) {
+    return (
+      <div className="entrada-rapida entrada-rapida-carregando">
+        <AreaCarregando mensagem="Gerando o QR code..." />
+      </div>
+    );
+  }
+
+  const endereco = `${base}/sala/${codigo}`;
+  const enderecoCurto = endereco.replace(/^https?:\/\//, "");
 
   return (
     <div className="entrada-rapida">
@@ -46,7 +72,7 @@ export default function EntradaRapida({ codigo }: PropsEntradaRapida) {
 
       <p className="sala-texto mb-0">Aponte a câmera para o QR code ou abra o endereço abaixo.</p>
       <div className="entrada-rapida-endereco">{enderecoCurto}</div>
-      <button type="button" className="quiz-botao-secundario botao-compacto" onClick={copiar}>
+      <button type="button" className="quiz-botao-secundario botao-compacto" onClick={() => copiar(endereco)}>
         <i className={`bi ${situacao === "copiado" ? "bi-check2" : "bi-clipboard"} me-1`} aria-hidden="true" />
         Copiar link
       </button>

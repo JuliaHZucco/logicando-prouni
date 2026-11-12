@@ -1,9 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { EstadoSala, LinhaRanking } from "../../salas/tipos";
 import { criarEstado, criarPergunta, criarResultado } from "../../../testes/fabricas";
 import { renderizarComRotas } from "../../../testes/renderizar";
+import { buscarEnderecoPublico } from "../servicos/moderadorApi";
 import ModalEncerrarSala from "./ModalEncerrarSala";
 import { descreverCronometro, descreverModoDaSala } from "./propsDaSala";
 import TelaEncerradaModerador from "./TelaEncerradaModerador";
@@ -15,6 +16,12 @@ import TelaResultadoModerador from "./TelaResultadoModerador";
 function propsBase(parcial: Partial<EstadoSala> = {}, ocupado = false) {
   return { estado: criarEstado({ souModerador: true, ...parcial }), ocupado, aoAcionar: vi.fn(), aoPedirEncerramento: vi.fn() };
 }
+
+vi.mock("../servicos/moderadorApi", () => ({ buscarEnderecoPublico: vi.fn() }));
+
+beforeEach(() => {
+  vi.mocked(buscarEnderecoPublico).mockResolvedValue(null);
+});
 
 const mostrar = (elemento: React.ReactElement) => renderizarComRotas("/", { "/": elemento });
 

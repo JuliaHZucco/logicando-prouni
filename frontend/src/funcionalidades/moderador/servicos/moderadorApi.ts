@@ -29,6 +29,12 @@ export async function listarMinhasSalas(filtros: FiltrosDeSalas): Promise<SalaRe
   return tratarErro(await buscarJson<SalaResumo[]>(`/api/salas/minhas${consulta ? `?${consulta}` : ""}`));
 }
 
+// Endereço público oficial do site, quando o servidor tem um configurado. Sem ele, o QR usa o endereço do navegador.
+export async function buscarEnderecoPublico(): Promise<string | null> {
+  const { enderecoPublico } = tratarErro(await buscarJson<{ enderecoPublico: string | null }>("/api/configuracao/publica"));
+  return enderecoPublico;
+}
+
 export async function buscarRankingGeral(codigo: string): Promise<LinhaRanking[]> {
   return tratarErro(await buscarJson<LinhaRanking[]>(`/api/salas/${codigo}/ranking`));
 }
