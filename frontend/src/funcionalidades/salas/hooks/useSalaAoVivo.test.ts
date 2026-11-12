@@ -104,6 +104,15 @@ describe("useSalaAoVivo", () => {
     expect(result.current.estado?.participantes.map((x) => x.apelido)).toEqual(["Ana", "Bruno"]);
   });
 
+  it("atualiza a lista quando alguém sai da sala", async () => {
+    const { emitir, result } = await iniciar();
+
+    await emitir("participante-saiu", { participantes: [{ id: 1, apelido: "Ana" }], total: 1 });
+
+    expect(result.current.estado?.totalParticipantes).toBe(1);
+    expect(result.current.estado?.participantes.map((x) => x.apelido)).toEqual(["Ana"]);
+  });
+
   it("abre a pergunta quando o moderador avança e limpa a resposta e o resultado anteriores", async () => {
     vi.mocked(buscarEstadoDaSala).mockResolvedValue(
       criarEstado({ status: "resultado_pergunta", minhaAlternativaId: 12, resultado: criarResultado() }),

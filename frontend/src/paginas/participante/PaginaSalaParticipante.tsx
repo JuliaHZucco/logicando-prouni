@@ -1,9 +1,11 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import Alerta from "../../componentes/Alerta";
 import AreaCarregando from "../../componentes/AreaCarregando";
 import BarraDaSala from "../../funcionalidades/salas/componentes/BarraDaSala";
 import { useSalaAoVivo } from "../../funcionalidades/salas/hooks/useSalaAoVivo";
 import { useSonsDaSala } from "../../funcionalidades/salas/hooks/useSonsDaSala";
+import { sairDaSala } from "../../funcionalidades/salas/servicos/salasApi";
 import TelaEspera from "../../funcionalidades/salas/telas/TelaEspera";
 import TelaPergunta from "../../funcionalidades/salas/telas/TelaPergunta";
 import TelaRanking from "../../funcionalidades/salas/telas/TelaRanking";
@@ -14,6 +16,21 @@ export default function PaginaSalaParticipante() {
   const codigoNormalizado = codigo.toUpperCase();
   const { estado, erroDeCarga, mensagemDeConexao, responder } = useSalaAoVivo(codigoNormalizado);
   useSonsDaSala(estado);
+  const navigate = useNavigate();
+  const [saindo, setSaindo] = useState(false);
+  const [mensagemErro, setMensagemErro] = useState<string | null>(null);
+
+  const sair = async () => {
+    setSaindo(true);
+    setMensagemErro(null);
+    try {
+      await sairDaSala(codigoNormalizado);
+      navigate("/", { replace: true });
+    } catch (erro) {
+      setMensagemErro((erro as Error).message || "Erro ao sair da sala.");
+      setSaindo(false);
+    }
+  };
 
   if (erroDeCarga?.status === 404) {
     return <Navigate to="/quiz/sala" replace />;
@@ -43,7 +60,9 @@ export default function PaginaSalaParticipante() {
       <main className="sala-conteudo">
         {mensagemDeConexao && <Alerta mensagem={mensagemDeConexao} variante="warning" />}
 
-        {estado.status === "aguardando" && <TelaEspera estado={estado} />}
+        {mensagemErro && <Alerta mensagem={mensagemErro} />}
+
+        {estado.status === "aguardando" && <TelaEspera estado={estado} aoSair={sair} saindo={saindo} />}
 
         {estado.status === "pergunta_aberta" && estado.pergunta && (
           <TelaPergunta estado={estado} pergunta={estado.pergunta} aoResponder={responder} />

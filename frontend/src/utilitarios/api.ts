@@ -40,6 +40,11 @@ export async function enviarJson<T>(rota: string, corpo?: unknown): Promise<Resu
   return { resposta, dados: await lerJson<T>(resposta) };
 }
 
+export async function excluirJson<T>(rota: string): Promise<ResultadoRequisicao<T>> {
+  const resposta = await fetch(rota, { method: "DELETE", credentials: "include" });
+  return { resposta, dados: await lerJson<T>(resposta) };
+}
+
 const ROTA_DO_LOGIN = "/moderador/login";
 
 function levarParaOLoginDoModerador() {

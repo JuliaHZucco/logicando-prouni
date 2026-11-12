@@ -130,6 +130,21 @@ describe("TelaEspera", () => {
     expect(screen.getByRole("heading", { name: "O moderador abriu uma nova rodada" })).toBeInTheDocument();
   });
 
+  it("na primeira rodada oferece o botão para sair da sala", async () => {
+    const aoSair = vi.fn();
+    render(<TelaEspera estado={criarEstado({ rodada: 1 })} aoSair={aoSair} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Voltar e sair da sala/ }));
+
+    expect(aoSair).toHaveBeenCalledOnce();
+  });
+
+  it("nas rodadas seguintes não oferece o botão de sair", () => {
+    render(<TelaEspera estado={criarEstado({ rodada: 2 })} aoSair={vi.fn()} />);
+
+    expect(screen.queryByRole("button", { name: /sair da sala/ })).not.toBeInTheDocument();
+  });
+
   it("conta os participantes no singular e no plural", () => {
     const { rerender } = render(<TelaEspera estado={criarEstado({ totalParticipantes: 1 })} />);
     expect(screen.getByText("1 participante")).toBeInTheDocument();

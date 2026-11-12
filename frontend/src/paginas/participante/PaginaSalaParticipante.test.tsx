@@ -1,6 +1,8 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { useSalaAoVivo } from "../../funcionalidades/salas/hooks/useSalaAoVivo";
+import { sairDaSala } from "../../funcionalidades/salas/servicos/salasApi";
 import type { EstadoSala } from "../../funcionalidades/salas/tipos";
 import { ErroApi } from "../../utilitarios/api";
 import { criarEstado, criarPergunta, criarResultado } from "../../testes/fabricas";
@@ -9,6 +11,7 @@ import PaginaSalaParticipante from "./PaginaSalaParticipante";
 
 vi.mock("../../funcionalidades/salas/hooks/useSalaAoVivo", () => ({ useSalaAoVivo: vi.fn() }));
 vi.mock("../../funcionalidades/salas/hooks/useSonsDaSala", () => ({ useSonsDaSala: vi.fn() }));
+vi.mock("../../funcionalidades/salas/servicos/salasApi", () => ({ sairDaSala: vi.fn() }));
 
 type RetornoDoHook = ReturnType<typeof useSalaAoVivo>;
 
@@ -30,6 +33,7 @@ function renderizar(entrada = "/sala/ABC123") {
   return renderizarComRotas(entrada, {
     "/sala/:codigo": <PaginaSalaParticipante />,
     "/sala/:codigo/apelido": <div>Escolha o apelido</div>,
+    "/": <div>Página inicial</div>,
     "/quiz/sala": <div>Entrar em uma sala</div>,
     "/moderador/sala/:codigo": <div>Painel do moderador</div>,
   });
@@ -87,6 +91,28 @@ describe("PaginaSalaParticipante", () => {
     renderizar();
 
     expect(screen.getByRole("heading", { name: "Aguardando o moderador iniciar" })).toBeInTheDocument();
+  });
+
+  it("'Voltar e sair da sala' remove o participante e leva ao início", async () => {
+    vi.mocked(sairDaSala).mockResolvedValue(undefined);
+    simular(criarEstado({ status: "aguardando" }));
+    renderizar();
+
+    await userEvent.click(screen.getByRole("button", { name: /Voltar e sair da sala/ }));
+
+    expect(sairDaSala).toHaveBeenCalledExactlyOnceWith("ABC123");
+    expect(await screen.findByText("Página inicial")).toBeInTheDocument();
+  });
+
+  it("mostra o motivo e continua na sala quando não consegue sair", async () => {
+    vi.mocked(sairDaSala).mockRejectedValue(new Error("Só é possível sair da sala antes da partida começar."));
+    simular(criarEstado({ status: "aguardando" }));
+    renderizar();
+
+    await userEvent.click(screen.getByRole("button", { name: /Voltar e sair da sala/ }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Só é possível sair da sala antes da partida começar.");
+    expect(screen.queryByText("Página inicial")).not.toBeInTheDocument();
   });
 
   it("com a pergunta aberta mostra as alternativas e envia a resposta", async () => {

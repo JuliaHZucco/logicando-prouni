@@ -80,6 +80,23 @@ public class SalasController : ControllerBase
         return new JsonResult(new { response.Participante, response.Reconectado }) { StatusCode = statusHttp };
     }
 
+    [HttpDelete("{codigo}/participantes/eu")]
+    [EnableRateLimiting(PoliticasDeLimite.AcessoASala)]
+    public async Task<IActionResult> Sair(string codigo)
+    {
+        var visitanteId = await visitanteContexto.ObterVisitanteIdAsync();
+        if (visitanteId == null)
+            return NoContent();
+
+        var response = await salaService.SairAsync(visitanteId.Value, codigo);
+        response.LancarSeHouverErro();
+
+        if (response.Saiu)
+            await notificador.ParticipanteSaiuAsync(codigo, response.Participantes);
+
+        return NoContent();
+    }
+
     [HttpGet("{codigo}/estado")]
     [EnableRateLimiting(PoliticasDeLimite.AcessoASala)]
     public async Task<IActionResult> ObterEstado(string codigo)

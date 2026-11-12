@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { criarEstado } from "../../../testes/fabricas";
 import { respostaJson } from "../../../testes/respostas";
-import { buscarEstadoDaSala, entrarNaSala } from "./salasApi";
+import { buscarEstadoDaSala, entrarNaSala, sairDaSala } from "./salasApi";
 
 function simularFetch(resposta: Response) {
   const fetchFalso = vi.fn().mockResolvedValue(resposta);
@@ -24,6 +24,15 @@ describe("salasApi", () => {
     simularFetch(respostaJson({ type: "error", code: "PrecisaApelido", message: "Escolha um apelido de 1 a 20 caracteres." }, 400));
 
     await expect(entrarNaSala("ABC123", "")).rejects.toMatchObject({ status: 400, codigo: "PrecisaApelido" });
+  });
+
+  it("sairDaSala remove o participante pela rota DELETE", async () => {
+    const fetchFalso = simularFetch(new Response(null, { status: 204 }));
+
+    await expect(sairDaSala("ABC123")).resolves.toBeUndefined();
+
+    expect(fetchFalso.mock.calls[0][0]).toBe("/api/salas/ABC123/participantes/eu");
+    expect(fetchFalso.mock.calls[0][1].method).toBe("DELETE");
   });
 
   it("buscarEstadoDaSala consulta o estado pelo código", async () => {

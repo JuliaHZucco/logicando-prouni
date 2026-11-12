@@ -417,6 +417,7 @@ Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira v
 - Cada participante responde uma vez por pergunta em cada rodada. A violação devolve 409.
 - O apelido tem até 20 caracteres e é único na sala, sem diferenciar maiúsculas e minúsculas.
 - O moderador só inicia a partida com pelo menos um participante na sala. O servidor recusa a ação sem ninguém, e o botão "Iniciar partida" fica desabilitado até a primeira pessoa entrar.
+- O participante pode sair da sala pelo botão "Voltar e sair da sala" na tela de espera da primeira rodada. Depois que a partida começa, não pode mais sair. Se todos saírem, o moderador volta a não poder iniciar.
 - A sessão do moderador dura 12 horas. Ele pode navegar pelo site, pelas dúvidas e pela busca sem perder o login (o logo do painel leva à página inicial); só sai pelo botão "Sair" ou quando a sessão expira, e nesse caso é levado à tela de login.
 - "Jogar novamente" na sala abre uma nova rodada, com os mesmos participantes, placar zerado e respostas anteriores preservadas.
 - Os participantes veem só o pódio com os três primeiros e a própria posição. O ranking geral é exclusivo do moderador.
@@ -437,6 +438,7 @@ Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira v
 | `GET /api/salas/minhas?busca=&estado=&de=&ate=` | Salas do moderador. `estado` aceita `aguardando`, `em_andamento` (pergunta aberta, resultado ou ranking) e `encerrada` |
 | `GET /api/salas/{codigo}/ranking` | Ranking geral (só o moderador dono) |
 | `POST /api/salas/{codigo}/participantes` | Entra na sala (ou reconecta) |
+| `DELETE /api/salas/{codigo}/participantes/eu` | O participante sai da sala. Só vale antes da partida começar; depois devolve 409 |
 | `GET /api/salas/{codigo}/estado` | Estado atual da sala, para quem entra ou recarrega a página |
 
 ### Tempo real (SignalR)
@@ -448,6 +450,7 @@ Métodos que o cliente chama (todos devolvem `{ ok, erro }`): `EntrarSala`, `Res
 | Evento | Quando é enviado |
 | --- | --- |
 | `participante-entrou` | Alguém entrou na sala. Traz a lista de participantes e o total |
+| `participante-saiu` | Alguém saiu da sala antes da partida. Traz a lista de participantes e o total |
 | `pergunta-iniciada` | O moderador abriu uma pergunta. Traz o enunciado e as alternativas, sem a correta |
 | `resposta-registrada` | Um participante respondeu (só para o moderador). Traz quantas respostas já chegaram |
 | `pergunta-encerrada` | A pergunta fechou, pelo moderador ou porque o prazo acabou (veja "Cronômetro das perguntas") |

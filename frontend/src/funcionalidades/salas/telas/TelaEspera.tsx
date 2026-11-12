@@ -2,9 +2,11 @@ import type { EstadoSala } from "../tipos";
 
 interface PropsTelaEspera {
   estado: EstadoSala;
+  aoSair?: () => void;
+  saindo?: boolean;
 }
 
-export default function TelaEspera({ estado }: PropsTelaEspera) {
+export default function TelaEspera({ estado, aoSair, saindo = false }: PropsTelaEspera) {
   const novaRodada = estado.rodada > 1;
 
   return (
@@ -43,6 +45,13 @@ export default function TelaEspera({ estado }: PropsTelaEspera) {
           ))}
         </div>
       </section>
+
+      {!novaRodada && aoSair && (
+        <button type="button" className="quiz-botao-secundario w-100" onClick={aoSair} disabled={saindo}>
+          <i className="bi bi-arrow-left me-2" aria-hidden="true" />
+          Voltar e sair da sala
+        </button>
+      )}
     </>
   );
 }

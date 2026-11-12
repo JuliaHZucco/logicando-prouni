@@ -51,6 +51,12 @@ public class EntrarNaSalaResponse : RespostaBase
     public List<ParticipanteBag> Participantes { get; set; } = new();
 }
 
+public class SairDaSalaResponse : RespostaBase
+{
+    public bool Saiu { get; set; }
+    public List<ParticipanteBag> Participantes { get; set; } = new();
+}
+
 public class AlternativaDaSalaBag
 {
     public int AlternativaId { get; set; }

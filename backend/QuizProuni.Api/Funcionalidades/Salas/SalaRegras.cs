@@ -251,6 +251,42 @@ public static class SalaRegras
         }
     }
 
+    public static async Task<SairDaSalaResponse> SairAsync(QuizProuniContext db, int visitanteId, string codigo, ILogger logger)
+    {
+        var codigoNormalizado = ConsultasDaSala.NormalizarCodigo(codigo);
+
+        try
+        {
+            await using var transacao = await db.Database.BeginTransactionAsync();
+
+            var sala = await ConsultasDaSala.BuscarTravandoParaAlterarAsync(db, codigoNormalizado);
+            if (sala == null)
+                return RespostaBase.ComErro<SairDaSalaResponse>("Código de sala não encontrado.", TipoDeErro.NaoEncontrado);
+
+            var participante = await db.Participantes.FirstOrDefaultAsync(x => x.SalaId == sala.SalaId && x.VisitanteId == visitanteId);
+            if (participante == null)
+                return new SairDaSalaResponse { Participantes = await ConsultasDaSala.ListarParticipantesAsync(db, sala.SalaId) };
+
+            if (sala.Status != ConsultasDaSala.StatusAguardando || sala.RodadaAtual > 1)
+                return RespostaBase.ComErro<SairDaSalaResponse>("Só é possível sair da sala antes da partida começar.", TipoDeErro.Conflito, "PartidaIniciada");
+
+            db.Participantes.Remove(participante);
+            await db.SaveChangesAsync();
+            await transacao.CommitAsync();
+
+            return new SairDaSalaResponse
+            {
+                Saiu = true,
+                Participantes = await ConsultasDaSala.ListarParticipantesAsync(db, sala.SalaId)
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Erro ao sair da sala. VisitanteId: {VisitanteId}, Codigo: {Codigo}", visitanteId, codigoNormalizado);
+            return RespostaBase.ComErro<SairDaSalaResponse>("Erro ao sair da sala.");
+        }
+    }
+
     public static async Task<EstadoDaSalaResponse> ObterEstadoAsync(QuizProuniContext db, int? moderadorId, int? visitanteId, string codigo, ILogger logger)
     {
         try

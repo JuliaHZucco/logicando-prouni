@@ -17,6 +17,12 @@ public class NotificadorDaSala
             .SendAsync("participante-entrou", new { participantes, total = participantes.Count });
     }
 
+    public Task ParticipanteSaiuAsync(string codigo, List<ParticipanteBag> participantes)
+    {
+        return hub.Clients.Group(SalaHub.GrupoDaSala(codigo))
+            .SendAsync("participante-saiu", new { participantes, total = participantes.Count });
+    }
+
     public Task PerguntaIniciadaAsync(string codigo, PerguntaDaSalaBag pergunta)
     {
         return hub.Clients.Group(SalaHub.GrupoDaSala(codigo)).SendAsync("pergunta-iniciada", pergunta);

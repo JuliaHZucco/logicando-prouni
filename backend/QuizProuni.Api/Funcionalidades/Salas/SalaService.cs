@@ -33,6 +33,11 @@ public class SalaService
         return SalaRegras.EntrarAsync(db, visitanteId, codigo, request, logger);
     }
 
+    public Task<SairDaSalaResponse> SairAsync(int visitanteId, string codigo)
+    {
+        return SalaRegras.SairAsync(db, visitanteId, codigo, logger);
+    }
+
     public Task<EstadoDaSalaResponse> ObterEstadoAsync(int? moderadorId, int? visitanteId, string codigo)
     {
         return SalaRegras.ObterEstadoAsync(db, moderadorId, visitanteId, codigo, logger);

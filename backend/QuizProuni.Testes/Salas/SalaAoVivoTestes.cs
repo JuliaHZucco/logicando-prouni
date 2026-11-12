@@ -163,6 +163,37 @@ public class SalaAoVivoTestes : TestesDeApi
     }
 
     [Fact]
+    public async Task Participante_pode_sair_antes_da_partida_e_o_moderador_e_avisado()
+    {
+        var (_, moderador, codigo) = await PrepararSalaAsync();
+        var ana = CriarVisitante();
+        await EntrarNaSalaAsync(ana, codigo, "Ana");
+        var aviso = AguardarEventoAsync(moderador, "participante-saiu");
+
+        var resposta = await ana.DeleteAsync($"/api/salas/{codigo}/participantes/eu");
+
+        Assert.Equal(System.Net.HttpStatusCode.NoContent, resposta.StatusCode);
+        var evento = await aviso;
+        Assert.Equal(0, evento.GetProperty("total").GetInt32());
+        Assert.False(await InvocarAsync(moderador, "Avancar", codigo));
+    }
+
+    [Fact]
+    public async Task Participante_nao_pode_sair_depois_que_a_partida_comecou()
+    {
+        var (_, moderador, codigo) = await PrepararSalaAsync();
+        var ana = CriarVisitante();
+        await EntrarNaSalaAsync(ana, codigo, "Ana");
+        Assert.True(await InvocarAsync(moderador, "Avancar", codigo));
+
+        var resposta = await ana.DeleteAsync($"/api/salas/{codigo}/participantes/eu");
+
+        Assert.Equal(System.Net.HttpStatusCode.Conflict, resposta.StatusCode);
+        var total = await UsarBancoAsync(db => db.Participantes.CountAsync(x => db.Salas.Any(s => s.Codigo == codigo && s.SalaId == x.SalaId)));
+        Assert.Equal(1, total);
+    }
+
+    [Fact]
     public async Task Participante_nao_pode_avancar_encerrar_nem_abrir_nova_rodada()
     {
         var (_, _, codigo) = await PrepararSalaAsync();

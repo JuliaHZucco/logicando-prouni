@@ -32,9 +32,11 @@ export function useSalaAoVivo(codigo: string) {
     const conexao = criarConexaoDaSala();
     conexaoRef.current = conexao;
 
-    conexao.on("participante-entrou", (dados: { participantes: ParticipanteSala[]; total: number }) =>
-      setEstado((atual) =>
-        atual ? { ...atual, participantes: dados.participantes, totalParticipantes: dados.total } : atual,
+    ["participante-entrou", "participante-saiu"].forEach((evento) =>
+      conexao.on(evento, (dados: { participantes: ParticipanteSala[]; total: number }) =>
+        setEstado((atual) =>
+          atual ? { ...atual, participantes: dados.participantes, totalParticipantes: dados.total } : atual,
+        ),
       ),
     );
 
