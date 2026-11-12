@@ -142,7 +142,7 @@ export default function PaginaQuizMenu() {
 
         <div className={`quiz-config-card mt-4 ${modo === "aleatorio" ? "quiz-config-card-aleatorio" : ""}`}>
           <div className="row g-3 align-items-end">
-            <div className={`col-12 ${modo !== "aleatorio" ? "col-md-6" : "quiz-config-quantidade"}`}>
+            <div className={`col-12 ${modo === "categoria" ? "col-md-6" : "quiz-config-quantidade"}`}>
               <label className="form-label quiz-label" htmlFor="quantidadePerguntas">
                 Quantidade de perguntas
               </label>
@@ -204,7 +204,7 @@ export default function PaginaQuizMenu() {
           {modo === "misto" && (
             <div className="mt-3">
               {categoriasSelecionadasMisto.length > 0 && (
-                <small className="quiz-dica text-muted d-block mb-3">
+                <small className="quiz-dica text-muted d-block text-center mb-3">
                   {`No modo misto, o mínimo é uma pergunta por categoria escolhida (${categoriasSelecionadasMisto.length}).`}
                 </small>
               )}

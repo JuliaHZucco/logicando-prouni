@@ -219,7 +219,7 @@ a {
 .chamada-quiz {
   position: relative;
   overflow: hidden;
-  width: min(100%, 760px);
+  width: min(100%, 500px);
   max-width: 100%;
   margin: 0 auto;
   justify-content: space-between;
@@ -892,7 +892,7 @@ a {
   padding: 1.5rem;
 }
 
-.quiz-config-card-aleatorio .quiz-config-quantidade {
+.quiz-config-quantidade {
   max-width: 320px;
   margin-right: auto;
   margin-left: auto;
