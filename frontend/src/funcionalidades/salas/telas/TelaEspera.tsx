@@ -46,7 +46,7 @@ export default function TelaEspera({ estado, aoSair, saindo = false }: PropsTela
         </div>
       </section>
 
-      {!novaRodada && aoSair && (
+      {aoSair && (
         <button type="button" className="quiz-botao-secundario w-100" onClick={aoSair} disabled={saindo}>
           <i className="bi bi-arrow-left me-2" aria-hidden="true" />
           Voltar e sair da sala

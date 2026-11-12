@@ -194,6 +194,25 @@ public class SalaAoVivoTestes : TestesDeApi
     }
 
     [Fact]
+    public async Task Participante_pode_sair_quando_o_moderador_abre_uma_nova_rodada()
+    {
+        var (_, moderador, codigo) = await PrepararSalaAsync(quantidade: 1);
+        var (anaCliente, ana) = await EntrarComoParticipanteAsync(codigo, "Ana");
+        await InvocarAsync(moderador, "Avancar", codigo);
+        await InvocarAsync(ana, "Responder", codigo, await ObterAlternativaDaSalaAsync(codigo, 1, correta: true));
+        await InvocarAsync(moderador, "EncerrarPergunta", codigo);
+        await InvocarAsync(moderador, "Avancar", codigo);
+        Assert.True(await InvocarAsync(moderador, "JogarNovamente", codigo));
+
+        var resposta = await anaCliente.DeleteAsync($"/api/salas/{codigo}/participantes/eu");
+
+        Assert.Equal(System.Net.HttpStatusCode.NoContent, resposta.StatusCode);
+        var total = await UsarBancoAsync(db => db.Participantes.CountAsync(x => db.Salas.Any(s => s.Codigo == codigo && s.SalaId == x.SalaId)));
+        Assert.Equal(0, total);
+        Assert.False(await InvocarAsync(moderador, "Avancar", codigo));
+    }
+
+    [Fact]
     public async Task Participante_nao_pode_avancar_encerrar_nem_abrir_nova_rodada()
     {
         var (_, _, codigo) = await PrepararSalaAsync();

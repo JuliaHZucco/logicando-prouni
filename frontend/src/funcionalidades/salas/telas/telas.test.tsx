@@ -139,10 +139,10 @@ describe("TelaEspera", () => {
     expect(aoSair).toHaveBeenCalledOnce();
   });
 
-  it("nas rodadas seguintes não oferece o botão de sair", () => {
+  it("nas rodadas seguintes também oferece o botão de sair", () => {
     render(<TelaEspera estado={criarEstado({ rodada: 2 })} aoSair={vi.fn()} />);
 
-    expect(screen.queryByRole("button", { name: /sair da sala/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Voltar e sair da sala/ })).toBeInTheDocument();
   });
 
   it("conta os participantes no singular e no plural", () => {

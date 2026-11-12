@@ -267,8 +267,8 @@ public static class SalaRegras
             if (participante == null)
                 return new SairDaSalaResponse { Participantes = await ConsultasDaSala.ListarParticipantesAsync(db, sala.SalaId) };
 
-            if (sala.Status != ConsultasDaSala.StatusAguardando || sala.RodadaAtual > 1)
-                return RespostaBase.ComErro<SairDaSalaResponse>("Só é possível sair da sala antes da partida começar.", TipoDeErro.Conflito, "PartidaIniciada");
+            if (sala.Status != ConsultasDaSala.StatusAguardando)
+                return RespostaBase.ComErro<SairDaSalaResponse>("Só é possível sair da sala enquanto a partida não está em andamento.", TipoDeErro.Conflito, "PartidaIniciada");
 
             db.Participantes.Remove(participante);
             await db.SaveChangesAsync();
