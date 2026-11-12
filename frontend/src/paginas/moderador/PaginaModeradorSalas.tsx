@@ -135,7 +135,7 @@ export default function PaginaModeradorSalas() {
           <div className="col-12 col-md-2">
             <button
               type="button"
-              className="quiz-botao-secundario w-100"
+              className="quiz-botao-secundario botao-limpar-filtros w-100"
               onClick={() => setFiltros(filtrosVazios)}
               disabled={!temFiltro}
             >

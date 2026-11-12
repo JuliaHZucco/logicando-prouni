@@ -156,8 +156,8 @@ export default function PaginaModeradorCriarSala() {
             </div>
           )}
 
-          <div className="quiz-label mb-2">NÚMERO DE PERGUNTAS (1 a 10)</div>
-          <div className="quiz-quantidade-controle mb-4">
+          <div className="quiz-label text-center mb-2">NÚMERO DE PERGUNTAS (1 a 10)</div>
+          <div className="quiz-quantidade-controle justify-content-center mb-4">
             <button
               type="button"
               className="quiz-quantidade-botao"
@@ -179,8 +179,8 @@ export default function PaginaModeradorCriarSala() {
             </button>
           </div>
 
-          <div className="quiz-label mb-2">TEMPO POR PERGUNTA</div>
-          <div className="d-flex align-items-center gap-3 flex-wrap mb-4">
+          <div className="quiz-label text-center mb-2">TEMPO POR PERGUNTA</div>
+          <div className="d-flex align-items-center justify-content-center gap-3 flex-wrap mb-4">
             <div className="form-check mb-0">
               <input
                 id="usaCronometro"
@@ -217,7 +217,7 @@ export default function PaginaModeradorCriarSala() {
             </div>
           )}
 
-          <div className="d-flex align-items-center gap-3 flex-wrap">
+          <div className="d-flex flex-column align-items-center gap-2">
             <button
               type="button"
               className="quiz-botao-iniciar"
@@ -233,7 +233,7 @@ export default function PaginaModeradorCriarSala() {
                 "Criar sala e gerar código"
               )}
             </button>
-            {motivoDeBloqueio && nome.trim() && <span className="text-muted small">{motivoDeBloqueio}</span>}
+            {motivoDeBloqueio && nome.trim() && <span className="text-muted small text-center">{motivoDeBloqueio}</span>}
           </div>
         </section>
       </div>

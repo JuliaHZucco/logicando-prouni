@@ -634,6 +634,59 @@ a {
     min-width: 0;
   }
 
+  /* cabeçalho do site: logo, busca e ícone ficam lado a lado, só menores */
+  .app-cabecalho .container.cabecalho-site {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+
+  .cabecalho-site .marca-bloco {
+    width: auto;
+    flex-shrink: 0;
+    gap: 0.4rem !important;
+  }
+
+  .cabecalho-site .marca-logo {
+    width: 34px;
+    height: 36px;
+  }
+
+  .cabecalho-site .marca-titulo {
+    font-size: 0.9rem;
+    /* quebra em duas linhas (FEEVALE / PROUNI) para sobrar espaço à busca */
+    width: min-content;
+  }
+
+  .app-cabecalho .container.cabecalho-site > div {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    gap: 0.5rem !important;
+  }
+
+  .cabecalho-site .campo-busca {
+    min-width: 0;
+    width: 100%;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+    padding-left: 34px;
+    font-size: 0.9rem;
+  }
+
+  .cabecalho-site .icone-busca {
+    left: 12px;
+    font-size: 0.9rem;
+  }
+
+  .cabecalho-site .botao-moderador {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
   .card-boas-vindas {
     padding: 1.25rem;
     text-align: center;
@@ -984,6 +1037,15 @@ a {
 
 .quiz-botao-secundario:hover {
   border-color: var(--feevale-verde-limao);
+}
+
+/* versão compacta, com a altura e o arredondamento dos campos de filtro ao lado */
+.botao-limpar-filtros {
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  min-height: calc(1.5rem + 1.2rem + 2px); /* mesma altura dos campos (.quiz-input) */
 }
 
 .quiz-jogo-card {
@@ -1921,6 +1983,15 @@ a {
   color: #b7d9c4;
 }
 
+/* link do cabeçalho escuro: mesmo tom do subtítulo "PAINEL DO MODERADOR" (o verde padrão some no fundo verde-escuro) */
+.app-cabecalho .link-limpar {
+  color: #b7d9c4;
+}
+
+.app-cabecalho .link-limpar:hover {
+  color: #ffffff;
+}
+
 .moderador-email {
   font-size: 0.9rem;
   color: #d3e8db;
@@ -2008,20 +2079,159 @@ a {
 }
 
 .moderador-codigo-grande {
+  display: inline-block;
   font-size: 3.2rem;
   font-weight: 800;
   letter-spacing: 0.18em;
-  color: var(--feevale-verde);
+  /* o espaço depois da última letra do letter-spacing deixaria o código torto dentro do bloco */
+  padding: 0.2em calc(0.5em - 0.18em) 0.2em 0.5em;
+  color: #ffffff;
+  background: var(--feevale-verde);
+  border-radius: var(--feevale-raio-medio);
+  box-shadow: 0 6px 16px rgba(0, 120, 60, 0.28);
   line-height: 1.1;
-  margin: 0.25rem 0 0.75rem;
+  margin: 0.25rem 0 0.9rem;
+  max-width: 100%;
 }
 
-.moderador-resumo {
-  display: inline-flex;
+@media (max-width: 576px) {
+  .moderador-codigo-grande {
+    font-size: clamp(1.8rem, 9.5vw, 3.2rem);
+  }
+}
+
+.moderador-espera-cartao {
+  display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  text-align: left;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.moderador-sala-nome {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--feevale-cinza-escuro);
+}
+
+.moderador-codigo-bloco {
+  padding: 1rem 0.75rem;
+  border-radius: var(--feevale-raio-medio);
+  background: var(--feevale-fundo);
+}
+
+.moderador-ficha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.6rem;
+}
+
+.moderador-ficha-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.7rem 0.5rem;
+  border: 1px solid #e3e8e2;
+  border-radius: var(--feevale-raio-medio);
+}
+
+.moderador-ficha-item .bi {
+  font-size: 1.15rem;
+  color: var(--feevale-verde);
+}
+
+.moderador-ficha-rotulo {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--feevale-cinza);
+}
+
+.moderador-ficha-valor {
   font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--feevale-cinza-escuro);
+}
+
+.moderador-acoes {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.moderador-encerrar {
+  align-self: center;
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #a4382b;
+  cursor: pointer;
+}
+
+.moderador-encerrar:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.moderador-encerrar:disabled {
+  color: #c9a29c;
+  cursor: default;
+}
+
+.moderador-contagem {
+  background: var(--feevale-cinza-claro);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--feevale-cinza-escuro);
+  white-space: nowrap;
+}
+
+.moderador-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 2rem 1rem;
+  border: 1px dashed #d3dad2;
+  border-radius: var(--feevale-raio-medio);
+  color: var(--feevale-cinza);
+  font-size: 0.95rem;
+}
+
+.moderador-vazio .bi {
+  font-size: 1.8rem;
+}
+
+@media (max-width: 576px) {
+  .moderador-espera-cartao {
+    padding: 1.1rem;
+  }
+
+  .moderador-ficha {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .moderador-ficha-rotulo {
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
+  }
+
+  .moderador-ficha-item {
+    padding: 0.55rem 0.25rem;
+  }
+
+  .moderador-ficha-valor {
+    font-size: 0.8rem;
+  }
 }
 
 .moderador-opcao {

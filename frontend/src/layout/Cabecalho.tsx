@@ -22,7 +22,7 @@ export default function Cabecalho() {
 
   return (
     <header className="app-cabecalho">
-      <div className="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
+      <div className="container cabecalho-site d-flex align-items-center justify-content-between gap-3 flex-wrap py-3">
         <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none marca-bloco">
           <img src="/logo-feevale.png" alt="Logo da Universidade Feevale" className="marca-logo" />
           <span className="d-flex flex-column">
