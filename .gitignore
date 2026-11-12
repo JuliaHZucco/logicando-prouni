@@ -29,3 +29,5 @@ appsettings.Teste.json
 backend/QuizProuni.Api/wwwroot/
 .vs/
 *.csproj.user
+
+schema-producao.sql

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using QuizProuni.Api.Compartilhado.Configuracao;
 using QuizProuni.Api.Compartilhado.Logs;
 using QuizProuni.Api.Compartilhado.Middlewares;
+using QuizProuni.Api.Compartilhado.Saude;
 using QuizProuni.Api.Compartilhado.Seguranca;
 using QuizProuni.Api.Dados;
 using QuizProuni.Api.Funcionalidades.Conteudo;
@@ -33,6 +35,8 @@ builder.Services.AddDbContext<QuizProuniContext>(opcoes =>
     opcoes.UseNpgsql(builder.Configuration.GetConnectionString("QuizProuni")).UseSnakeCaseNamingConvention());
 
 builder.Services.AddLimitesDeUso(builder.Configuration);
+builder.Services.AddProxyReverso();
+builder.Services.AddHealthChecks().AddCheck<VerificacaoDoBanco>("banco");
 
 builder.Services.AddSingleton<FilaDeLogs>();
 builder.Services.AddSingleton<ILoggerProvider, LogNoBancoProvider>();
@@ -61,6 +65,11 @@ if (args.Length > 0 && args[0] == CriarModeradorComando.Nome)
     return sucesso ? 0 : 1;
 }
 
+// Falha já na inicialização se o endereço público estiver preenchido de forma inválida.
+app.Configuration.LerEnderecoPublico();
+
+app.UseProxyReverso();
+app.UseMiddleware<CabecalhosDeSegurancaMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseResponseCompression();
@@ -73,6 +82,7 @@ app.UseRouting();
 app.UseRateLimiter();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 app.MapHub<SalaHub>("/hubs/sala");
 app.MapFallbackToFile("/{*caminho:regex(^(?!api/|hubs/).*$)}", "index.html", opcoesDeArquivosEstaticos);
 
