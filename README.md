@@ -419,6 +419,7 @@ Por isso o cronômetro **sobrevive a reinícios da API**: ao subir, a primeira v
 - O moderador só inicia a partida com pelo menos um participante na sala. O servidor recusa a ação sem ninguém, e o botão "Iniciar partida" fica desabilitado até a primeira pessoa entrar.
 - O participante pode sair da sala pelo botão "Voltar e sair da sala" na tela de espera, tanto antes da primeira partida quanto quando o moderador abre uma nova rodada. Com a partida em andamento, não pode sair. Quem sai numa nova rodada deixa de aparecer no ranking dela e tem as respostas das rodadas anteriores apagadas do banco junto com o participante. Se todos saírem, o moderador volta a não poder iniciar.
 - A sessão do moderador dura 12 horas. Ele pode navegar pelo site, pelas dúvidas e pela busca sem perder o login (o logo do painel leva à página inicial); só sai pelo botão "Sair" ou quando a sessão expira, e nesse caso é levado à tela de login.
+- A tela de espera do moderador mostra um QR code grande, pensado para projetor, e o endereço direto da sala (`/sala/CÓDIGO`), com o botão "Copiar link". Quem escaneia cai direto na escolha de apelido, sem passar pelos menus nem digitar o código.
 - "Jogar novamente" na sala abre uma nova rodada, com os mesmos participantes, placar zerado e respostas anteriores preservadas.
 - Os participantes veem só o pódio com os três primeiros e a própria posição. O ranking geral é exclusivo do moderador.
 

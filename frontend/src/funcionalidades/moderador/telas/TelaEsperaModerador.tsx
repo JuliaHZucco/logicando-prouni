@@ -1,3 +1,4 @@
+import EntradaRapida from "../componentes/EntradaRapida";
 import { descreverCronometro, descreverModoDaSala, type PropsTelaDaSala } from "./propsDaSala";
 
 export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedirEncerramento }: PropsTelaDaSala) {
@@ -12,9 +13,6 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
           <div className="moderador-codigo-bloco">
             <div className="sala-rotulo">CÓDIGO DA SALA · RODADA {estado.rodada}</div>
             <div className="moderador-codigo-grande">{estado.codigo}</div>
-            <p className="sala-texto mb-0">
-              Peça aos participantes para abrirem o site, escolherem “Entrar em uma sala” e digitarem o código.
-            </p>
           </div>
 
           <div className="moderador-ficha">
@@ -33,6 +31,35 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
               <span className="moderador-ficha-rotulo">Cronômetro</span>
               <span className="moderador-ficha-valor">{descreverCronometro(estado)}</span>
             </div>
+          </div>
+
+          <div className="moderador-participantes">
+            <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+              <h2 className="moderador-participantes-titulo">Participantes na sala</h2>
+              <span className="moderador-contagem">
+                {estado.totalParticipantes} {estado.totalParticipantes === 1 ? "participante" : "participantes"}
+              </span>
+            </div>
+
+            {semParticipantes ? (
+              <div className="moderador-vazio">
+                <i className="bi bi-people" aria-hidden="true" />
+                <span>Ninguém entrou ainda.</span>
+              </div>
+            ) : (
+              <div
+                className="sala-lista-participantes moderador-lista-rolavel"
+                role="region"
+                aria-label="Lista de participantes"
+                tabIndex={0}
+              >
+                {estado.participantes.map((participante) => (
+                  <span className="sala-participante" key={participante.id}>
+                    {participante.apelido}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="moderador-acoes">
@@ -56,29 +83,8 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
       </div>
 
       <div className="col-12 col-lg-6">
-        <section className="sala-cartao h-100">
-          <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-            <h2 className="titulo-secao mb-0 fs-5">Participantes na sala</h2>
-            <span className="moderador-contagem">
-              {estado.totalParticipantes} {estado.totalParticipantes === 1 ? "participante" : "participantes"}
-            </span>
-          </div>
-
-          {semParticipantes ? (
-            <div className="moderador-vazio">
-              <i className="bi bi-people" aria-hidden="true" />
-              <span>Ninguém entrou ainda.</span>
-            </div>
-          ) : (
-            <div className="sala-lista-participantes">
-              {estado.participantes.map((participante) => (
-                <span className="sala-participante" key={participante.id}>
-                  {participante.apelido}
-                </span>
-              ))}
-            </div>
-          )}
-          <p className="sala-aviso mt-3 mb-0">A lista atualiza sozinha quando alguém entra.</p>
+        <section className="sala-cartao moderador-qr-cartao h-100">
+          <EntradaRapida codigo={estado.codigo} />
         </section>
       </div>
     </div>
