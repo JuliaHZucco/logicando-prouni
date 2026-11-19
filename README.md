@@ -31,10 +31,36 @@ Passo a passo completo, do zero até o site no ar. Todos os comandos são execut
 
 ### 1. Pré-requisitos
 
-- **.NET SDK 10** (confira com `dotnet --version`).
+- **.NET SDK 10** (o projeto usa `net10.0`; confira com `dotnet --version`). Se a máquina tiver mais de uma versão do .NET instalada, veja [Mais de uma versão do .NET instalada](#mais-de-uma-versão-do-net-instalada).
 - **Node.js** (confira com `node --version`). A API usa o Node para compilar o front durante o build.
 - **Visual Studio Code** com a extensão **C# Dev Kit**, da Microsoft.
 - **PostgreSQL** instalado e **rodando**. No Windows ele roda como serviço (`postgresql-x64-18`, início automático). Para conferir: Win+R, `services.msc`, procure `postgresql` e veja se está "Em execução". Se estiver parado, clique com o botão direito e escolha "Iniciar".
+
+#### Mais de uma versão do .NET instalada
+
+O projeto precisa do **.NET SDK 10**. Quando a máquina (ou o servidor) tem outras versões instaladas, por exemplo a 10 e a 11 ao mesmo tempo, o `dotnet` pode escolher a versão errada e o projeto não compila ou não roda. Isso foi observado em um Mac com as versões 10 e 11 instaladas.
+
+A solução é fixar a versão do SDK com um arquivo `global.json`:
+
+1. Veja as versões instaladas:
+
+   ```
+   dotnet --list-sdks
+   ```
+
+2. Crie o arquivo `global.json` na **pasta raiz do projeto** (a mesma do `QuizProuni.sln`) com o conteúdo abaixo, trocando `10.0.404` pela versão 10 que aparece na listagem do passo 1:
+
+   ```json
+   {
+     "sdk": {
+       "version": "10.0.404"
+     }
+   }
+   ```
+
+3. Confirme que, dentro da pasta do projeto, o `dotnet --version` mostra a versão 10.
+
+Esse arquivo é uma configuração do computador ou servidor onde o projeto roda, então **não precisa ser enviado ao git**. Em máquinas que só têm o .NET 10, ele não é necessário.
 
 ### 2. Abrir o projeto no VS Code
 
@@ -238,7 +264,7 @@ Passo a passo para colocar o site no ar em um servidor. Os valores de exemplo (c
 
 ### O que o servidor precisa
 
-- **.NET 10 Runtime (ASP.NET Core)**, para rodar o pacote publicado. Não precisa do SDK, do Node nem do código-fonte.
+- **.NET 10 Runtime (ASP.NET Core)**, para rodar o pacote publicado. Não precisa do SDK, do Node nem do código-fonte. Se o servidor tiver mais de uma versão do .NET e o projeto for compilado nele, fixe o SDK 10 com um `global.json`, como em [Mais de uma versão do .NET instalada](#mais-de-uma-versão-do-net-instalada).
 - **PostgreSQL** com um banco vazio.
 - **Endereço público com HTTPS**, e a rede dos alunos precisa alcançá-lo (Wi-Fi da faculdade, Wi-Fi de visitantes e 4G/5G). O DNS do endereço precisa resolver fora da rede interna.
 - **WebSocket liberado** em `/hubs/sala`, que é o canal do tempo real.
