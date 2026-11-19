@@ -9,12 +9,14 @@ import TelaEsperaModerador from "../../funcionalidades/moderador/telas/TelaEsper
 import TelaPerguntaModerador from "../../funcionalidades/moderador/telas/TelaPerguntaModerador";
 import TelaRankingModerador from "../../funcionalidades/moderador/telas/TelaRankingModerador";
 import TelaResultadoModerador from "../../funcionalidades/moderador/telas/TelaResultadoModerador";
+import { useRolarAoTopoAoMudarDeEtapa } from "../../funcionalidades/salas/hooks/useRolarAoTopoAoMudarDeEtapa";
 import { useSalaAoVivo } from "../../funcionalidades/salas/hooks/useSalaAoVivo";
 
 export default function PaginaModeradorSala() {
   const { codigo = "" } = useParams<{ codigo: string }>();
   const codigoNormalizado = codigo.toUpperCase();
   const { estado, erroDeCarga, mensagemDeConexao, executar } = useSalaAoVivo(codigoNormalizado);
+  useRolarAoTopoAoMudarDeEtapa(estado);
   const [ocupado, setOcupado] = useState(false);
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
   const [confirmandoEncerramento, setConfirmandoEncerramento] = useState(false);

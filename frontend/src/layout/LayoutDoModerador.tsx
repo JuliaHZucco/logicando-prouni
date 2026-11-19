@@ -5,6 +5,7 @@ import CabecalhoModerador from "../funcionalidades/moderador/componentes/Cabecal
 import { buscarModeradorLogado } from "../funcionalidades/moderador/servicos/moderadorApi";
 import type { ModeradorLogado } from "../funcionalidades/moderador/tipos";
 import { ErroApi } from "../utilitarios/api";
+import Rodape from "./Rodape";
 
 export default function LayoutDoModerador() {
   const [moderador, setModerador] = useState<ModeradorLogado | null>(null);
@@ -36,6 +37,7 @@ export default function LayoutDoModerador() {
       <main className="flex-grow-1">
         <Outlet />
       </main>
+      <Rodape />
     </div>
   );
 }

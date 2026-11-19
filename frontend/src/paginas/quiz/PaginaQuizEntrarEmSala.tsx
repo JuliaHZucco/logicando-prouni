@@ -1,13 +1,16 @@
 import { useRef, useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import AbasQuiz from "../../funcionalidades/quiz/componentes/AbasQuiz";
+import { useNavigate } from "react-router-dom";
+import CabecalhoDoQuiz from "../../funcionalidades/quiz/componentes/CabecalhoDoQuiz";
 import { entrarNaSala } from "../../funcionalidades/salas/servicos/salasApi";
 import { ErroApi } from "../../utilitarios/api";
+
+const tamanhoDoCodigo = 6;
 
 export default function PaginaQuizEntrarEmSala() {
   const navigate = useNavigate();
   const campoDoCodigo = useRef<HTMLInputElement>(null);
   const [codigo, setCodigo] = useState("");
+  const [focado, setFocado] = useState(false);
   const [verificando, setVerificando] = useState(false);
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
 
@@ -45,22 +48,7 @@ export default function PaginaQuizEntrarEmSala() {
   return (
     <div className="container py-4">
       <div className="quiz-menu-wrap">
-        <Link to="/" className="link-voltar mb-4 d-inline-flex align-items-center">
-          <i className="bi bi-arrow-left me-2" aria-hidden="true" />
-          Voltar ao início
-        </Link>
-
-        <div className="quiz-menu-header mb-4">
-          <h1 className="quiz-menu-titulo mb-2">
-            <span className="quiz-menu-titulo-icone" aria-hidden="true">
-              <i className="bi bi-controller" />
-            </span>
-            <span>Quiz do Prouni</span>
-          </h1>
-          <p className="quiz-menu-subtitulo mb-0">Escolha como praticar</p>
-        </div>
-
-        <AbasQuiz abaAtiva="sala" />
+        <CabecalhoDoQuiz abaAtiva="sala" />
 
         <form className="cartao-codigo-sala" onSubmit={entrar}>
           <h2>Tem um código de sala?</h2>
@@ -69,22 +57,37 @@ export default function PaginaQuizEntrarEmSala() {
           <label className="cartao-codigo-rotulo" htmlFor="codigoDaSala">
             CÓDIGO DA SALA
           </label>
-          <input
-            ref={campoDoCodigo}
-            id="codigoDaSala"
-            type="text"
-            maxLength={6}
-            autoComplete="off"
-            autoCapitalize="characters"
-            className={`campo-codigo-sala ${mensagemErro ? "invalido" : ""}`}
-            value={codigo}
-            onChange={(evento) => {
-              setCodigo(evento.target.value.toUpperCase());
-              setMensagemErro(null);
-            }}
-            aria-invalid={Boolean(mensagemErro)}
-            aria-describedby={mensagemErro ? "erroDoCodigo" : undefined}
-          />
+          <div className={`codigo-otp ${mensagemErro ? "invalido" : ""}`}>
+            {Array.from({ length: tamanhoDoCodigo }, (_, posicao) => (
+              <span
+                key={posicao}
+                className={`codigo-otp-caixa ${posicao < codigo.length ? "preenchida" : ""} ${
+                  focado && posicao === Math.min(codigo.length, tamanhoDoCodigo - 1) ? "ativa" : ""
+                }`}
+                aria-hidden="true"
+              >
+                {codigo[posicao] ?? ""}
+              </span>
+            ))}
+            <input
+              ref={campoDoCodigo}
+              id="codigoDaSala"
+              type="text"
+              maxLength={tamanhoDoCodigo}
+              autoComplete="off"
+              autoCapitalize="characters"
+              className="campo-codigo-sala"
+              value={codigo}
+              onChange={(evento) => {
+                setCodigo(evento.target.value.toUpperCase());
+                setMensagemErro(null);
+              }}
+              onFocus={() => setFocado(true)}
+              onBlur={() => setFocado(false)}
+              aria-invalid={Boolean(mensagemErro)}
+              aria-describedby={mensagemErro ? "erroDoCodigo" : undefined}
+            />
+          </div>
 
           {mensagemErro && (
             <div id="erroDoCodigo" className="cartao-codigo-erro" role="alert">

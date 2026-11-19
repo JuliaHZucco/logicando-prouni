@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Alerta from "../../componentes/Alerta";
 import { entrarNaSala } from "../../funcionalidades/salas/servicos/salasApi";
 import { ErroApi } from "../../utilitarios/api";
+import Rodape from "../../layout/Rodape";
 
 const tamanhoMaximoDoApelido = 20;
 
@@ -85,6 +86,7 @@ export default function PaginaSalaApelido() {
           </button>
         </form>
       </main>
+      <Rodape />
     </div>
   );
 }

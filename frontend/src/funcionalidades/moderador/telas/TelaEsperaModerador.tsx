@@ -1,3 +1,4 @@
+import BotaoEncerrarSala from "../componentes/BotaoEncerrarSala";
 import EntradaRapida from "../componentes/EntradaRapida";
 import { descreverCronometro, descreverModoDaSala, type PropsTelaDaSala } from "./propsDaSala";
 
@@ -5,11 +6,15 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
   const semParticipantes = estado.totalParticipantes < 1;
 
   return (
+    <>
+      <div className="mb-3">
+        <div className="eyebrow eyebrow-cinza mb-1">SALA AO VIVO · AGUARDANDO PARTICIPANTES</div>
+        <h1 className="moderador-sala-titulo mb-0">{estado.nome.toUpperCase()}</h1>
+      </div>
+
     <div className="row g-3">
       <div className="col-12 col-lg-6">
         <section className="sala-cartao moderador-espera-cartao text-center h-100">
-          <div className="moderador-sala-nome">{estado.nome.toUpperCase()}</div>
-
           <div className="moderador-codigo-bloco">
             <div className="sala-rotulo">CÓDIGO DA SALA · RODADA {estado.rodada}</div>
             <div className="moderador-codigo-grande">{estado.codigo}</div>
@@ -74,10 +79,7 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
             {semParticipantes && (
               <small className="sala-texto">Aguarde pelo menos um participante entrar para iniciar.</small>
             )}
-            <button type="button" className="moderador-encerrar" onClick={aoPedirEncerramento} disabled={ocupado}>
-              <i className="bi bi-x-circle me-1" aria-hidden="true" />
-              Encerrar sala
-            </button>
+            <BotaoEncerrarSala aoClicar={aoPedirEncerramento} desabilitado={ocupado} />
           </div>
         </section>
       </div>
@@ -88,5 +90,6 @@ export default function TelaEsperaModerador({ estado, ocupado, aoAcionar, aoPedi
         </section>
       </div>
     </div>
+    </>
   );
 }

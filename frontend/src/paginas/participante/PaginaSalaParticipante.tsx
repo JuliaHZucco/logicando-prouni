@@ -4,18 +4,21 @@ import Alerta from "../../componentes/Alerta";
 import AreaCarregando from "../../componentes/AreaCarregando";
 import BarraDaSala from "../../funcionalidades/salas/componentes/BarraDaSala";
 import { useSalaAoVivo } from "../../funcionalidades/salas/hooks/useSalaAoVivo";
+import { useRolarAoTopoAoMudarDeEtapa } from "../../funcionalidades/salas/hooks/useRolarAoTopoAoMudarDeEtapa";
 import { useSonsDaSala } from "../../funcionalidades/salas/hooks/useSonsDaSala";
 import { sairDaSala } from "../../funcionalidades/salas/servicos/salasApi";
 import TelaEspera from "../../funcionalidades/salas/telas/TelaEspera";
 import TelaPergunta from "../../funcionalidades/salas/telas/TelaPergunta";
 import TelaRanking from "../../funcionalidades/salas/telas/TelaRanking";
 import TelaResultado from "../../funcionalidades/salas/telas/TelaResultado";
+import Rodape from "../../layout/Rodape";
 
 export default function PaginaSalaParticipante() {
   const { codigo = "" } = useParams<{ codigo: string }>();
   const codigoNormalizado = codigo.toUpperCase();
   const { estado, erroDeCarga, mensagemDeConexao, responder } = useSalaAoVivo(codigoNormalizado);
   useSonsDaSala(estado);
+  useRolarAoTopoAoMudarDeEtapa(estado);
   const navigate = useNavigate();
   const [saindo, setSaindo] = useState(false);
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
@@ -46,6 +49,7 @@ export default function PaginaSalaParticipante() {
         <main className="sala-conteudo">
           <AreaCarregando mensagem="Entrando na sala..." />
         </main>
+        <Rodape />
       </div>
     );
   }
@@ -80,6 +84,7 @@ export default function PaginaSalaParticipante() {
           </Link>
         )}
       </main>
+      <Rodape />
     </div>
   );
 }

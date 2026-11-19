@@ -19,7 +19,6 @@ export default function Inicio() {
           </div>
           <div className="col">
             <div className="eyebrow eyebrow-laranja mb-2">
-              <i className="bi bi-stars me-1" aria-hidden="true" />
               BEM-VINDO(A) AO FEEVALE PROUNI
             </div>
             <h1 className="titulo-boas-vindas mb-3">

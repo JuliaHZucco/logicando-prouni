@@ -65,7 +65,6 @@ if (args.Length > 0 && args[0] == CriarModeradorComando.Nome)
     return sucesso ? 0 : 1;
 }
 
-// Falha já na inicialização se o endereço público estiver preenchido de forma inválida.
 app.Configuration.LerEnderecoPublico();
 
 app.UseProxyReverso();

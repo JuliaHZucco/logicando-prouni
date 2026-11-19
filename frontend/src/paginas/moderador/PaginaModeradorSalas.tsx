@@ -150,18 +150,18 @@ export default function PaginaModeradorSalas() {
       {!salas && !mensagemErro && <AreaCarregando mensagem="Carregando salas..." />}
 
       {salas && (
-        <section className="sala-cartao tabela-salas-cartao p-0 overflow-hidden">
+        <section className="sala-cartao tabela-cartao p-0 overflow-hidden">
           <div className="table-responsive">
-            <table className="table tabela-salas mb-0 align-middle">
+            <table className="table tabela-padrao mb-0 align-middle">
               <thead>
                 <tr>
                   <th>NOME</th>
                   <th>CÓDIGO</th>
                   <th>STATUS</th>
                   <th>MODO</th>
-                  <th>PARTICIPANTES</th>
+                  <th className="col-numero">PARTICIPANTES</th>
                   <th>CRIADA EM</th>
-                  <th className="text-end">AÇÕES</th>
+                  <th className="col-acao">AÇÕES</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,16 +170,17 @@ export default function PaginaModeradorSalas() {
                   return (
                     <tr key={sala.codigo}>
                       <td className="fw-bold">{sala.nome}</td>
-                      <td className="tabela-salas-codigo">{sala.codigo}</td>
+                      <td className="tabela-codigo">{sala.codigo}</td>
                       <td>
                         <span className={`selo-estado selo-estado-${estado.classe}`}>{estado.texto}</span>
                       </td>
                       <td>{descreverModo(sala)}</td>
-                      <td>{sala.participantes}</td>
+                      <td className="col-numero">{sala.participantes}</td>
                       <td>{formatarData(sala.criadaEm)}</td>
-                      <td className="text-end">
+                      <td className="col-acao">
                         <Link to={`/moderador/sala/${sala.codigo}`} className="link-limpar">
                           {sala.status === "encerrada" ? "Ver resultado" : "Abrir sala"}
+                          <i className="bi bi-chevron-right ms-1" aria-hidden="true" />
                         </Link>
                       </td>
                     </tr>

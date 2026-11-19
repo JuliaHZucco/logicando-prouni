@@ -50,7 +50,10 @@ export default function TelaResultado({ estado, resultado }: PropsTelaResultado)
       </section>
 
       <section className="quiz-resposta-revelada">
-        <strong>Resposta correta: {String.fromCharCode(64 + letraCorreta)}.</strong> {resultado.explicacao}
+        <span className="quiz-resposta-revelada-eyebrow">Explicação</span>
+        <p>
+          <strong>Resposta correta: {String.fromCharCode(64 + letraCorreta)}.</strong> {resultado.explicacao}
+        </p>
       </section>
 
       <p className="sala-aviso">Aguarde o moderador abrir a próxima pergunta.</p>

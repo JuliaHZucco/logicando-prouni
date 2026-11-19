@@ -12,8 +12,6 @@ type SituacaoDaCopia = "parado" | "copiado" | "falhou";
 const TEMPO_DO_AVISO_EM_MS = 2500;
 
 export default function EntradaRapida({ codigo }: PropsEntradaRapida) {
-  // undefined = ainda consultando. Sem endereço público configurado no servidor (ou se a consulta falhar),
-  // usa o endereço em que o moderador abriu o painel.
   const [base, setBase] = useState<string | undefined>(undefined);
   const [situacao, setSituacao] = useState<SituacaoDaCopia>("parado");
   const temporizador = useRef<number | undefined>(undefined);
@@ -71,11 +69,15 @@ export default function EntradaRapida({ codigo }: PropsEntradaRapida) {
       </div>
 
       <p className="sala-texto mb-0">Aponte a câmera para o QR code ou abra o endereço abaixo.</p>
-      <div className="entrada-rapida-endereco">{enderecoCurto}</div>
-      <button type="button" className="quiz-botao-secundario botao-compacto" onClick={() => copiar(endereco)}>
-        <i className={`bi ${situacao === "copiado" ? "bi-check2" : "bi-clipboard"} me-1`} aria-hidden="true" />
-        Copiar link
-      </button>
+      <div className="entrada-rapida-link">
+        <span className="entrada-rapida-endereco" title={endereco}>
+          {enderecoCurto}
+        </span>
+        <button type="button" className="entrada-rapida-copiar" onClick={() => copiar(endereco)}>
+          <i className={`bi ${situacao === "copiado" ? "bi-check2" : "bi-clipboard"} me-1`} aria-hidden="true" />
+          Copiar link
+        </button>
+      </div>
       <small className="entrada-rapida-aviso" role="status">
         {situacao === "copiado" && "Link copiado!"}
         {situacao === "falhou" && "Não foi possível copiar. Selecione o endereço e copie à mão."}

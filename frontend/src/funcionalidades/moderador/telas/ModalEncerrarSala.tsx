@@ -20,7 +20,7 @@ export default function ModalEncerrarSala({ codigo, ocupado, aoCancelar, aoConfi
           <button type="button" className="quiz-botao-secundario" onClick={aoCancelar} disabled={ocupado}>
             Cancelar
           </button>
-          <button type="button" className="quiz-botao-iniciar botao-perigo alt-d" onClick={aoConfirmar} disabled={ocupado}>
+          <button type="button" className="quiz-botao-iniciar botao-perigo" onClick={aoConfirmar} disabled={ocupado}>
             Encerrar sala
           </button>
         </div>

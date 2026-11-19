@@ -1,9 +1,5 @@
 namespace QuizProuni.Api.Compartilhado.Middlewares;
 
-/// <summary>
-/// Acrescenta cabeçalhos de segurança a todas as respostas. O HSTS e o redirecionamento para HTTPS
-/// ficam de fora de propósito: dependem de quem encerra o HTTPS (a API ou o proxy da hospedagem).
-/// </summary>
 public class CabecalhosDeSegurancaMiddleware
 {
     private readonly RequestDelegate proximo;
@@ -25,8 +21,6 @@ public class CabecalhosDeSegurancaMiddleware
         return proximo(contexto);
     }
 
-    // Tudo vem do próprio site. O tempo real usa WebSocket no mesmo endereço, e alguns navegadores mais antigos
-    // não tratam ws:// e wss:// como "mesma origem", então o endereço é liberado de forma explícita.
     private static string MontarPoliticaDeConteudo(HostString host)
     {
         var endereco = host.Value;

@@ -1,8 +1,9 @@
+import ChipsDeCategorias from "../../funcionalidades/quiz/componentes/ChipsDeCategorias";
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Alerta from "../../componentes/Alerta";
 import { useConteudo } from "../../funcionalidades/duvidas/hooks/useConteudo";
-import AbasQuiz from "../../funcionalidades/quiz/componentes/AbasQuiz";
+import CabecalhoDoQuiz from "../../funcionalidades/quiz/componentes/CabecalhoDoQuiz";
 import { iniciarPartida } from "../../funcionalidades/quiz/servicos/quizApi";
 import { ajustarQuantidade } from "../../funcionalidades/quiz/utilitarios/quantidade";
 import type { ModoQuiz } from "../../funcionalidades/quiz/tipos";
@@ -71,22 +72,7 @@ export default function PaginaQuizMenu() {
   return (
     <div className="container py-4">
       <div className="quiz-menu-wrap">
-        <Link to="/" className="link-voltar mb-4 d-inline-flex align-items-center">
-          <i className="bi bi-arrow-left me-2" aria-hidden="true" />
-          Voltar ao início
-        </Link>
-
-        <div className="quiz-menu-header mb-4">
-          <h1 className="quiz-menu-titulo mb-2">
-            <span className="quiz-menu-titulo-icone" aria-hidden="true">
-              <i className="bi bi-controller" />
-            </span>
-            <span>Quiz do Prouni</span>
-          </h1>
-          <p className="quiz-menu-subtitulo mb-0">Escolha como praticar</p>
-        </div>
-
-        <AbasQuiz abaAtiva="sozinho" />
+        <CabecalhoDoQuiz abaAtiva="sozinho" />
 
         <div className="quiz-menu-grid">
           <button
@@ -146,7 +132,7 @@ export default function PaginaQuizMenu() {
               <label className="form-label quiz-label" htmlFor="quantidadePerguntas">
                 Quantidade de perguntas
               </label>
-              <div className="quiz-quantidade-controle">
+              <div className={modo === "categoria" ? "quiz-quantidade-controle justify-content-start" : "quiz-quantidade-controle"}>
                 <button
                   type="button"
                   className="quiz-quantidade-botao"
@@ -154,7 +140,7 @@ export default function PaginaQuizMenu() {
                   disabled={quantidadePerguntas <= minimoPerguntas}
                   aria-label="Diminuir quantidade de perguntas"
                 >
-                  <i className="bi bi-chevron-down" aria-hidden="true" />
+                  <i className="bi bi-dash-lg" aria-hidden="true" />
                 </button>
                 <input
                   id="quantidadePerguntas"
@@ -175,7 +161,7 @@ export default function PaginaQuizMenu() {
                   disabled={quantidadePerguntas >= 10}
                   aria-label="Aumentar quantidade de perguntas"
                 >
-                  <i className="bi bi-chevron-up" aria-hidden="true" />
+                  <i className="bi bi-plus-lg" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -211,23 +197,11 @@ export default function PaginaQuizMenu() {
               <div className="quiz-misto-titulo">
                 Categorias selecionadas ({categoriasSelecionadasMisto.length})
               </div>
-              <div className="quiz-misto-lista">
-                {categorias.map((categoria) => {
-                  const selecionada = categoriasSelecionadasMisto.includes(categoria.categoriaId);
-                  return (
-                    <button
-                      type="button"
-                      key={categoria.categoriaId}
-                      className={`quiz-misto-chip ${selecionada ? "selecionada" : ""}`}
-                      onClick={() => alternarCategoriaMisto(categoria.categoriaId)}
-                      aria-pressed={selecionada}
-                    >
-                      {selecionada && <i className="bi bi-check2 me-1" aria-hidden="true" />}
-                      {categoria.categoriaNome}
-                    </button>
-                  );
-                })}
-              </div>
+              <ChipsDeCategorias
+                categorias={categorias}
+                selecionadas={categoriasSelecionadasMisto}
+                aoAlternar={alternarCategoriaMisto}
+              />
               {nenhumaCategoriaSelecionadaNoMisto && (
                 <p className="quiz-misto-aviso mt-2 mb-0">
                   Selecione pelo menos uma categoria para iniciar o quiz.

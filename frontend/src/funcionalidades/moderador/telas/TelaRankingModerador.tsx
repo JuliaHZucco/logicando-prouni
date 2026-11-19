@@ -1,3 +1,4 @@
+import BotaoEncerrarSala from "../componentes/BotaoEncerrarSala";
 import { Link } from "react-router-dom";
 import Podio from "../../../componentes/Podio";
 import type { PropsTelaDaSala } from "./propsDaSala";
@@ -32,9 +33,7 @@ export default function TelaRankingModerador({ estado, ocupado, aoAcionar, aoPed
             moderador vê este botão.
           </p>
 
-          <button type="button" className="quiz-botao-iniciar botao-perigo alt-d" onClick={aoPedirEncerramento} disabled={ocupado}>
-            Encerrar sala
-          </button>
+          <BotaoEncerrarSala aoClicar={aoPedirEncerramento} desabilitado={ocupado} />
         </div>
       </div>
     </>

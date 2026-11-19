@@ -55,13 +55,13 @@ export default function PaginaModeradorRankingGeral() {
 
           <section className="sala-cartao p-0 overflow-hidden">
             <div className="table-responsive">
-              <table className="table tabela-salas mb-0 align-middle">
+              <table className="table tabela-padrao mb-0 align-middle">
                 <thead>
                   <tr>
                     <th>POSIÇÃO</th>
                     <th>APELIDO</th>
-                    <th>ACERTOS</th>
-                    <th>APROVEITAMENTO</th>
+                    <th className="col-numero">ACERTOS</th>
+                    <th className="col-numero">APROVEITAMENTO</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,10 +69,10 @@ export default function PaginaModeradorRankingGeral() {
                     <tr key={linha.participanteId}>
                       <td className={`posicao-ranking ${classeDaPosicao(linha.posicao)}`}>{linha.posicao}º</td>
                       <td>{linha.apelido}</td>
-                      <td>
+                      <td className="col-numero">
                         {linha.acertos} de {linha.perguntasExibidas}
                       </td>
-                      <td>{linha.aproveitamento === null ? "-" : `${linha.aproveitamento}%`}</td>
+                      <td className="col-numero">{linha.aproveitamento === null ? "-" : `${linha.aproveitamento}%`}</td>
                     </tr>
                   ))}
                 </tbody>

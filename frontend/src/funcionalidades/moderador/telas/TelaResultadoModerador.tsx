@@ -1,3 +1,4 @@
+import BotaoEncerrarSala from "../componentes/BotaoEncerrarSala";
 import GraficoDeFatias from "../../../componentes/GraficoDeFatias";
 import type { PerguntaSala, ResultadoPergunta } from "../../salas/tipos";
 import type { PropsTelaDaSala } from "./propsDaSala";
@@ -70,16 +71,15 @@ export default function TelaResultadoModerador({
             </p>
 
             <div className="quiz-resposta-revelada mb-3">
-              <strong>Explicação:</strong> {resultado.explicacao}
+              <span className="quiz-resposta-revelada-eyebrow">Explicação</span>
+              <p>{resultado.explicacao}</p>
             </div>
 
             <div className="d-flex flex-column gap-2">
               <button type="button" className="quiz-botao-iniciar" onClick={() => aoAcionar("Avancar")} disabled={ocupado}>
                 {ehAUltima ? "Última pergunta: ver ranking final" : "Próxima pergunta"}
               </button>
-              <button type="button" className="quiz-botao-iniciar botao-perigo alt-d" onClick={aoPedirEncerramento} disabled={ocupado}>
-                Encerrar sala
-              </button>
+              <BotaoEncerrarSala aoClicar={aoPedirEncerramento} desabilitado={ocupado} />
             </div>
           </section>
         </div>

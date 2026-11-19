@@ -1,3 +1,4 @@
+import BotaoEncerrarSala from "../componentes/BotaoEncerrarSala";
 import { formatarTempo, useContagemRegressiva } from "../../salas/hooks/useContagemRegressiva";
 import type { PerguntaSala } from "../../salas/tipos";
 import type { PropsTelaDaSala } from "./propsDaSala";
@@ -73,9 +74,7 @@ export default function TelaPerguntaModerador({
           <button type="button" className="quiz-botao-iniciar" onClick={() => aoAcionar("EncerrarPergunta")} disabled={ocupado}>
             Encerrar pergunta agora
           </button>
-          <button type="button" className="quiz-botao-iniciar botao-perigo alt-d" onClick={aoPedirEncerramento} disabled={ocupado}>
-            Encerrar sala
-          </button>
+          <BotaoEncerrarSala aoClicar={aoPedirEncerramento} desabilitado={ocupado} />
           <div className="sala-aviso">Quando o tempo acaba, a pergunta fecha sozinha.</div>
         </div>
       </div>

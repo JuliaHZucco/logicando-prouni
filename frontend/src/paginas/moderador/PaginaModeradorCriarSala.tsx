@@ -1,3 +1,4 @@
+import ChipsDeCategorias from "../../funcionalidades/quiz/componentes/ChipsDeCategorias";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alerta from "../../componentes/Alerta";
@@ -135,23 +136,11 @@ export default function PaginaModeradorCriarSala() {
           {modo === "misto" && (
             <div className="mb-4">
               <div className="quiz-misto-titulo">CATEGORIAS SELECIONADAS ({categoriasDoMisto.length})</div>
-              <div className="quiz-misto-lista">
-                {categorias.map((categoria) => {
-                  const selecionada = categoriasDoMisto.includes(categoria.categoriaId);
-                  return (
-                    <button
-                      type="button"
-                      key={categoria.categoriaId}
-                      className={`quiz-misto-chip ${selecionada ? "selecionada" : ""}`}
-                      aria-pressed={selecionada}
-                      onClick={() => alterarCategoriaDoMisto(categoria.categoriaId)}
-                    >
-                      {selecionada && <i className="bi bi-check2 me-1" aria-hidden="true" />}
-                      {categoria.categoriaNome}
-                    </button>
-                  );
-                })}
-              </div>
+              <ChipsDeCategorias
+                categorias={categorias}
+                selecionadas={categoriasDoMisto}
+                aoAlternar={alterarCategoriaDoMisto}
+              />
               {categoriasDoMisto.length === 0 && <p className="quiz-misto-aviso mt-2 mb-0">Escolha ao menos uma categoria.</p>}
             </div>
           )}
